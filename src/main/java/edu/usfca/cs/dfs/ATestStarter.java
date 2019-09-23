@@ -14,13 +14,13 @@ import static java.lang.System.exit;
 public class ATestStarter {
 
     public static void main(String[] args) throws IOException {
-        if(Init.isCorrectArgs(args)) {
-            System.out.println("::: Bloom Filter :::");
+        System.out.println("::: Bloom Filter :::");
 
+        if(Init.isCorrectArgs(args)) {
             Map<String,String> c = Init.readConfigFileIntoMap(args[0]);
-            long filterSize = Long.parseLong(c.get("filterSize"));
             System.out.println(c);
 
+            long filterSize = Long.parseLong(c.get("filterSize"));
             ABloomFilter bf = new ABloomFilter(filterSize);
 
             for(;;) {
