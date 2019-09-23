@@ -8,7 +8,7 @@ import java.util.Map;
 
 import static java.lang.System.exit;
 
-public class ABloomFilter {
+public class ABloomFilter implements Filter {
 
     private final Map<Integer,Integer> bloom; //bloomFilter
     private enum action {add, check, delete}
