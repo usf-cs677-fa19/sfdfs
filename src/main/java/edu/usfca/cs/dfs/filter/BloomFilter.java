@@ -1,4 +1,4 @@
-package edu.usfca.cs.dfs.bloomFilter;
+package edu.usfca.cs.dfs.filter;
 
 
 import com.sangupta.murmur.Murmur1;
