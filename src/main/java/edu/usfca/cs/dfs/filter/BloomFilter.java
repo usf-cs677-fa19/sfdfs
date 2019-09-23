@@ -61,41 +61,41 @@ public class BloomFilter {
         return Math.abs((int)(hash%this.size));
     }
 
-    private void executeCommand(String cmd, String str) {
-        if (action.add.toString().equals(cmd)) {
-            this.add(str);
-            System.out.println("added");
+//    private void executeCommand(String cmd, String str) {
+//        if (action.add.toString().equals(cmd)) {
+//            this.add(str);
+//            System.out.println("added");
+//
+//        } else if (action.check.toString().equals(cmd)) {
+//            System.out.println(this.check(str));
+//
+//        } else if (cmd.equals(action.delete.toString())) {
+//            this.delete(str);
+//            System.out.println("deleted");
+//
+//        } else {
+//            exit(1);
+//        }
+//    }
 
-        } else if (action.check.toString().equals(cmd)) {
-            System.out.println(this.check(str));
 
-        } else if (cmd.equals(action.delete.toString())) {
-            this.delete(str);
-            System.out.println("deleted");
-
-        } else {
-            exit(1);
-        }
-    }
-
-
-    public static void main(String[] args) throws IOException {
-        System.out.println("::: Bloom Filter :::");
-        BloomFilter bf = new BloomFilter(483647);
-
-        for(;;) {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            String input = reader.readLine();
-
-            if (input.contains(" ")) {
-                String[] inputs = input.split(" ");
-                bf.executeCommand(inputs[0], inputs[1]);
-            } else {
-                exit(1);
-            }
-        }
-
-    }
+//    public static void main(String[] args) throws IOException {
+//        System.out.println("::: Bloom Filter :::");
+//        BloomFilter bf = new BloomFilter(483647);
+//
+//        for(;;) {
+//            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+//            String input = reader.readLine();
+//
+//            if (input.contains(" ")) {
+//                String[] inputs = input.split(" ");
+//                bf.executeCommand(inputs[0], inputs[1]);
+//            } else {
+//                exit(1);
+//            }
+//        }
+//
+//    }
 
 
 
