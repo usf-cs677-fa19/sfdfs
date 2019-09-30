@@ -11,9 +11,33 @@ message RetrieveFile {
     string fileName = 1;
 }
 
+message RetrieveChunk{
+    string fileName = 1;
+    int32 chunkId = 2;
+}
+
+message ChunkLocation{
+    string fileName = 1;
+    int32 chunkId = 2;
+}
+
+message ListChunksAndFileName{
+    repeated string files = 1;
+    repeated int32 chunks = 2;
+}
+
+message HeartBeat{
+    string ipAddress = 1;
+    string port = 2;
+    string spaceRemainingMB = 3;
+}
+
 message StorageMessageWrapper {
     oneof msg {
         StoreChunk storeChunkMsg = 1;
         RetrieveFile retrieveFileMsg = 2;
+        RetrieveChunk retrieveChunk = 3;
+        HeartBeat heartBeat = 4;
     }
 }
+

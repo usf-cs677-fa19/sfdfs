@@ -1,26 +1,73 @@
 package edu.usfca.cs.dfs.filter;
 
-import java.util.HashMap;
+import com.sangupta.murmur.Murmur3;
 
-public class MBloomFilter extends Filter {
+import java.util.ArrayList;
+import java.util.BitSet;
 
-    private HashMap<Integer,Integer> bloomfilter;
+public class MBloomFilter {
 
+    private BitSet bloomFilter;
+    private int[] bloomFilterCounter;
     private int size;
+    private int numberOfHashes;
+    private int numberOfElements;
 
-
-    @Override
-    public int add(String str) {
-        return 0;
+    public MBloomFilter(int size, int hashes){
+        this.bloomFilter = new BitSet(size);
+        this.bloomFilterCounter = new int[size];
+        this.numberOfElements = 0;
+        this.numberOfHashes = hashes;
+        this.size = size;
     }
 
-    @Override
-    public boolean check(String str) {
-        return false;
+    public void put(String data){
+        putInBloomFilter(data.getBytes());
     }
 
-    @Override
-    public boolean delete(String str) {
-        return false;
+    public boolean get(String data){
+        return getFromBloomFilter(data.getBytes());
+    }
+
+    public float falsePositiveProb(){
+
+        return (float)Math.pow(1 - Math.exp(-(float)this.numberOfHashes / ((float)this.size / this.numberOfElements)), this.numberOfHashes);
+    }
+
+    private void putInBloomFilter(byte[] data){
+        ArrayList<Integer>  indexes = getIndexes(data);
+
+        for(int index : indexes){
+            this.bloomFilterCounter[index] += 1;
+            this.bloomFilter.set(index);
+        }
+        this.numberOfElements += 1;
+    }
+
+    private boolean getFromBloomFilter(byte[] data){
+
+        ArrayList<Integer> indexes = getIndexes(data);
+        int count = 0;
+        for(int index : indexes){
+            if(this.bloomFilter.get(index)){
+                count += 1;
+            }
+        }
+        return count == this.numberOfHashes;
+    }
+
+    private ArrayList<Integer>  getIndexes(byte[] data){
+        ArrayList<Integer> hashes = getHashes(data);
+        return hashes;
+    }
+
+    private ArrayList<Integer> getHashes(byte[] data){
+        ArrayList<Integer> results = new ArrayList<Integer>(this.numberOfHashes);
+        long hash1 = Murmur3.hash_x86_32(data, data.length, 777);
+        long hash2 = Murmur3.hash_x86_32(data,data.length,hash1);
+        for(int i=0; i< this.numberOfHashes; i++){
+            results.add(Math.abs((int) (hash1 + i * hash2) % this.size));
+        }
+        return results;
     }
 }
