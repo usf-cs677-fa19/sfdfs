@@ -34,7 +34,7 @@ public class Client {
         ChannelFuture cf = bootstrap.connect("localhost", 7777);
         cf.syncUninterruptibly();
 
-        ByteString data = ByteString.copyFromUtf8("Hello World!");
+        ByteString data = ByteString.copyFromUtf8("Hello World!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         StorageMessages.StoreChunk storeChunkMsg
             = StorageMessages.StoreChunk.newBuilder()
                 .setFileName("my_file.txt")

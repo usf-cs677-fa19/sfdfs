@@ -2,6 +2,7 @@ package edu.usfca.cs.dfs.storageNode;
 
 import com.google.protobuf.ByteString;
 import edu.usfca.cs.dfs.StorageMessages;
+import edu.usfca.cs.dfs.data.HeartBeat;
 import edu.usfca.cs.dfs.net.MessagePipeline;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -12,6 +13,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.io.IOException;
+import java.util.Timer;
 
 public class StorageNodeClient {
 
@@ -48,7 +50,7 @@ public class StorageNodeClient {
                 .build();*/
 
 
-        startSendingHeartBeat(ChannelFuture cf);
+        new StorageNodeClientHelper().startSendingHeartBeat(cf); // start sending heartbeat
         StorageMessages.StorageMessageWrapper msgWrapper =
                 StorageMessages.StorageMessageWrapper.newBuilder()
                         .setHeartBeat(heartBeat)
@@ -64,3 +66,5 @@ public class StorageNodeClient {
         workerGroup.shutdownGracefully();
     }
 }
+
+

@@ -7,14 +7,13 @@ import java.util.Timer;
 
 public class StorageNodeClientHelper {
 
-    public void sendHeartBeat(ChannelFuture cf) {
+    public void startSendingHeartBeat(ChannelFuture cf) {
         for(;;) {
             Timer timer = new Timer();
             HeartBeat beat = new HeartBeat("127.0.0.1", "20000", "1024");
-            timer.schedule();
+            //timer.schedule();
 
 
         }
     }
-
 }
