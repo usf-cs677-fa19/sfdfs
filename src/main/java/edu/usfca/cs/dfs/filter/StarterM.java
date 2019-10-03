@@ -1,6 +1,4 @@
-package edu.usfca.cs.dfs;
-
-import edu.usfca.cs.dfs.filter.MBloomFilter;
+package edu.usfca.cs.dfs.filter;
 
 import java.util.Scanner;
 

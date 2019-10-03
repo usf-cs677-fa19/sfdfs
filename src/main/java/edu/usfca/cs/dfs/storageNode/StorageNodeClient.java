@@ -1,8 +1,6 @@
 package edu.usfca.cs.dfs.storageNode;
 
-import com.google.protobuf.ByteString;
 import edu.usfca.cs.dfs.StorageMessages;
-import edu.usfca.cs.dfs.data.HeartBeat;
 import edu.usfca.cs.dfs.net.MessagePipeline;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -13,7 +11,6 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.io.IOException;
-import java.util.Timer;
 
 public class StorageNodeClient {
 
@@ -21,10 +18,10 @@ public class StorageNodeClient {
 
     }
 
-    public static void main(String[] args)
+    public void startClient()
             throws IOException {
         EventLoopGroup workerGroup = new NioEventLoopGroup();
-        MessagePipeline pipeline = new MessagePipeline();
+        MessagePipeline pipeline = new MessagePipeline("storage");
 
         Bootstrap bootstrap = new Bootstrap()
                 .group(workerGroup)
@@ -32,15 +29,15 @@ public class StorageNodeClient {
                 .option(ChannelOption.SO_KEEPALIVE, true)
                 .handler(pipeline);
 
-        ChannelFuture cf = bootstrap.connect("localhost", 7777);
+        ChannelFuture cf = bootstrap.connect("localhost", 7777);// 7777 is controller
         cf.syncUninterruptibly();
 
        // ByteString data = ByteString.copyFromUtf8("Hello World!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 
         StorageMessages.HeartBeat heartBeat = StorageMessages.HeartBeat.newBuilder()
                 .setIpAddress("localhost")
-                .setPort("7777")
-                .setSpaceRemainingMB("1024")
+                .setPort("8000")
+                .setSpaceRemainingMB("1024")  // new File("\").getSpace
                 .build();
         /*StorageMessages.StoreChunk storeChunkMsg
                 = StorageMessages.StoreChunk.newBuilder()
@@ -50,7 +47,7 @@ public class StorageNodeClient {
                 .build();*/
 
 
-        new StorageNodeClientHelper().startSendingHeartBeat(cf); // start sending heartbeat
+       // new StorageNodeClientHelper().startSendingHeartBeat(cf); // start sending heartbeat
         StorageMessages.StorageMessageWrapper msgWrapper =
                 StorageMessages.StorageMessageWrapper.newBuilder()
                         .setHeartBeat(heartBeat)

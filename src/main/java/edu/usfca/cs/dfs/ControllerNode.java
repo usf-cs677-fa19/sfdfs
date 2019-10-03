@@ -4,23 +4,23 @@ import edu.usfca.cs.dfs.net.ServerMessageRouter;
 
 import java.io.IOException;
 
-public class Controller {
+public class ControllerNode {
 
     ServerMessageRouter messageRouter;
 
-    public Controller() { }
+    public ControllerNode() { }
 
 
     public void start()
             throws IOException {
-        messageRouter = new ServerMessageRouter();
+        messageRouter = new ServerMessageRouter("controller");
         messageRouter.listen(7777);
         System.out.println("Listening for connections on port 7777");
     }
 
     public static void main(String[] args)
             throws IOException {
-        Controller c = new Controller();
+        ControllerNode c = new ControllerNode();
         c.start();
     }
 }

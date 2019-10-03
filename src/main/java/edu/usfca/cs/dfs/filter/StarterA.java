@@ -1,7 +1,6 @@
-package edu.usfca.cs.dfs;
+package edu.usfca.cs.dfs.filter;
 
 
-import edu.usfca.cs.dfs.filter.BloomFilter;
 import edu.usfca.cs.dfs.init.Init;
 
 import java.io.IOException;

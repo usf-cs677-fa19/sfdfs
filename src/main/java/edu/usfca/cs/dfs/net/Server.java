@@ -1,8 +1,6 @@
-package edu.usfca.cs.dfs;
+package edu.usfca.cs.dfs.net;
 
 import java.io.IOException;
-
-import edu.usfca.cs.dfs.net.ServerMessageRouter;
 
 public class Server {
 

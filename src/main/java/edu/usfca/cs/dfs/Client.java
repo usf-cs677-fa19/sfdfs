@@ -1,9 +1,7 @@
 package edu.usfca.cs.dfs;
 
-import java.io.IOException;
-
 import com.google.protobuf.ByteString;
-
+import edu.usfca.cs.dfs.net.MessagePipeline;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -12,7 +10,7 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
-import edu.usfca.cs.dfs.net.MessagePipeline;
+import java.io.IOException;
 
 public class Client {
 
@@ -23,7 +21,7 @@ public class Client {
     public static void main(String[] args)
     throws IOException {
         EventLoopGroup workerGroup = new NioEventLoopGroup();
-        MessagePipeline pipeline = new MessagePipeline();
+        MessagePipeline pipeline = new MessagePipeline("client");
 
         Bootstrap bootstrap = new Bootstrap()
             .group(workerGroup)

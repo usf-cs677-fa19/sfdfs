@@ -1,12 +1,11 @@
 package edu.usfca.cs.dfs.net;
 
-import java.net.InetSocketAddress;
-
 import edu.usfca.cs.dfs.StorageMessages;
-
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+
+import java.net.InetSocketAddress;
 
 @ChannelHandler.Sharable
 public class InboundHandler
@@ -41,10 +40,14 @@ extends SimpleChannelInboundHandler<StorageMessages.StorageMessageWrapper> {
             ChannelHandlerContext ctx,
             StorageMessages.StorageMessageWrapper msg) {
 
-        StorageMessages.StoreChunk storeChunkMsg
-            = msg.getStoreChunkMsg();
-        System.out.println("Storing file name: "
-                + storeChunkMsg.getFileName());
+//        if(msg.hasHeartBeat() ) {
+//            System.out.println("heartbeat from");
+//        } else {
+            StorageMessages.StoreChunk storeChunkMsg
+                    = msg.getStoreChunkMsg();
+            System.out.println("Storing file name: "
+                    + storeChunkMsg.getFileName());
+//        }
     }
 
     @Override
