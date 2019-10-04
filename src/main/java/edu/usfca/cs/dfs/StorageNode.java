@@ -33,7 +33,9 @@ public class StorageNode {
     public static void main(String[] args)
             throws IOException {
         StorageNode s = new StorageNode();
-        s.start();
+        String nodeType = "StorageNode";
+        int port = 9999;
+        s.start(nodeType,port);
         StorageNodeClient client = new StorageNodeClient();
         client.startClient();
     }
