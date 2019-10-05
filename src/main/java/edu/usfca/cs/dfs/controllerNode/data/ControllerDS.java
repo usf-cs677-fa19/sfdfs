@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class ControllerDS {
 
-    //here key = ip+port
+    // here key = ip+port
     private HashMap<String, StorageNodeDetail> storageNodeRegister;
 
     public ControllerDS() {
@@ -34,6 +34,5 @@ public class ControllerDS {
     private void existInStorageNodeRegister(String key, StorageNodeDetail snd) {
         this.storageNodeRegister.get(key).setSpaceRemainingMB(snd.getSpaceRemainingMB());
         this.storageNodeRegister.get(key).setTimeStamp(snd.getTimeStamp());
-
     }
 }
