@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.Timer;
 
 
-public class NodeClient {
+public class StorageNodeClient {
 
     private String nodeType;
     private String address;
@@ -22,27 +22,24 @@ public class NodeClient {
 
     StorageClientHelper helper;
 
-    public NodeClient(String nodeType, String address, int port) {
+    public StorageNodeClient(String nodeType, String address, int port) {
         this.nodeType = nodeType;
         this.address = address;
         this.port = port;
 
-        if(nodeType.equals("storage")) {
-            this.helper = new StorageClientHelper();
-            this.keepSendingHeartBeat();
+        this.helper = new StorageClientHelper();
+        this.keepSendingHeartBeat();
 
-        }
+
     }
-
-
 
     public void keepSendingHeartBeat() {
         Timer timer = new Timer();
-        timer.schedule(new HeartBeatSender(), 0, 5000);
+        timer.schedule(
+                new HeartBeatSender(this,"localhost",7777,helper.buildHeartBeat(this.address,this.port)),
+                0,
+                5000);
     }
-
-
-
 
     public void startClient(String connectingAddress, int connectingPort, StorageMessages.StorageMessageWrapper msgWrapper)
             throws IOException {

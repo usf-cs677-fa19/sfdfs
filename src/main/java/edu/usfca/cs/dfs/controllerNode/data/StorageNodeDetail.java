@@ -6,7 +6,7 @@ public class StorageNodeDetail {
 
     private final String ipAddress;
     private final String port;
-    private final String spaceRemainingMB;
+    private String spaceRemainingMB;
     private Instant timeStamp;
 
     public StorageNodeDetail(String ipAddress, String port, String spaceRemainingMB, Instant timeStamp) {
@@ -32,5 +32,11 @@ public class StorageNodeDetail {
         return timeStamp;
     }
 
+    public void setSpaceRemainingMB(String spaceRemainingMB) {
+        this.spaceRemainingMB = spaceRemainingMB;
+    }
 
+    public void setTimeStamp(Instant timeStamp) {
+        this.timeStamp = timeStamp;
+    }
 }

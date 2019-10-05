@@ -32,14 +32,14 @@ public class ControllerInboundHandler extends InboundHandler {
     private void recvHeartBeat(StorageMessages.StorageMessageWrapper msg) {
         System.out.println("heartbeat from: "+msg.getHeartBeat().getIpAddress()+":"+msg.getHeartBeat().getPort());
 
-        controllerDS.addToStorageNodeDetailList(new StorageNodeDetail(
+        controllerDS.updateStorageNodeRegister(new StorageNodeDetail(
                 msg.getHeartBeat().getIpAddress(),
                 msg.getHeartBeat().getPort(),
                 msg.getHeartBeat().getSpaceRemainingMB(),
                 Instant.now()
         ));
 
-        System.out.println("StorageNodeDetailList size: "+controllerDS.getStorageNodeDetailList().size());
+        System.out.println("StorageNodeDetailList size: "+controllerDS.getStorageNodeRegister().size());
     }
 
 

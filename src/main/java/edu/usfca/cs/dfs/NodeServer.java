@@ -7,10 +7,10 @@ import java.io.IOException;
 
 public class NodeServer {
 
-    ServerMessageRouter messageRouter;
-    NodeClient client ;
+    private ServerMessageRouter messageRouter;
+    private StorageNodeClient client ;
 
-    ConfigSystemParam nodeParam;
+    private ConfigSystemParam nodeParam;
 
     public NodeServer(ConfigSystemParam nodeParam) {
         this.nodeParam = nodeParam;
@@ -26,9 +26,15 @@ public class NodeServer {
     public void run()
             throws IOException {
 
-            this.start(nodeParam.getNodeType(), nodeParam.getPort());
+        this.start(nodeParam.getNodeType(), nodeParam.getPort());
 
-            this.client = new NodeClient(nodeParam.getNodeType(), nodeParam.getAddress(), nodeParam.getPort());
+        if(nodeParam.getNodeType().equals("storage")) { // if storage  node
+            this.client = new StorageNodeClient(nodeParam.getNodeType(), nodeParam.getAddress(), nodeParam.getPort());
+
+        } else if(nodeParam.getNodeType().equals("controller")) {
+
+        }
+
     }
 
 
