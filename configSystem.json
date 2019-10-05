@@ -1,0 +1,5 @@
+[
+    {"nodeType": "controller", "address" : "localhost", "port" : 7777},
+    {"nodeType": "storage", "address" : "localhost", "port" : 8000},
+    {"nodeType": "storage", "address" : "localhost", "port" : 8001}
+]

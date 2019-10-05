@@ -23,6 +23,19 @@ public class Init {
      */
     public static Boolean isCorrectArgs(String[] args) {
         return ((args.length == 1) && (args[0].contains(".json")));
+//        return ((args.length == 2) &&
+//                ((args[0].equalsIgnoreCase("controller")) || (args[0].equalsIgnoreCase("storage"))) &&
+//                (Init.isInt(args[1]))
+//        );
+    }
+
+    private static boolean isInt(String strNum) {
+        try {
+            int i = Integer.parseInt(strNum);
+        } catch (NumberFormatException | NullPointerException nfe) {
+            return false;
+        }
+        return true;
     }
 
     /**
