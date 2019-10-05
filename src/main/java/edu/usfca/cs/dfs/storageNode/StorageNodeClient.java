@@ -1,7 +1,7 @@
-package edu.usfca.cs.dfs;
+package edu.usfca.cs.dfs.storageNode;
 
+import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.net.MessagePipeline;
-import edu.usfca.cs.dfs.storageNode.HeartBeatSender;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;

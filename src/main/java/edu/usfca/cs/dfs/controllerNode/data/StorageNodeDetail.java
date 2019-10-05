@@ -1,6 +1,11 @@
 package edu.usfca.cs.dfs.controllerNode.data;
 
+import edu.usfca.cs.dfs.filter.BloomFilter;
+import edu.usfca.cs.dfs.init.Init;
+
 import java.time.Instant;
+import java.util.Map;
+import java.util.Scanner;
 
 public class StorageNodeDetail {
 
@@ -8,12 +13,14 @@ public class StorageNodeDetail {
     private final String port;
     private String spaceRemainingMB;
     private Instant timeStamp;
+    private BloomFilter bloom;
 
     public StorageNodeDetail(String ipAddress, String port, String spaceRemainingMB, Instant timeStamp) {
         this.ipAddress = ipAddress;
         this.port = port;
         this.spaceRemainingMB = spaceRemainingMB;
         this.timeStamp = timeStamp;
+        this.bloom = this.InitBloom();
     }
 
     public String getIpAddress() {
@@ -38,5 +45,22 @@ public class StorageNodeDetail {
 
     public void setTimeStamp(Instant timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    private BloomFilter InitBloom() {
+        Map<String, String> c = Init.readConfigFileIntoMap("configFilter.json");
+        System.out.println(c);
+
+        int filterSize = Integer.parseInt(c.get("filterSize"));
+        int hashes = Integer.parseInt(c.get("hashes"));
+
+        BloomFilter bf = new BloomFilter(filterSize, hashes);
+
+        for (; ; ) {
+            Scanner scanner = new Scanner(System.in);
+            if (scanner.hasNextLine()) {
+                bf.executeCommand(scanner.nextLine());
+            }
+        }
     }
 }

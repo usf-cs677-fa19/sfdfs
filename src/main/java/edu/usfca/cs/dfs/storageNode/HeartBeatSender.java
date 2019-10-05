@@ -1,7 +1,6 @@
 package edu.usfca.cs.dfs.storageNode;
 
 import edu.usfca.cs.dfs.StorageMessages;
-import edu.usfca.cs.dfs.StorageNodeClient;
 
 import java.io.IOException;
 import java.util.TimerTask;

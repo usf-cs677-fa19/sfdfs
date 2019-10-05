@@ -1,12 +1,12 @@
 package edu.usfca.cs.dfs.storageNode;
 
-public class Directory {
+public class DirAndFileCreator {
 
     //state
     private String basePath;
 
 
-    public Directory(String basePath) {
+    public DirAndFileCreator(String basePath) {
         this.basePath = basePath;
     }
     //behaviour

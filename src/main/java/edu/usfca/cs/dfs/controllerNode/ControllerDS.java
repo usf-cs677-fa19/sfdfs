@@ -1,14 +1,19 @@
-package edu.usfca.cs.dfs.controllerNode.data;
+package edu.usfca.cs.dfs.controllerNode;
+
+import edu.usfca.cs.dfs.controllerNode.data.StorageNodeDetail;
 
 import java.util.HashMap;
 
 public class ControllerDS {
 
     // here key = ip+port
-    private HashMap<String, StorageNodeDetail> storageNodeRegister;
+    private HashMap<String, StorageNodeDetail> storageNodeRegister; // can keep bloomfilter in StorageNodeDetail if we assume bloomfilter should be r
+    // efreshed everytime the storage node in deleted
+
 
     public ControllerDS() {
         storageNodeRegister = new HashMap<>();
+
     }
 
     public HashMap<String, StorageNodeDetail> getStorageNodeRegister() {
@@ -28,7 +33,6 @@ public class ControllerDS {
 
     private void newInStorageNodeRegister(String key, StorageNodeDetail snd) {
         this.storageNodeRegister.put(key,snd);
-
     }
 
     private void existInStorageNodeRegister(String key, StorageNodeDetail snd) {

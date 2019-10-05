@@ -1,4 +1,6 @@
-package edu.usfca.cs.dfs;
+package edu.usfca.cs.dfs.storageNode;
+
+import edu.usfca.cs.dfs.StorageMessages;
 
 public class StorageClientHelper {
 

@@ -2,6 +2,7 @@ package edu.usfca.cs.dfs;
 
 import edu.usfca.cs.dfs.init.ConfigSystemParam;
 import edu.usfca.cs.dfs.net.ServerMessageRouter;
+import edu.usfca.cs.dfs.storageNode.StorageNodeClient;
 
 import java.io.IOException;
 
