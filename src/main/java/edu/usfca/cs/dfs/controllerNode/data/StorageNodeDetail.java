@@ -54,13 +54,7 @@ public class StorageNodeDetail {
         int filterSize = Integer.parseInt(c.get("filterSize"));
         int hashes = Integer.parseInt(c.get("hashes"));
 
-        BloomFilter bf = new BloomFilter(filterSize, hashes);
+        return new BloomFilter(filterSize, hashes);
 
-        for (; ; ) {
-            Scanner scanner = new Scanner(System.in);
-            if (scanner.hasNextLine()) {
-                bf.executeCommand(scanner.nextLine());
-            }
-        }
     }
 }

@@ -1,5 +1,6 @@
 package edu.usfca.cs.dfs.storageNode;
 
+import edu.usfca.cs.dfs.NodeClient;
 import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.net.MessagePipeline;
 import io.netty.bootstrap.Bootstrap;
@@ -14,7 +15,7 @@ import java.io.IOException;
 import java.util.Timer;
 
 
-public class StorageNodeClient {
+public class StorageNodeClient implements NodeClient {
 
     private String nodeType;
     private String address;

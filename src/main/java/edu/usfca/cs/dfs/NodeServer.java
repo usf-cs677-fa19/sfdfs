@@ -1,5 +1,7 @@
 package edu.usfca.cs.dfs;
 
+import edu.usfca.cs.dfs.controllerNode.ControllerDS;
+import edu.usfca.cs.dfs.controllerNode.ControllerNodeHelper;
 import edu.usfca.cs.dfs.init.ConfigSystemParam;
 import edu.usfca.cs.dfs.net.ServerMessageRouter;
 import edu.usfca.cs.dfs.storageNode.StorageNodeClient;
@@ -9,7 +11,9 @@ import java.io.IOException;
 public class NodeServer {
 
     private ServerMessageRouter messageRouter;
-    private StorageNodeClient client ;
+    private NodeClient client;
+//    private StorageNodeClient client ;
+//    private ControllerNodeClient cclient;
 
     private ConfigSystemParam nodeParam;
 
@@ -33,11 +37,11 @@ public class NodeServer {
             this.client = new StorageNodeClient(nodeParam.getNodeType(), nodeParam.getAddress(), nodeParam.getPort());
 
         } else if(nodeParam.getNodeType().equals("controller")) {
+            ControllerDS controllerDS = new ControllerDS();
+            new ControllerNodeHelper(controllerDS);
+
 
         }
 
     }
-
-
-
 }
