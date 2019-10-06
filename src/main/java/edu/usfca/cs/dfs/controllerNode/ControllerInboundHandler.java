@@ -30,7 +30,7 @@ public class ControllerInboundHandler extends InboundHandler {
 
     private void recvHeartBeat(StorageMessages.StorageMessageWrapper msg) {
 
-        ControllerNodeHelper.recvHeartBeat(msg);
+        new ControllerNodeHelper().recvHeartBeat(msg);
 //        System.out.println("heartbeat from: "+msg.getHeartBeat().getIpAddress()+":"+msg.getHeartBeat().getPort());
 //
 //        controllerDS.updateStorageNodeRegister(new StorageNodeDetail(

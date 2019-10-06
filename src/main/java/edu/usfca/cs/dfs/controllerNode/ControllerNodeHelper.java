@@ -11,10 +11,10 @@ import java.util.Timer;
 
 public class ControllerNodeHelper{
 
-    private static ControllerDS controllerDS;
+    //private static ControllerDS controllerDS;
 
-    public ControllerNodeHelper(ControllerDS controllerDS) {
-        this.controllerDS = controllerDS;
+    public ControllerNodeHelper(/*ControllerDS controllerDS*/) {
+        //this.controllerDS = controllerDS;
         this.checkAliveStorageNodes();
     }
 
@@ -23,28 +23,28 @@ public class ControllerNodeHelper{
         timer.schedule(
                 new CheckAliveStorageNodes(),
                 0,
-                7000);
+                8000);
     }
 
-    public static Map<String, StorageNodeDetail> getStorageNodes(){
-        return controllerDS.getStorageNodeRegister();
-    }
+//    public static Map<String, StorageNodeDetail> getStorageNodes(){
+//        return controllerDS.getStorageNodeRegister();
+//    }
+//
+//    public static void updateStorageNodeRegister(StorageNodeDetail snd){
+//        controllerDS.updateStorageNodeRegister(snd);
+//    }
 
-    public static void updateStorageNodeRegister(StorageNodeDetail snd){
-        controllerDS.updateStorageNodeRegister(snd);
-    }
-
-    public static void recvHeartBeat(StorageMessages.StorageMessageWrapper msg) {
+    public void recvHeartBeat(StorageMessages.StorageMessageWrapper msg) {
         System.out.println("heartbeat from: "+msg.getHeartBeat().getIpAddress()+":"+msg.getHeartBeat().getPort());
 
-        updateStorageNodeRegister(new StorageNodeDetail(
+        ControllerDS.CDS.updateStorageNodeRegister(new StorageNodeDetail(
                 msg.getHeartBeat().getIpAddress(),
                 msg.getHeartBeat().getPort(),
                 msg.getHeartBeat().getSpaceRemainingMB(),
                 Instant.now()
         ));
 
-        System.out.println("StorageNodeDetailList size: "+ControllerDS.getStorageNodeRegister().size());
+        System.out.println("StorageNodeDetailList size: "+ControllerDS.CDS.getStorageNodeRegister().size());
     }
 
     //for a chunk return 3 storage node
