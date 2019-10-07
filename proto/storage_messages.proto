@@ -7,18 +7,6 @@ message StoreChunk {
      bytes data = 3;
  }
 
-message chunkMeta {
-    string fileName = 1;
-    int32 chunkId = 2;
-
-    string checksum = 3;
-    int32 chunkSize = 4;
-    int32 chunkNumber = 5;
-    int32 totalChunks = 6;
-
-    repeated string storageNodeIds = 7;
-}
-
 message RetrieveFile {
     string fileName = 1;
 }
