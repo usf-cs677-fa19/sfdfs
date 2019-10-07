@@ -1,12 +1,9 @@
 package edu.usfca.cs.dfs.controllerNode;
 
 import edu.usfca.cs.dfs.StorageMessages;
-import edu.usfca.cs.dfs.controllerNode.data.ChunkMeta;
-import edu.usfca.cs.dfs.controllerNode.data.StorageNodeDetail;
+import edu.usfca.cs.dfs.data.ChunkMeta;
 import edu.usfca.cs.dfs.net.InboundHandler;
 import io.netty.channel.ChannelHandlerContext;
-
-import java.time.Instant;
 
 public class ControllerInboundHandler extends InboundHandler {
 

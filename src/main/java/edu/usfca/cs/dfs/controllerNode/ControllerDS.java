@@ -1,6 +1,7 @@
 package edu.usfca.cs.dfs.controllerNode;
 
 import edu.usfca.cs.dfs.controllerNode.data.StorageNodeDetail;
+import edu.usfca.cs.dfs.controllerNode.data.StorageNodeGroupRegister;
 import edu.usfca.cs.dfs.data.NodeId;
 
 
@@ -14,7 +15,7 @@ public enum ControllerDS {
 
     // here key = ip+port
     private Map<String, StorageNodeDetail> storageNodeRegister = new ConcurrentHashMap<>();
-
+    public StorageNodeGroupRegister storageNodeGroupRegister = StorageNodeGroupRegister.getStorageNodeGroupRegister();
 
     public Map<String, StorageNodeDetail> getStorageNodeRegister() {
         return storageNodeRegister;
@@ -58,10 +59,8 @@ public enum ControllerDS {
         storageNodeRegister.get(key).setTimeStamp(snd.getTimeStamp());
     }
 
-
     public void deleteFromStorageNodeRegister(String key) {
         //String key = snd.getIpAddress() + snd.getPort();
-
         if (storageNodeRegister.containsKey(key)) {
             storageNodeRegister.remove(key);
         }
@@ -70,17 +69,46 @@ public enum ControllerDS {
     public String findTheStorageNodeToSaveChunk(int size){
         String storageNodeKey = new String();
 
+        storageNodeKey = getSNWithMaxSpace(size);
+//        Iterator storageNodeIterator = storageNodeRegister.entrySet().iterator();
+//
+//        while (storageNodeIterator.hasNext()){
+//            Map.Entry node = (Map.Entry) storageNodeIterator.next();
+//
+//            StorageNodeDetail details = (StorageNodeDetail) node.getValue();
+//
+//            //todo : to sort
+//
+//            if(Integer.getInteger(((StorageNodeDetail) node.getValue()).getSpaceRemainingMB()) >= size){
+//
+//                storageNodeKey = (String)node.getKey();
+//            }
+//        }
+        return storageNodeKey;
+    }
+
+    public String getSNWithMaxSpace(int requiredChunkSize){
+        String node = "";
+        int size = 0;
+
         Iterator storageNodeIterator = storageNodeRegister.entrySet().iterator();
 
         while (storageNodeIterator.hasNext()){
-            Map.Entry node = (Map.Entry) storageNodeIterator.next();
+            Map.Entry storageNode = (Map.Entry) storageNodeIterator.next();
 
-            StorageNodeDetail details = (StorageNodeDetail) node.getValue();
+            StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
 
-            if(Integer.getInteger(((StorageNodeDetail) node.getValue()).getSpaceRemainingMB()) >= size){
-                storageNodeKey = (String)node.getKey();
+            if(size < Integer.getInteger(details.getSpaceRemainingMB())){
+                size = Integer.getInteger(details.getSpaceRemainingMB());
+                node = (String) storageNode.getKey();
             }
         }
-        return storageNodeKey;
+
+        if(size > requiredChunkSize) {
+            return node;
+        }else{
+            return "";
+        }
     }
+
 }

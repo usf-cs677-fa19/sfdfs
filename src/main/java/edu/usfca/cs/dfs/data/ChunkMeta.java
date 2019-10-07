@@ -1,4 +1,4 @@
-package edu.usfca.cs.dfs.controllerNode.data;
+package edu.usfca.cs.dfs.data;
 
 public class ChunkMeta {
 
