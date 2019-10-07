@@ -6,7 +6,7 @@ public class ChunkMeta {
     private int chunkId;
     private int checksum;
     private int chunkSize;
-    private int chunkNumber;
+    //private int chunkNumber;
     private int totalChunks;
 
     private String[] storageNodeIds;
@@ -15,7 +15,7 @@ public class ChunkMeta {
     public ChunkMeta(String filename, int totalChunks, int chunkNumber, int chunkSize){
         this.filename = filename;
         this.totalChunks = totalChunks;
-        this.chunkNumber = chunkNumber;
+        this.chunkId = chunkNumber;
         this.chunkSize = chunkSize;
     }
 
@@ -27,9 +27,9 @@ public class ChunkMeta {
         return totalChunks;
     }
 
-    public int getChunkNumber() {
-        return chunkNumber;
-    }
+//    public int getChunkNumber() {
+//        return chunkNumber;
+//    }
 
     public int getChunkSize() {
         return chunkSize;

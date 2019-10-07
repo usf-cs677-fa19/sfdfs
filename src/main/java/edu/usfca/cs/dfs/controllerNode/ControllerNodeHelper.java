@@ -63,7 +63,7 @@ public class ControllerNodeHelper{
 
         String primaryNode = ControllerDS.CDS.findTheStorageNodeToSaveChunk(chunkMeta.getChunkSize());
 
-        ((StorageNodeGroupRegister)ControllerDS.CDS.getStorageNodeRegister()).checkStorageNodeGroupRegister(primaryNode);
+        ((StorageNodeGroupRegister)ControllerDS.CDS.getStorageNodeRegister()).checkStorageNodeGroupRegister(primaryNode,chunkMeta.getChunkSize());
 
 
 

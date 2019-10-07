@@ -1,5 +1,8 @@
 package edu.usfca.cs.dfs.controllerNode.data;
 
+import edu.usfca.cs.dfs.controllerNode.ControllerDS;
+import edu.usfca.cs.dfs.controllerNode.ControllerNodeHelper;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -34,13 +37,14 @@ public class StorageNodeGroupRegister {
         return false;
     }
 
-    public ArrayList<String> checkStorageNodeGroupRegister(String node){
+    public ArrayList<String> checkStorageNodeGroupRegister(String node, int chunkSize){
         ArrayList<String> storageNodePrimaryReplicaDetails = new ArrayList<>();
         if(checkIfPrimaryExists(node)){
             storageNodePrimaryReplicaDetails.add(node);
             storageNodePrimaryReplicaDetails.addAll(getReplicaList(node));
         }else{
-
+            String newReplicaOne = ControllerDS.CDS.getSNWithMaxSpace(chunkSize);
+            //String
             //todo : get new replicas
         }
         return storageNodePrimaryReplicaDetails;

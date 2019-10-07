@@ -77,7 +77,6 @@ public enum ControllerDS {
 //
 //            StorageNodeDetail details = (StorageNodeDetail) node.getValue();
 //
-//            //todo : to sort
 //
 //            if(Integer.getInteger(((StorageNodeDetail) node.getValue()).getSpaceRemainingMB()) >= size){
 //
@@ -103,7 +102,6 @@ public enum ControllerDS {
                 node = (String) storageNode.getKey();
             }
         }
-
         if(size > requiredChunkSize) {
             return node;
         }else{
