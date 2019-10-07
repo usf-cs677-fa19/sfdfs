@@ -1,7 +1,7 @@
 package edu.usfca.cs.dfs.controllerNode;
 
 import edu.usfca.cs.dfs.StorageMessages;
-import edu.usfca.cs.dfs.controllerNode.data.ChunkMeta;
+import edu.usfca.cs.dfs.data.ChunkMeta;
 import edu.usfca.cs.dfs.controllerNode.data.StorageNodeDetail;
 import java.time.Instant;
 import java.util.Timer;

@@ -37,9 +37,8 @@ message HeartBeat{
      int32 chunkId = 2;
      int32 checksum = 3;
      int32 chunkSize = 4;
-     int32 chunkNumber = 5;
-     int32 totalChunks = 6;
-     repeated string storageNodeIds = 7;
+     int32 totalChunks = 5;
+     repeated string storageNodeIds = 6;
  }
 
 message StorageMessageWrapper {
