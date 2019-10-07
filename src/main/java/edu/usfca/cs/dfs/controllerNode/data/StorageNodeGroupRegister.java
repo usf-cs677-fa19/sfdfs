@@ -1,12 +1,26 @@
 package edu.usfca.cs.dfs.controllerNode.data;
 
+import edu.usfca.cs.dfs.controllerNode.ControllerDS;
+import edu.usfca.cs.dfs.controllerNode.ControllerNodeHelper;
+
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class StorageNodeGroupRegister {
-    Map<String, List<String>> storageNodeGroupRegister;
 
-    public StorageNodeGroupRegister() {
-        storageNodeGroupRegister = new HashMap<>();
+    private static StorageNodeGroupRegister register = null;
+    private Map<String, List<String>> storageNodeGroupRegister;
+
+    private StorageNodeGroupRegister() {
+        storageNodeGroupRegister = new ConcurrentHashMap<>();
+    }
+
+    public static synchronized StorageNodeGroupRegister getStorageNodeGroupRegister(){
+        if (register == null){
+            return new StorageNodeGroupRegister();
+        }else {
+            return register;
+        }
     }
 
     public void addAPrimaryNode(String primaryKey) {
@@ -23,11 +37,15 @@ public class StorageNodeGroupRegister {
         return false;
     }
 
-    public ArrayList<String> checkStorageNodeGroupRegister(String node){
+    public ArrayList<String> checkStorageNodeGroupRegister(String node, int chunkSize){
         ArrayList<String> storageNodePrimaryReplicaDetails = new ArrayList<>();
         if(checkIfPrimaryExists(node)){
-            storageNodePrimaryReplicaDetails.addAll(getReplicaList(node));
             storageNodePrimaryReplicaDetails.add(node);
+            storageNodePrimaryReplicaDetails.addAll(getReplicaList(node));
+        }else{
+            String newReplicaOne = ControllerDS.CDS.getSNWithMaxSpace(chunkSize);
+            //String
+            //todo : get new replicas
         }
         return storageNodePrimaryReplicaDetails;
     }
