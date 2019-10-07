@@ -7,6 +7,7 @@ import java.time.Instant;
 import java.util.Map;
 import java.util.Scanner;
 
+//based on heartbeat recv'ed from storage nodes
 public class StorageNodeDetail {
 
     private final String ipAddress;

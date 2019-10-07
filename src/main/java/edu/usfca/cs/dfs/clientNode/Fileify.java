@@ -11,9 +11,14 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class Fileify {
+
+    //private static String HOME = System.getProperty("user.home"); todo : use it for storage node to check if file exist
 
 
     //behaviour
@@ -21,25 +26,35 @@ public class Fileify {
     //create directory
     //delete directory
     //change directory
+    // does file exist
+    public boolean doesFileExist(String filePath) {
+        Path p = Paths.get(filePath);
+        return Files.exists(p);
+    }
     //create file
     //open filechannel for a file
-    public FileChannel openFileAndGetFileChannel(String filename, String mode) throws IOException {
+//    public FileChannel openFileAndGetFileChannel(String filename, String mode) throws IOException {
 
-        try(
-                RandomAccessFile reader = new RandomAccessFile(filename, mode);
-                FileChannel fc = reader.getChannel();
-                //ByteArrayOutputStream out = new ByteArrayOutputStream();
-        ) {
-            return fc;
-        }
-    }
+//        try(
+//                RandomAccessFile reader = new RandomAccessFile(filename, mode);
+//                FileChannel fc = reader.getChannel();
+//                //ByteArrayOutputStream out = new ByteArrayOutputStream();
+//        ) {
+//            return fc;
+//        }
+//    }
 
     //read file
 
     //get file size
-    public long getFileSize(FileChannel fc) throws IOException {
-        //ByteBuf buf = ByteBuffer.allocate(chunkSize);
-        return fc.size();
+    public long getFileSize(String filename) throws IOException {
+        try(
+                RandomAccessFile reader = new RandomAccessFile(filename, "r");
+                FileChannel fc = reader.getChannel();
+        ) {
+            return fc.size();
+        }
+
     }
     //write from start
     // write append
