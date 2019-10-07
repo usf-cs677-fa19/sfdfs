@@ -45,7 +45,7 @@ public class StorageNodeGroupRegister {
         }else{
             String newReplicaOne = ControllerDS.CDS.getSNWithMaxSpace(chunkSize);
             //String
-            //todo : get new replicas
+            //todo : get new replicas  ok
         }
         return storageNodePrimaryReplicaDetails;
     }
