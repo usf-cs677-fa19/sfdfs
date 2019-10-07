@@ -1,11 +1,10 @@
 package edu.usfca.cs.dfs.controllerNode;
 
-import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.controllerNode.data.StorageNodeDetail;
+import edu.usfca.cs.dfs.data.NodeId;
 
-import java.time.Instant;
-import java.util.Collections;
-import java.util.HashMap;
+
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -19,6 +18,11 @@ public enum ControllerDS {
 
     public Map<String, StorageNodeDetail> getStorageNodeRegister() {
         return storageNodeRegister;
+    }
+
+    public String getStorageNodeKey(String ipAddress, String port) {
+       return new NodeId(ipAddress,port).getId();
+       // return ipAddress + port;
     }
 
 //    private void recvHeartBeat(StorageMessages.StorageMessageWrapper msg) {
@@ -35,7 +39,7 @@ public enum ControllerDS {
 //    }
 
     public void updateStorageNodeRegister(StorageNodeDetail snd) {
-        String key = snd.getIpAddress()+snd.getPort();
+        String key = getStorageNodeKey(snd.getIpAddress(), snd.getPort());
 
         if(storageNodeRegister.containsKey(key)){
             existInStorageNodeRegister(key, snd);
@@ -61,5 +65,22 @@ public enum ControllerDS {
         if (storageNodeRegister.containsKey(key)) {
             storageNodeRegister.remove(key);
         }
+    }
+
+    public String findTheStorageNodeToSaveChunk(int size){
+        String storageNodeKey;
+
+        Iterator storageNodeIterator = storageNodeRegister.entrySet().iterator();
+
+        while (storageNodeIterator.hasNext()){
+            Map.Entry node = (Map.Entry) storageNodeIterator.next();
+
+            StorageNodeDetail details = (StorageNodeDetail) node.getValue();
+
+            if(Integer.getInteger(((StorageNodeDetail) node.getValue()).getSpaceRemainingMB()) >= size){
+                return (String)node.getKey();
+            }
+        }
+        return new String();
     }
 }
