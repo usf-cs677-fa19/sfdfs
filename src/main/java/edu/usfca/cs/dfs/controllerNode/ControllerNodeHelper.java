@@ -1,21 +1,27 @@
 package edu.usfca.cs.dfs.controllerNode;
 
-import edu.usfca.cs.dfs.NodeClient;
 import edu.usfca.cs.dfs.StorageMessages;
+import edu.usfca.cs.dfs.controllerNode.data.ChunkMeta;
 import edu.usfca.cs.dfs.controllerNode.data.StorageNodeDetail;
-import edu.usfca.cs.dfs.storageNode.HeartBeatSender;
-
 import java.time.Instant;
-import java.util.Map;
 import java.util.Timer;
 
 public class ControllerNodeHelper{
 
     //private static ControllerDS controllerDS;
 
-    public ControllerNodeHelper(/*ControllerDS controllerDS*/) {
+    private static ControllerNodeHelper controllerNodeHelper = null;
+
+    private ControllerNodeHelper(/*ControllerDS controllerDS*/) {
         //this.controllerDS = controllerDS;
         this.checkAliveStorageNodes();
+    }
+
+    public static synchronized ControllerNodeHelper getControllerNodeHelper(){
+        if(controllerNodeHelper == null){
+            controllerNodeHelper = new ControllerNodeHelper();
+        }
+        return controllerNodeHelper;
     }
 
     public void checkAliveStorageNodes() {
@@ -48,6 +54,18 @@ public class ControllerNodeHelper{
     }
 
     //for a chunk return 3 storage node
+
+    public String[] storeChunkMetadata(ChunkMeta chunkMeta){
+        //check if the space in storage nodes
+       // Map<Integer, StorageNodeKey> threeStorageNodes = new HashMap<Integer, StorageNodeKey>();
+        String[] threeStorageNodes = {};
+
+        ControllerDS.CDS.findTheStorageNodeToSaveChunk(chunkMeta.getChunkSize());
+
+
+        return threeStorageNodes;
+    }
+
 
 
 }

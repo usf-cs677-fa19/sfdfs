@@ -38,8 +38,8 @@ public class NodeServer {
 
         } else if(nodeParam.getNodeType().equals("controller")) {
             //ControllerDS controllerDS = new ControllerDS();
-            new ControllerNodeHelper(/*controllerDS*/);
-
+            ControllerNodeHelper.getControllerNodeHelper();
+            //new ControllerNodeHelper(/*controllerDS*/);
 
         }
 
