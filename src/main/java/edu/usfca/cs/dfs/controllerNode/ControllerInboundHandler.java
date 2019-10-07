@@ -19,7 +19,7 @@ public class ControllerInboundHandler extends InboundHandler {
             this.recvHeartBeat(msg);
 
         }else if(msg.hasChunkMetaMsg()){
-
+            this.storeChunkMetadata(msg);
         }else {
             StorageMessages.StoreChunk storeChunkMsg
                     = msg.getStoreChunkMsg();

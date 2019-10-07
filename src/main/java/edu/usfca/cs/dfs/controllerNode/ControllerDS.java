@@ -68,7 +68,7 @@ public enum ControllerDS {
     }
 
     public String findTheStorageNodeToSaveChunk(int size){
-        String storageNodeKey;
+        String storageNodeKey = new String();
 
         Iterator storageNodeIterator = storageNodeRegister.entrySet().iterator();
 
@@ -78,9 +78,9 @@ public enum ControllerDS {
             StorageNodeDetail details = (StorageNodeDetail) node.getValue();
 
             if(Integer.getInteger(((StorageNodeDetail) node.getValue()).getSpaceRemainingMB()) >= size){
-                return (String)node.getKey();
+                storageNodeKey = (String)node.getKey();
             }
         }
-        return new String();
+        return storageNodeKey;
     }
 }
