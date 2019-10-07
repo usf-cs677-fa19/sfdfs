@@ -27,6 +27,9 @@ public class ChunkMeta {
         return totalChunks;
     }
 
+    public int getChunkId() {
+        return chunkId;
+    }
 //    public int getChunkNumber() {
 //        return chunkNumber;
 //    }

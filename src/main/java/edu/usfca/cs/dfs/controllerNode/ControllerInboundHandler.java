@@ -47,7 +47,7 @@ public class ControllerInboundHandler extends InboundHandler {
         ControllerNodeHelper.getControllerNodeHelper().storeChunkMetadata(
                 new ChunkMeta(msg.getChunkMetaMsg().getFileName(),
                         msg.getChunkMetaMsg().getTotalChunks(),
-                        msg.getChunkMetaMsg().getChunkNumber(),
+                        msg.getChunkMetaMsg().getChunkId(),
                         msg.getChunkMetaMsg().getChunkSize())
         );
     }
