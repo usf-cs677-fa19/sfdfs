@@ -1,5 +1,8 @@
 package edu.usfca.cs.dfs.clientNode;
 
+import com.google.protobuf.ByteString;
+import edu.usfca.cs.dfs.StorageMessages;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 
@@ -12,6 +15,38 @@ import java.util.List;
 
 public class Fileify {
 
+
+    //behaviour
+    //open directory
+    //create directory
+    //delete directory
+    //change directory
+    //create file
+    //open filechannel for a file
+    public FileChannel openFileAndGetFileChannel(String filename, String mode) throws IOException {
+
+        try(
+                RandomAccessFile reader = new RandomAccessFile(filename, mode);
+                FileChannel fc = reader.getChannel();
+                //ByteArrayOutputStream out = new ByteArrayOutputStream();
+        ) {
+            return fc;
+        }
+    }
+
+    //read file
+
+    //get file size
+    public long getFileSize(FileChannel fc) throws IOException {
+        //ByteBuf buf = ByteBuffer.allocate(chunkSize);
+        return fc.size();
+    }
+    //write from start
+    // write append
+    // close fileChannel
+    public void closeFileChannel(FileChannel fc) throws IOException {
+        fc.close();
+    }
 
     /**
      * readFileInChunks reads a file in chunks of byte array, writes to channel and adds to list of Channel Futures
@@ -37,11 +72,32 @@ public class Fileify {
 
                 out.write(buf.array(),0,buf.position());
 
-                PrefixedMessage msg = new PrefixedMessage(out.toByteArray());
+                //PrefixedMessage msg = new PrefixedMessage(out.toByteArray()); //
+
+
+
+//                public StorageMessages.StorageMessageWrapper buildStoreChunk(String address, int port) {
+                    StorageMessages.StoreChunk storeChunk = StorageMessages.StoreChunk.newBuilder() // building heartbeat
+                            .setFileName("filename")
+                            .setChunkId(1)
+                            .setData(ByteString.copyFrom(out.toByteArray()))
+                            .build();
+
+                    StorageMessages.StorageMessageWrapper msgWrapper =
+                            StorageMessages.StorageMessageWrapper.newBuilder()
+                                    .setStoreChunkMsg(storeChunk)
+                                    .build();
+
+//                    return msgWrapper;
+//                }
+
+
+
+
                 //PrefixedMessage msg = new PrefixedMessage(buf.array());
 
                 //System.out.println("Msg this round : \n"+new String(msg.payload()));
-                writes.add(chan.write(msg));
+                writes.add(chan.write(storeChunk));
 
                 buf.clear();
                 out.reset();

@@ -18,6 +18,11 @@ public class Client {
 
     }
 
+
+    public storeFile() { //todo:
+
+    }
+
     public static void main(String[] args)
     throws IOException {
         EventLoopGroup workerGroup = new NioEventLoopGroup();
