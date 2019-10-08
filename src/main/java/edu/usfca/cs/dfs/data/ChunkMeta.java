@@ -41,6 +41,10 @@ public class ChunkMeta {
         return chunkSize;
     }
 
+    public String[] getStorageNodeIds() {
+        return storageNodeIds;
+    }
+
     public ChunkMeta setFilename(String filename) {
         this.filename = filename;
         return this;
