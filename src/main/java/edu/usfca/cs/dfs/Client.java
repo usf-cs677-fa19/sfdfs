@@ -5,15 +5,13 @@ import edu.usfca.cs.dfs.clientNode.Fileify;
 import edu.usfca.cs.dfs.data.ChunkMeta;
 import edu.usfca.cs.dfs.net.MessagePipeline;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.util.Scanner;
 
 public class Client {
 
@@ -42,7 +40,7 @@ public class Client {
 
     }
 
-    public void createAndSendMetaData(String fileName, long fileSizeInBytes, long chunkSizeInBytes, int totalChunks) {
+    public void createAndSendMetaData(String fileName, long fileSizeInBytes, long chunkSizeInBytes, int totalChunks) throws IOException {
         for(int i=1; i<totalChunks; i++) {
             //int chunkId = i;
             ChunkMeta m = new ChunkMeta()
@@ -51,8 +49,8 @@ public class Client {
                     .setChunkSize((int)(chunkSizeInBytes/1024))
                     .setTotalChunks(totalChunks);
 
-            StorageMessages.chunkMeta chunkMetaMsg
-                    = StorageMessages.chunkMeta.newBuilder()
+            StorageMessages.ChunkMeta chunkMetaMsg
+                    = StorageMessages.ChunkMeta.newBuilder()
                     .setFileName(m.getFilename())
                     .setChunkId(m.getChunkId())
                     .setChunkSize(m.getChunkSize())
@@ -64,7 +62,8 @@ public class Client {
                             .setChunkMetaMsg(chunkMetaMsg)
                             .build();
 
-            // todo: from here
+            // todo: from here >
+            this.startClient("localhost", 7777, msgWrapper);
 
 
         }
@@ -78,40 +77,104 @@ public class Client {
     }
 
 
-    public static void main(String[] args)
-    throws IOException {
+    public void startClient(String connectingAddress, int connectingPort, StorageMessages.StorageMessageWrapper msgWrapper)
+            throws IOException {
         EventLoopGroup workerGroup = new NioEventLoopGroup();
-        MessagePipeline pipeline = new MessagePipeline("client");
+        MessagePipeline pipeline = new MessagePipeline("client"); // client pipeline
 
         Bootstrap bootstrap = new Bootstrap()
-            .group(workerGroup)
-            .channel(NioSocketChannel.class)
-            .option(ChannelOption.SO_KEEPALIVE, true)
-            .handler(pipeline);
+                .group(workerGroup)
+                .channel(NioSocketChannel.class)
+                .option(ChannelOption.SO_KEEPALIVE, true)
+                .handler(pipeline);
 
-        ChannelFuture cf = bootstrap.connect("localhost", 7777);
+        ChannelFuture cf = bootstrap.connect(connectingAddress, connectingPort);// connecting info
         cf.syncUninterruptibly();
 
-        ByteString data = ByteString.copyFromUtf8("Hello World!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        StorageMessages.StoreChunk storeChunkMsg
-            = StorageMessages.StoreChunk.newBuilder()
-                .setFileName("my_file.txt")
-                .setChunkId(3)
-                .setData(data)
-                .build();
-
-        StorageMessages.StorageMessageWrapper msgWrapper =
-            StorageMessages.StorageMessageWrapper.newBuilder()
-                .setStoreChunkMsg(storeChunkMsg)
-                .build();
 
         Channel chan = cf.channel();
         ChannelFuture write = chan.write(msgWrapper);
         chan.flush();
+
         write.syncUninterruptibly();
 
         /* Don't quit until we've disconnected: */
-        System.out.println("Shutting down");
+        System.out.println("Shutting down client");
         workerGroup.shutdownGracefully();
     }
+
+    public static void main(String[] args) throws IOException {
+        Client c = new Client();
+
+        for (; ; ) {
+            Scanner scanner = new Scanner(System.in);
+            if (scanner.hasNextLine()) {
+                if(scanner.nextLine().equalsIgnoreCase("ok")) {
+
+                    ChunkMeta m = new ChunkMeta()
+                            .setFilename("fileName")
+                            .setChunkId(5)
+                            .setChunkSize((int)(1024))
+                            .setTotalChunks(7);
+
+                    StorageMessages.ChunkMeta chunkMetaMsg
+                            = StorageMessages.ChunkMeta.newBuilder()
+                            .setFileName(m.getFilename())
+                            .setChunkId(m.getChunkId())
+                            .setChunkSize(m.getChunkSize())
+                            .setTotalChunks(m.getTotalChunks())
+                            .build();
+
+                    StorageMessages.StorageMessageWrapper msgWrapper =
+                            StorageMessages.StorageMessageWrapper.newBuilder()
+                                    .setChunkMetaMsg(chunkMetaMsg)
+                                    .build();
+
+                    c.startClient("localhost", 7777, msgWrapper);
+                }
+            }
+        }
+
+    }
+
+
+//    public static void main(String[] args)
+//    throws IOException {
+//        EventLoopGroup workerGroup = new NioEventLoopGroup();
+//        MessagePipeline pipeline = new MessagePipeline("client");
+//
+//        Bootstrap bootstrap = new Bootstrap()
+//            .group(workerGroup)
+//            .channel(NioSocketChannel.class)
+//            .option(ChannelOption.SO_KEEPALIVE, true)
+//            .handler(pipeline);
+//
+//        ChannelFuture cf = bootstrap.connect("localhost", 7777);
+//        cf.syncUninterruptibly();
+//
+//        ByteString data = ByteString.copyFromUtf8("Hello World!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//        StorageMessages.StoreChunk storeChunkMsg
+//            = StorageMessages.StoreChunk.newBuilder()
+//                .setFileName("my_file.txt")
+//                .setChunkId(3)
+//                .setData(data)
+//                .build();
+//
+//        StorageMessages.StorageMessageWrapper msgWrapper =
+//            StorageMessages.StorageMessageWrapper.newBuilder()
+//                .setStoreChunkMsg(storeChunkMsg)
+//                .build();
+//
+//        Channel chan = cf.channel();
+//        ChannelFuture write = chan.write(msgWrapper);
+//        chan.flush();
+//
+//        //write.addListener(ChannelFutureListener.CLOSE); todo: use this to listen ( to writes to a channel)
+//
+//        write.syncUninterruptibly();
+//
+//        /* Don't quit until we've disconnected: */
+//        System.out.println("Shutting down");
+//        workerGroup.shutdownGracefully();
+//    }
 }

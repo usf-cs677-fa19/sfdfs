@@ -3,6 +3,9 @@ package edu.usfca.cs.dfs.controllerNode;
 import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.data.ChunkMeta;
 import edu.usfca.cs.dfs.net.InboundHandler;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 
 public class ControllerInboundHandler extends InboundHandler {
@@ -16,7 +19,35 @@ public class ControllerInboundHandler extends InboundHandler {
             this.recvHeartBeat(msg);
 
         }else if(msg.hasChunkMetaMsg()){
-            this.storeChunkMetadata(msg);
+            /// todo doing
+            System.out.println("Recved chunkMetaMsg from client");
+
+            StorageMessages.RetrieveFile retrieveFileMsg
+                    = StorageMessages.RetrieveFile.newBuilder()
+                    .setFileName(msg.getChunkMetaMsg().getFileName())
+                    .build();
+
+            StorageMessages.StorageMessageWrapper msgWrapper =
+                    StorageMessages.StorageMessageWrapper.newBuilder()
+                            .setRetrieveFileMsg(retrieveFileMsg)
+                            .build();
+
+            System.out.println("msgWrapper.hasRetrieveFileMsg(): " + msgWrapper.hasRetrieveFileMsg());
+
+
+            Channel chan = ctx.channel();
+            ChannelFuture future = chan.write(msgWrapper);
+            chan.flush();
+            //future.addListener(ChannelFutureListener.CLOSE);
+
+            System.out.println("Sent RetrieveFileMsg back to  client");
+            // todo doing
+
+
+
+
+//            ctx.channel().writeAndFlush("\n\n RESPONSE FROM CONTROLLER TO CLIENT for Recved chunkMetaMsg !!!!! !!!!! !!!! \n ");
+            //this.storeChunkMetadata(msg);
         }else {
             StorageMessages.StoreChunk storeChunkMsg
                     = msg.getStoreChunkMsg();

@@ -2,6 +2,7 @@ package edu.usfca.cs.dfs.net;
 
 import edu.usfca.cs.dfs.StorageMessages;
 
+import edu.usfca.cs.dfs.clientNode.ClientInboundHandler;
 import edu.usfca.cs.dfs.controllerNode.ControllerInboundHandler;
 import edu.usfca.cs.dfs.storageNode.StorageInboundHandler;
 import io.netty.channel.ChannelInitializer;
@@ -25,6 +26,9 @@ public class MessagePipeline extends ChannelInitializer<SocketChannel> {
             case "storage":
                 inboundHandler = new StorageInboundHandler();
                 break;
+            case "client":
+                inboundHandler = new ClientInboundHandler();
+                break;
             default:
                 inboundHandler = new InboundHandler();
         }
@@ -46,10 +50,11 @@ public class MessagePipeline extends ChannelInitializer<SocketChannel> {
         pipeline.addLast(
                 new ProtobufDecoder(
                     StorageMessages.StorageMessageWrapper.getDefaultInstance()));
-        pipeline.addLast(inboundHandler);
+//        pipeline.addLast(inboundHandler);
 
         /* Outbound: */
         pipeline.addLast(new LengthFieldPrepender(4));
         pipeline.addLast(new ProtobufEncoder());
+        pipeline.addLast(inboundHandler);
     }
 }

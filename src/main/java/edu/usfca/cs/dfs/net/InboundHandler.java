@@ -43,11 +43,15 @@ extends SimpleChannelInboundHandler<StorageMessages.StorageMessageWrapper> {
 //        if(msg.hasHeartBeat() ) {
 //            System.out.println("heartbeat from");
 //        } else {
+        System.out.println("IN CLIENT INBOUND HANDLER");
+        if(msg.hasRetrieveFileMsg()) {
+            System.out.println("ChunkMetaMsg receved in CLIENT INBOUND HANDLER");
+        } else {
             StorageMessages.StoreChunk storeChunkMsg
                     = msg.getStoreChunkMsg();
             System.out.println("Storing file name: "
                     + storeChunkMsg.getFileName());
-//        }
+        }
     }
 
     @Override

@@ -32,7 +32,7 @@ message HeartBeat{
     string spaceRemainingMB = 3;
 }
 
- message chunkMeta {
+ message ChunkMeta {
      string fileName = 1;
      int32 chunkId = 2;
      int32 checksum = 3;
@@ -47,7 +47,7 @@ message StorageMessageWrapper {
         RetrieveFile retrieveFileMsg = 2;
         RetrieveChunk retrieveChunk = 3;
         HeartBeat heartBeat = 4;
-        chunkMeta chunkMetaMsg = 5;
+        ChunkMeta chunkMetaMsg = 5;
     }
 }
 
