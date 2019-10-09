@@ -5,25 +5,10 @@ import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.data.ChunkMeta;
 import edu.usfca.cs.dfs.controllerNode.data.StorageNodeDetail;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Timer;
 
 public class ControllerNodeHelper{
-
-//    //private static ControllerDS controllerDS;
-//
-//    private static ControllerNodeHelper controllerNodeHelper = null;
-//
-//    private ControllerNodeHelper(/*ControllerDS controllerDS*/) {
-//        //this.controllerDS = controllerDS;
-//        this.checkAliveStorageNodes();
-//    }
-//
-//    public static synchronized ControllerNodeHelper getControllerNodeHelper(){
-//        if(controllerNodeHelper == null){
-//            controllerNodeHelper = new ControllerNodeHelper();
-//        }
-//        return controllerNodeHelper;
-//    }
 
     public static void checkAliveStorageNodes() {
         Timer timer = new Timer();
@@ -49,20 +34,28 @@ public class ControllerNodeHelper{
 
     //for a chunk return 3 storage node
 
-    public static String[] storeChunkMetadata(ChunkMeta chunkMeta){
-        //check if the space in storage nodes
-       // Map<Integer, StorageNodeKey> threeStorageNodes = new HashMap<Integer, StorageNodeKey>();
-        String[] threeStorageNodes = {};
+    public static ArrayList<String> getThreeNodes(ChunkMeta chunkMeta){
+        ArrayList<String> threeStorageNodes = new ArrayList<>();
 
-        String primaryNode = ControllerDS.getInstance().findTheStorageNodeToSaveChunk(chunkMeta.getChunkSize());
+        String primaryNode = ControllerDS.getInstance().findTheStorageNodeToSaveChunk(chunkMeta.getChunkSize());  //get the storage node to
 
-        ControllerDS.getInstance().checkStorageNodeGroupRegister(primaryNode,chunkMeta.getChunkSize());
+        System.out.println("Primary node : \n\n"+primaryNode);
+        if(primaryNode != "") {                                                                                     //if there is atleast one storage node registered with the client
+
+            ArrayList<String> replicaNodesArrayList = (ControllerDS.getInstance())
+                    .checkStorageNodeGroupRegister(primaryNode, chunkMeta.getChunkSize());                          //check if the primary node selected has replicas in the StorageNodeGropuRegister
 
 
-
+            if (replicaNodesArrayList.size() > 0) {                                                                 //if number of storage nodes registered > 0
+                threeStorageNodes.add(primaryNode);                                                                 // add primary node
+                threeStorageNodes.addAll(replicaNodesArrayList);                                                    //add the replicas
+            }else{
+                System.out.println("Only one Storage Node registered with the Controller!!");
+                threeStorageNodes.add(primaryNode);                                                                 // add the primary node
+            }
+        }else{
+            System.out.println("No Storage nodes registered with the Controller!!");                                //no storage nodes registered
+        }
         return threeStorageNodes;
     }
-
-
-
 }

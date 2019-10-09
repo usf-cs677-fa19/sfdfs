@@ -13,8 +13,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ControllerDS {
 
-    //CDS;
-
     private static ControllerDS controllerDS = null;
 
     private ControllerDS(){
@@ -30,7 +28,6 @@ public class ControllerDS {
     // here key = ip+port
     private Map<String, StorageNodeDetail> storageNodeRegister = new ConcurrentHashMap<>();
     private Map<String, List<String>> storageNodeGroupRegister = new ConcurrentHashMap<>(); //exp
-    //public StorageNodeGroupRegister storageNodeGroupRegister = StorageNodeGroupRegister.getStorageNodeGroupRegister();
 
     public Map<String, StorageNodeDetail> getStorageNodeRegister() {
         return storageNodeRegister;
@@ -40,19 +37,6 @@ public class ControllerDS {
        return new NodeId(ipAddress,port).getId();
        // return ipAddress + port;
     }
-
-//    private void recvHeartBeat(StorageMessages.StorageMessageWrapper msg) {
-//        System.out.println("heartbeat from: "+msg.getHeartBeat().getIpAddress()+":"+msg.getHeartBeat().getPort());
-//
-//        this.updateStorageNodeRegister(new StorageNodeDetail(
-//                msg.getHeartBeat().getIpAddress(),
-//                msg.getHeartBeat().getPort(),
-//                msg.getHeartBeat().getSpaceRemainingMB(),
-//                Instant.now()
-//        ));
-//
-//        System.out.println("StorageNodeDetailList size: "+this.getStorageNodeRegister().size());
-//    }
 
     public void updateStorageNodeRegister(StorageNodeDetail snd) {
         String key = getStorageNodeKey(snd.getIpAddress(), snd.getPort());
@@ -75,7 +59,6 @@ public class ControllerDS {
     }
 
     public void deleteFromStorageNodeRegister(String key) {
-        //String key = snd.getIpAddress() + snd.getPort();
         if (storageNodeRegister.containsKey(key)) {
             storageNodeRegister.remove(key);
         }
@@ -83,21 +66,7 @@ public class ControllerDS {
 
     public String findTheStorageNodeToSaveChunk(int size){
         String storageNodeKey = new String();
-
         storageNodeKey = getSNWithMaxSpace(size);
-//        Iterator storageNodeIterator = storageNodeRegister.entrySet().iterator();
-//
-//        while (storageNodeIterator.hasNext()){
-//            Map.Entry node = (Map.Entry) storageNodeIterator.next();
-//
-//            StorageNodeDetail details = (StorageNodeDetail) node.getValue();
-//
-//
-//            if(Integer.getInteger(((StorageNodeDetail) node.getValue()).getSpaceRemainingMB()) >= size){
-//
-//                storageNodeKey = (String)node.getKey();
-//            }
-//        }
         return storageNodeKey;
     }
 
@@ -111,46 +80,53 @@ public class ControllerDS {
 
             StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
 
-            if(size < Integer.getInteger(details.getSpaceRemainingMB())){
-                size = Integer.getInteger(details.getSpaceRemainingMB());
+            if(size < Integer.parseInt(details.getSpaceRemainingMB())){
+                size =  Integer.parseInt(details.getSpaceRemainingMB());
                 node = (String) storageNode.getKey();
             }
         }
         if(size > requiredChunkSize) {
             return node;
         }else{
+            System.out.println("Storage Node size is less than the required Chunk size!!");
             return "";
         }
     }
 
-    public String[] getReplicas(int requiredChunkSize, String primaryNodeKey){
-        String[] replicas = new String[2];
+    public ArrayList<String> getReplicas(int requiredChunkSize, String primaryNodeKey){
+        ArrayList<String> replicas = new ArrayList<>();
         String replica1 = "";
         String replica2 = "";
         int size1 = 0;
         int size2 = 0;
-        Iterator storageNodeIterator = storageNodeRegister.entrySet().iterator();
-       while (storageNodeIterator.hasNext()){
-           Map.Entry storageNode = (Map.Entry) storageNodeIterator.next();
-           if(storageNode.getKey() != primaryNodeKey){
-               StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
-               if(size1 < Integer.getInteger(details.getSpaceRemainingMB())){
-                   size2 = size1;
-                   size1 = Integer.getInteger(details.getSpaceRemainingMB());
+        if(!storageNodeRegister.isEmpty()){
+            Iterator storageNodeIterator = storageNodeRegister.entrySet().iterator();
+            while (storageNodeIterator.hasNext()){
+                Map.Entry storageNode = (Map.Entry) storageNodeIterator.next();
+                if(storageNode.getKey() != primaryNodeKey){
+                    StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
+                    if(size1 <  Integer.parseInt(details.getSpaceRemainingMB())){
+                        size2 = size1;
+                        size1 =  Integer.parseInt(details.getSpaceRemainingMB());
 
-                   replica2 = replica1;
-                   replica1 = (String) storageNode.getKey();
-               }else if(size2 < Integer.getInteger(details.getSpaceRemainingMB())){
-                   size2 = Integer.getInteger(details.getSpaceRemainingMB());
-                   replica2 = (String) storageNode.getKey();
-               }
-           }
-       }
+                        replica2 = replica1;
+                        replica1 = (String) storageNode.getKey();
+                    }else if(size2 <  Integer.parseInt(details.getSpaceRemainingMB())){
+                        size2 =  Integer.parseInt(details.getSpaceRemainingMB());
+                        replica2 = (String) storageNode.getKey();
+                    }
+                }
+            }
+        }
        if(size1 > requiredChunkSize){
-            replicas[1] = replica1;
-            replicas[2] = replica2;
+            replicas.add( replica1);
+           replicas.add( replica2);
        }
         return replicas;
+    }
+
+    public Map<String, List<String>> getStorageNodeGroupRegister(){
+        return this.storageNodeGroupRegister;
     }
 
 
@@ -170,14 +146,14 @@ public class ControllerDS {
     }
 
     public ArrayList<String> checkStorageNodeGroupRegister(String node, int chunkSize){
+
+        System.out.println("Check Storage Node Group Register !!!! \n\n\n");
         ArrayList<String> storageNodePrimaryReplicaDetails = new ArrayList<>();
         if(checkIfPrimaryExists(node)){
             storageNodePrimaryReplicaDetails.add(node);
             storageNodePrimaryReplicaDetails.addAll(getReplicaList(node));
         }else{
-            String newReplicaOne = ControllerDS.getInstance().getSNWithMaxSpace(chunkSize);
-            //String
-            //todo : get new replicas  ok
+            storageNodePrimaryReplicaDetails = ControllerDS.getInstance().getReplicas(chunkSize,node);
         }
         return storageNodePrimaryReplicaDetails;
     }

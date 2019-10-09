@@ -33,20 +33,20 @@ public class ControllerInboundHandler extends InboundHandler {
                     .setTotalChunks(receivedChunkMetaMsg.getTotalChunks());
 
             String[] storageNodesAssigned = this.getStorageNodesForChunkMeta(cm);
-            cm.setStorageNodeIds(storageNodesAssigned);
+           // if (storageNodesAssigned.length > 0) {
 
-            StorageMessages.StorageMessageWrapper msgWrapper = this.buildChunkMeta(cm);
+                cm.setStorageNodeIds(storageNodesAssigned);
+           // }
+                StorageMessages.StorageMessageWrapper msgWrapper = this.buildChunkMeta(cm);
 
-            Channel chan = ctx.channel();
-            ChannelFuture future = chan.write(msgWrapper);
-            chan.flush();
+                Channel chan = ctx.channel();
+                ChannelFuture future = chan.write(msgWrapper);
+                chan.flush();
 //            //future.addListener(ChannelFutureListener.CLOSE);
 //
-            System.out.println("Sent RetrieveFileMsg back to  client");
-            //
+                System.out.println("Sent RetrieveFileMsg back to  client");
 
 
-            //this.getStorageNodesForChunkMeta(msg); todo manali
         }else {
             StorageMessages.StoreChunk storeChunkMsg
                     = msg.getStoreChunkMsg();
@@ -74,28 +74,17 @@ public class ControllerInboundHandler extends InboundHandler {
 
     }
 
-    private String[] getStorageNodesForChunkMeta(ChunkMeta cm) { //todo manali
-        String[] arr =  new String[3];
-        arr[0] = "localhost:8000";
-        arr[1] = "localhost:8001";
-        arr[2] = "localhost:8002";
+    private String[] getStorageNodesForChunkMeta(ChunkMeta cm) {
+        String[] arr = null;
+        ArrayList<String> threeNodes = ControllerNodeHelper.getThreeNodes(cm);
+        arr = threeNodes.toArray(new String[threeNodes.size()]);
         return arr;
     }
 
 
     private void recvHeartBeat(StorageMessages.StorageMessageWrapper msg) {
-       // ControllerNodeHelper.getControllerNodeHelper().recvHeartBeat(msg);
         ControllerNodeHelper.recvHeartBeat(msg);
 
     }
 
-    private void storeChunkMetadata(StorageMessages.StorageMessageWrapper msg){
-
-        ControllerNodeHelper.storeChunkMetadata(
-                new ChunkMeta(msg.getChunkMetaMsg().getFileName(),
-                        msg.getChunkMetaMsg().getTotalChunks(),
-                        msg.getChunkMetaMsg().getChunkId(),
-                        msg.getChunkMetaMsg().getChunkSize())
-        );
-    }
 }

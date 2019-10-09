@@ -14,14 +14,11 @@ public class CheckAliveStorageNodes extends TimerTask {
     @Override
     public void run(){
         System.out.println("\nChecking if Storage Nodes are alive : "+Instant.now()+"\n");
-        //Map<String, StorageNodeDetail> storageNodes =  ControllerDS.CDS.getStorageNodeRegister();
-        this.checkAliveStorageNodes(/*storageNodes*/);
+        this.checkAliveStorageNodes();
     }
 
 
-    public void checkAliveStorageNodes(/*Map<String, StorageNodeDetail> storageNodes*/){
-//        System.out.println("Checking the hashmap and removing the nodes\n");
-//        Iterator hmIterator = storageNodes.entrySet().iterator();
+    public void checkAliveStorageNodes(){
         Iterator hmIterator = ControllerDS.getInstance().getStorageNodeRegister().entrySet().iterator();
         while(hmIterator.hasNext()){
             Map.Entry node = (Map.Entry)hmIterator.next();
@@ -29,7 +26,6 @@ public class CheckAliveStorageNodes extends TimerTask {
 
             if(instant.isBefore(Instant.now().minus(6, ChronoUnit.SECONDS))){
                 System.out.println("Removing the storage node : "+node.getKey()+"\n");
-//                 storageNodes.remove(node.getKey());
                 ControllerDS.getInstance().deleteFromStorageNodeRegister((String) node.getKey());
             }
         }
