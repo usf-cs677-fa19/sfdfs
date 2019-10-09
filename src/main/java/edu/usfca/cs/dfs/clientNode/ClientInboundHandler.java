@@ -20,17 +20,19 @@ public class ClientInboundHandler extends InboundHandler {
 
             //this.recvChunkMetaMsg(msg);
 
-            System.out.println("\nChunkMetaMsg receved in CLIENT INBOUND HANDLER");
-            System.out.println(msg.getChunkMetaMsg().getFileName()+
-                    "-"+msg.getChunkMetaMsg().getChunkId()+
-                    " => "+msg.getChunkMetaMsg().getStorageNodeIds(0)+
-                    ", "+msg.getChunkMetaMsg().getStorageNodeIds(1)+
-                    ", "+msg.getChunkMetaMsg().getStorageNodeIds(2));
-        }
-        else if(msg.hasRetrieveFileMsg()) {
-            System.out.println("RetrieveFileMsg received in CLIENT INBOUND HANDLER");
+
+            System.out.println("\nChunkMetaMsg received in CLIENT INBOUND HANDLER");
+            int size = msg.getChunkMetaMsg().getStorageNodeIdsCount();
+            if (size > 0) {
+                System.out.println(msg.getChunkMetaMsg().getFileName()+"-"+msg.getChunkMetaMsg().getChunkId());
+                for(int i = 0; i < size; i++) {
+                    System.out.println(msg.getChunkMetaMsg().getStorageNodeIds(i));
+                }
+            }
 
         }
+
+
         ctx.close();
 
     }
