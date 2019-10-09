@@ -9,9 +9,20 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public enum ControllerDS {
+public class ControllerDS {
 
-    CDS;
+   // CDS;
+
+    private static ControllerDS controllerDS = null;
+
+    private ControllerDS(){}
+
+    public static ControllerDS getControllerDSInstance(){
+        if(controllerDS == null){
+            return new ControllerDS();
+        }
+        return controllerDS;
+    }
 
     // here key = ip+port
     private Map<String, StorageNodeDetail> storageNodeRegister = new ConcurrentHashMap<>();
