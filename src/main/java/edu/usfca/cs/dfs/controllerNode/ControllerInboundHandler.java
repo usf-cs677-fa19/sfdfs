@@ -22,7 +22,7 @@ public class ControllerInboundHandler extends InboundHandler {
 
         }else if(msg.hasChunkMetaMsg()){
             ///
-            System.out.println("Recved chunkMetaMsg from client");
+            System.out.println("Recieved chunkMetaMsg from client");
 
             StorageMessages.ChunkMeta receivedChunkMetaMsg = msg.getChunkMetaMsg();
 
