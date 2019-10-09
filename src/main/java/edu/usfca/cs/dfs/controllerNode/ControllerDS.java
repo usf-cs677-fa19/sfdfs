@@ -102,7 +102,6 @@ public class ControllerDS {
         int size = 0;
 
         Iterator storageNodeIterator = storageNodeRegister.entrySet().iterator();
-
         while (storageNodeIterator.hasNext()){
             Map.Entry storageNode = (Map.Entry) storageNodeIterator.next();
 
@@ -120,4 +119,33 @@ public class ControllerDS {
         }
     }
 
+    public String[] getReplicas(int requiredChunkSize, String primaryNodeKey){
+        String[] replicas = new String[2];
+        String replica1 = "";
+        String replica2 = "";
+        int size1 = 0;
+        int size2 = 0;
+        Iterator storageNodeIterator = storageNodeRegister.entrySet().iterator();
+       while (storageNodeIterator.hasNext()){
+           Map.Entry storageNode = (Map.Entry) storageNodeIterator.next();
+           if(storageNode.getKey() != primaryNodeKey){
+               StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
+               if(size1 < Integer.getInteger(details.getSpaceRemainingMB())){
+                   size2 = size1;
+                   size1 = Integer.getInteger(details.getSpaceRemainingMB());
+
+                   replica2 = replica1;
+                   replica1 = (String) storageNode.getKey();
+               }else if(size2 < Integer.getInteger(details.getSpaceRemainingMB())){
+                   size2 = Integer.getInteger(details.getSpaceRemainingMB());
+                   replica2 = (String) storageNode.getKey();
+               }
+           }
+       }
+       if(size1 > requiredChunkSize){
+            replicas[1] = replica1;
+            replicas[2] = replica2;
+       }
+        return replicas;
+    }
 }
