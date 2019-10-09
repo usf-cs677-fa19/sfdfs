@@ -2,7 +2,6 @@ package edu.usfca.cs.dfs.clientNode;
 
 import com.google.protobuf.ByteString;
 import edu.usfca.cs.dfs.StorageMessages;
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 
@@ -17,6 +16,39 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class Fileify {
+
+    public static ByteBuffer getFilledBuffer(StorageMessages.ChunkMeta cmMsg) throws IOException {
+
+        //Path filePath = Paths.get(cmMsg.getFileName());
+        ByteBuffer directBuf = ByteBuffer.allocateDirect(cmMsg.getChunkSize());
+
+        try (
+            RandomAccessFile reader = new RandomAccessFile(cmMsg.getFileName(), "r");
+            FileChannel chan = reader.getChannel();
+            ) {
+            // Sets the file-pointer offset
+            reader.seek(cmMsg.getChunkId() * cmMsg.getChunkSize());
+            // read bytes into directBuf
+            int bytesRead = chan.read(directBuf);
+            System.out.println("No of bytes read : "+ bytesRead);
+            // flipping the byte buffer before it can be read
+            directBuf.flip();
+
+            return directBuf;
+        }
+
+    }
+
+
+
+
+//    public static ChunkMeta getFilledBuffer(String filePath, StorageMessages.ChunkMeta cmMsg) throws IOException {
+//        Path path = Paths.get(filePath/*"data/test.xml"*/);
+//
+//        AsynchronousFileChannel fileChannel =
+//                AsynchronousFileChannel.open(path, StandardOpenOption.READ);
+//
+//    }todo: anurag
 
     //private static String HOME = System.getProperty("user.home"); todo : use it for storage node to check if file exist
 

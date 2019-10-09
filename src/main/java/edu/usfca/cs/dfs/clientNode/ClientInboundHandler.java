@@ -4,6 +4,9 @@ import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.net.InboundHandler;
 import io.netty.channel.ChannelHandlerContext;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
+
 public class ClientInboundHandler extends InboundHandler {
 
     @Override
@@ -13,7 +16,9 @@ public class ClientInboundHandler extends InboundHandler {
 
         System.out.println("IN CLIENT INBOUND HANDLER");
         if(msg.hasChunkMetaMsg()) { // msg returned from controller with storage nodes list
+
             this.recvChunkMetaMsg(msg);
+
             System.out.println("\nChunkMetaMsg receved in CLIENT INBOUND HANDLER");
             System.out.println(msg.getChunkMetaMsg().getFileName()+
                     "-"+msg.getChunkMetaMsg().getChunkId()+
@@ -22,16 +27,28 @@ public class ClientInboundHandler extends InboundHandler {
                     ", "+msg.getChunkMetaMsg().getStorageNodeIds(2));
         }
         else if(msg.hasRetrieveFileMsg()) {
-            System.out.println("RetrieveFileMsg receved in CLIENT INBOUND HANDLER");
+            System.out.println("RetrieveFileMsg received in CLIENT INBOUND HANDLER");
 
         }
+        ctx.close();
 
     }
 
-    private void recvChunkMetaMsg(StorageMessages.StorageMessageWrapper msg) {
+    private void recvChunkMetaMsg(StorageMessages.StorageMessageWrapper msg)  {
         //todo anurag
         //check file name, start read position , and chunk size
+        StorageMessages.ChunkMeta cmMsg = msg.getChunkMetaMsg();
+
+        ByteBuffer buffer = null;
+        try {
+            buffer = Fileify.getFilledBuffer(cmMsg);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         // read that much in the buffer
+
         // a. prepare a storeChunk msg
         // b. update chunkMeta message by filling checksum field
         // c. send to primary storage node

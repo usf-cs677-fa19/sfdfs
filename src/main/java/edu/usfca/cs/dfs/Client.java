@@ -12,6 +12,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
 
 public class Client {
 
@@ -26,12 +27,12 @@ public class Client {
     public void store(String filePath) {
         try {
             this.storeFileInSfdfs(filePath);
-        } catch (IOException e) {
+        } catch (IOException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    public void storeFileInSfdfs(String filePath) throws IOException { //
+    public void storeFileInSfdfs(String filePath) throws IOException, ExecutionException, InterruptedException { //
        Fileify ff = new Fileify();
        if (!ff.doesFileExist(filePath)) {
            System.out.println("File does not exist");
@@ -46,7 +47,7 @@ public class Client {
 
     }
 
-    public void createAndSendMeta(String fileName, long fileSizeInBytes, long chunkSizeInBytes, int totalChunks) throws IOException {
+    public void createAndSendMeta(String fileName, long fileSizeInBytes, long chunkSizeInBytes, int totalChunks) throws IOException, ExecutionException, InterruptedException {
         for(int i=1; i<totalChunks; i++) {
             this.createAndSendMetaHelper(fileName, i, fileSizeInBytes, chunkSizeInBytes, totalChunks); // todo: parallize
         }
@@ -57,7 +58,7 @@ public class Client {
     }
 
     // todo: parallize async method
-    public void createAndSendMetaHelper(String fileName, int chunkId, long fileSizeInBytes, long chunkSizeInBytes, int totalChunks) throws IOException {
+    public void createAndSendMetaHelper(String fileName, int chunkId, long fileSizeInBytes, long chunkSizeInBytes, int totalChunks) throws IOException, ExecutionException, InterruptedException {
         ChunkMeta m = this.createChunkMeta(fileName, chunkId, (int)(chunkSizeInBytes/1024), totalChunks);
 
         StorageMessages.StorageMessageWrapper msgWrapper = this.buildChunkMeta(m);
@@ -94,7 +95,7 @@ public class Client {
     }
 
     public void runClient(StorageMessages.StorageMessageWrapper msgWrapper)
-            throws IOException {
+            throws IOException, ExecutionException, InterruptedException {
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         MessagePipeline pipeline = new MessagePipeline("client"); // client pipeline
 
@@ -108,18 +109,28 @@ public class Client {
         cf.syncUninterruptibly();
 
 
+       //bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
         Channel chan = cf.channel();
         ChannelFuture write = chan.write(msgWrapper);
+        write.addListener(ChannelFutureListener.CLOSE);
         chan.flush();
+        chan.closeFuture().sync();
 
         write.syncUninterruptibly();
 
         /* Don't quit until we've disconnected: */
-        //System.out.println("Shutting down client"); //todo add closing mechanism
-        //workerGroup.shutdownGracefully();
+//        System.out.println("Shutting down client"); //todo add closing mechanism
+//        workerGroup.shutdownGracefully();
+        //this.shutDownEventLoopGroup(workerGroup);
     }
 
-    public static void main(String[] args) throws IOException {
+    public void shutDownEventLoopGroup(EventLoopGroup workerGroup) {
+        System.out.println("Shutting down client"); //todo add closing mechanism
+        workerGroup.shutdownGracefully();
+    }
+
+
+    public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
         Client c = new Client("localhost", 7777);
 
         for (; ; ) {
