@@ -44,14 +44,14 @@ public class ControllerNodeHelper{
     public void recvHeartBeat(StorageMessages.StorageMessageWrapper msg) {
         System.out.println("heartbeat from: "+msg.getHeartBeat().getIpAddress()+":"+msg.getHeartBeat().getPort());
 
-        ControllerDS.CDS.updateStorageNodeRegister(new StorageNodeDetail(
+        ControllerDS.getControllerDSInstance().updateStorageNodeRegister(new StorageNodeDetail(
                 msg.getHeartBeat().getIpAddress(),
                 msg.getHeartBeat().getPort(),
                 msg.getHeartBeat().getSpaceRemainingMB(),
                 Instant.now()
         ));
 
-        System.out.println("StorageNodeDetailList size: "+ControllerDS.CDS.getStorageNodeRegister().size());
+        System.out.println("StorageNodeDetailList size: "+ControllerDS.getControllerDSInstance().getStorageNodeRegister().size());
     }
 
     //for a chunk return 3 storage node
@@ -61,9 +61,9 @@ public class ControllerNodeHelper{
        // Map<Integer, StorageNodeKey> threeStorageNodes = new HashMap<Integer, StorageNodeKey>();
         String[] threeStorageNodes = {};
 
-        String primaryNode = ControllerDS.CDS.findTheStorageNodeToSaveChunk(chunkMeta.getChunkSize());
+        String primaryNode = ControllerDS.getControllerDSInstance().findTheStorageNodeToSaveChunk(chunkMeta.getChunkSize());
 
-        ((StorageNodeGroupRegister)ControllerDS.CDS.getStorageNodeRegister()).checkStorageNodeGroupRegister(primaryNode,chunkMeta.getChunkSize());
+        ((StorageNodeGroupRegister)ControllerDS.getControllerDSInstance().getStorageNodeRegister()).checkStorageNodeGroupRegister(primaryNode,chunkMeta.getChunkSize());
 
 
 
