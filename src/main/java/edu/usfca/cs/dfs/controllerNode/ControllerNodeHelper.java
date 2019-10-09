@@ -1,7 +1,7 @@
 package edu.usfca.cs.dfs.controllerNode;
 
 import edu.usfca.cs.dfs.StorageMessages;
-import edu.usfca.cs.dfs.controllerNode.data.StorageNodeGroupRegister;
+//import edu.usfca.cs.dfs.controllerNode.data.StorageNodeGroupRegister;
 import edu.usfca.cs.dfs.data.ChunkMeta;
 import edu.usfca.cs.dfs.controllerNode.data.StorageNodeDetail;
 import java.time.Instant;
@@ -56,7 +56,7 @@ public class ControllerNodeHelper{
 
         String primaryNode = ControllerDS.getInstance().findTheStorageNodeToSaveChunk(chunkMeta.getChunkSize());
 
-        ((StorageNodeGroupRegister)ControllerDS.getInstance().getStorageNodeRegister()).checkStorageNodeGroupRegister(primaryNode,chunkMeta.getChunkSize());
+        ControllerDS.getInstance().checkStorageNodeGroupRegister(primaryNode,chunkMeta.getChunkSize());
 
 
 

@@ -141,7 +141,7 @@ public class Client {
                     ChunkMeta m = new ChunkMeta()
                             .setFilename("fileName")
                             .setChunkId(5)
-                            .setChunkSize((int)(1024))
+                            .setChunkSize((int)(102))
                             .setTotalChunks(7);
 
                     StorageMessages.ChunkMeta chunkMetaMsg

@@ -1,11 +1,13 @@
 package edu.usfca.cs.dfs.controllerNode;
 
 import edu.usfca.cs.dfs.controllerNode.data.StorageNodeDetail;
-import edu.usfca.cs.dfs.controllerNode.data.StorageNodeGroupRegister;
+//import edu.usfca.cs.dfs.controllerNode.data.StorageNodeGroupRegister;
 import edu.usfca.cs.dfs.data.NodeId;
 
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -27,7 +29,8 @@ public class ControllerDS {
 
     // here key = ip+port
     private Map<String, StorageNodeDetail> storageNodeRegister = new ConcurrentHashMap<>();
-    public StorageNodeGroupRegister storageNodeGroupRegister = StorageNodeGroupRegister.getStorageNodeGroupRegister();
+    private Map<String, List<String>> storageNodeGroupRegister = new ConcurrentHashMap<>(); //exp
+    //public StorageNodeGroupRegister storageNodeGroupRegister = StorageNodeGroupRegister.getStorageNodeGroupRegister();
 
     public Map<String, StorageNodeDetail> getStorageNodeRegister() {
         return storageNodeRegister;
@@ -149,4 +152,42 @@ public class ControllerDS {
        }
         return replicas;
     }
+
+
+    /// storageNodeGroupRegister
+    public void addAPrimaryNode(String primaryKey) {
+        storageNodeGroupRegister.put(primaryKey, new ArrayList<>());
+    }
+
+    public boolean addAReplica(String primaryKey, String replicaKey) {
+        // todo : take no of replica from configSystem.json
+        int replication = 2;
+        if((storageNodeGroupRegister.containsKey(primaryKey)) && storageNodeGroupRegister.get(primaryKey).size() < replication) {
+            storageNodeGroupRegister.get(primaryKey).add(replicaKey);
+            return true;
+        }
+        return false;
+    }
+
+    public ArrayList<String> checkStorageNodeGroupRegister(String node, int chunkSize){
+        ArrayList<String> storageNodePrimaryReplicaDetails = new ArrayList<>();
+        if(checkIfPrimaryExists(node)){
+            storageNodePrimaryReplicaDetails.add(node);
+            storageNodePrimaryReplicaDetails.addAll(getReplicaList(node));
+        }else{
+            String newReplicaOne = ControllerDS.getInstance().getSNWithMaxSpace(chunkSize);
+            //String
+            //todo : get new replicas  ok
+        }
+        return storageNodePrimaryReplicaDetails;
+    }
+
+    public boolean checkIfPrimaryExists(String node){
+        return this.storageNodeGroupRegister.containsKey(node);
+    }
+
+    public List<String> getReplicaList(String node){
+        return this.storageNodeGroupRegister.get(node);
+    }
+
 }
