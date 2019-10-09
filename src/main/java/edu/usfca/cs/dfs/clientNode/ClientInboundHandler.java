@@ -28,6 +28,8 @@ public class ClientInboundHandler extends InboundHandler {
                 for(int i = 0; i < size; i++) {
                     System.out.println(msg.getChunkMetaMsg().getStorageNodeIds(i));
                 }
+            } else {
+                System.out.println(msg.getChunkMetaMsg().getFileName()+"-"+"NO STORAGE LIST");
             }
 
         }
