@@ -11,15 +11,16 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class ControllerDS {
 
-   // CDS;
+    //CDS;
 
     private static ControllerDS controllerDS = null;
 
-    private ControllerDS(){}
+    private ControllerDS(){
+    }
 
-    public static ControllerDS getControllerDSInstance(){
+    public static ControllerDS getInstance(){
         if(controllerDS == null){
-            return new ControllerDS();
+            controllerDS =  new ControllerDS();
         }
         return controllerDS;
     }

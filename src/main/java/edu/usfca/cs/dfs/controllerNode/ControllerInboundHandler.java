@@ -84,23 +84,14 @@ public class ControllerInboundHandler extends InboundHandler {
 
 
     private void recvHeartBeat(StorageMessages.StorageMessageWrapper msg) {
-        ControllerNodeHelper.getControllerNodeHelper().recvHeartBeat(msg);
-      //  new ControllerNodeHelper().recvHeartBeat(msg);
-//        System.out.println("heartbeat from: "+msg.getHeartBeat().getIpAddress()+":"+msg.getHeartBeat().getPort());
-//
-//        controllerDS.updateStorageNodeRegister(new StorageNodeDetail(
-//                msg.getHeartBeat().getIpAddress(),
-//                msg.getHeartBeat().getPort(),
-//                msg.getHeartBeat().getSpaceRemainingMB(),
-//                Instant.now()
-//        ));
-//
-//        System.out.println("StorageNodeDetailList size: "+controllerDS.getStorageNodeRegister().size());
+       // ControllerNodeHelper.getControllerNodeHelper().recvHeartBeat(msg);
+        ControllerNodeHelper.recvHeartBeat(msg);
+
     }
 
     private void storeChunkMetadata(StorageMessages.StorageMessageWrapper msg){
 
-        ControllerNodeHelper.getControllerNodeHelper().storeChunkMetadata(
+        ControllerNodeHelper.storeChunkMetadata(
                 new ChunkMeta(msg.getChunkMetaMsg().getFileName(),
                         msg.getChunkMetaMsg().getTotalChunks(),
                         msg.getChunkMetaMsg().getChunkId(),

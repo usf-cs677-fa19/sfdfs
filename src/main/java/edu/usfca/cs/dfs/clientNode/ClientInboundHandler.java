@@ -18,7 +18,7 @@ public class ClientInboundHandler extends InboundHandler {
         System.out.println("IN CLIENT INBOUND HANDLER");
         if(msg.hasChunkMetaMsg()) { // msg returned from controller with storage nodes list
 
-            this.recvChunkMetaMsg(msg);
+            //this.recvChunkMetaMsg(msg);
 
             System.out.println("\nChunkMetaMsg receved in CLIENT INBOUND HANDLER");
             System.out.println(msg.getChunkMetaMsg().getFileName()+

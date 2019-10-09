@@ -37,8 +37,10 @@ public class NodeServer {
             this.client = new StorageNodeClient(nodeParam.getNodeType(), nodeParam.getAddress(), nodeParam.getPort());
 
         } else if(nodeParam.getNodeType().equals("controller")) {
+
+            ControllerNodeHelper.checkAliveStorageNodes();
             //ControllerDS controllerDS = new ControllerDS();
-            ControllerNodeHelper.getControllerNodeHelper();
+            //ControllerNodeHelper.getControllerNodeHelper();
             //new ControllerNodeHelper(/*controllerDS*/);
 
         }

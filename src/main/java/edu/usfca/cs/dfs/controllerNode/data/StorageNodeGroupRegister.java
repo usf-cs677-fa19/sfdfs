@@ -43,7 +43,7 @@ public class StorageNodeGroupRegister {
             storageNodePrimaryReplicaDetails.add(node);
             storageNodePrimaryReplicaDetails.addAll(getReplicaList(node));
         }else{
-            String newReplicaOne = ControllerDS.getControllerDSInstance().getSNWithMaxSpace(chunkSize);
+            String newReplicaOne = ControllerDS.getInstance().getSNWithMaxSpace(chunkSize);
             //String
             //todo : get new replicas  ok
         }

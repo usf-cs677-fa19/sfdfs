@@ -112,7 +112,7 @@ public class Client {
        //bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10000);
         Channel chan = cf.channel();
         ChannelFuture write = chan.write(msgWrapper);
-        write.addListener(ChannelFutureListener.CLOSE);
+        //write.addListener(ChannelFutureListener.CLOSE);
         chan.flush();
         chan.closeFuture().sync();
 
