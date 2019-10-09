@@ -33,10 +33,10 @@ public class ControllerInboundHandler extends InboundHandler {
                     .setTotalChunks(receivedChunkMetaMsg.getTotalChunks());
 
             String[] storageNodesAssigned = this.getStorageNodesForChunkMeta(cm);
-            if (storageNodesAssigned.length > 0) {
+           // if (storageNodesAssigned.length > 0) {
 
                 cm.setStorageNodeIds(storageNodesAssigned);
-            }
+           // }
                 StorageMessages.StorageMessageWrapper msgWrapper = this.buildChunkMeta(cm);
 
                 Channel chan = ctx.channel();
