@@ -1,5 +1,6 @@
 package edu.usfca.cs.dfs.clientNode;
 
+import com.google.protobuf.ByteString;
 import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.net.InboundHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -34,10 +35,11 @@ public class ClientInboundHandler extends InboundHandler {
 
     }
 
-    private void recvChunkMetaMsg(StorageMessages.StorageMessageWrapper msg)  {
+    private void recvChunkMetaMsg(StorageMessages.StorageMessageWrapper chunkMetaMsg)  {
         //todo anurag
         //check file name, start read position , and chunk size
-        StorageMessages.ChunkMeta cmMsg = msg.getChunkMetaMsg();
+        // read that much in the buffer
+        StorageMessages.ChunkMeta cmMsg = chunkMetaMsg.getChunkMetaMsg();
 
         ByteBuffer buffer = null;
         try {
@@ -46,13 +48,28 @@ public class ClientInboundHandler extends InboundHandler {
             e.printStackTrace();
         }
 
-
-        // read that much in the buffer
-
         // a. prepare a storeChunk msg
+        StorageMessages.StorageMessageWrapper storeChunkMsg = this.prepareStoreChunkMsg(cmMsg.getFileName(), cmMsg.getChunkId(), buffer);
+
         // b. update chunkMeta message by filling checksum field
         // c. send to primary storage node
 
+    }
+
+    private StorageMessages.StorageMessageWrapper prepareStoreChunkMsg(String fileName, int chunkId, ByteBuffer buffer) {
+        StorageMessages.StoreChunk storeChunkMsg
+                = StorageMessages.StoreChunk.newBuilder()
+                .setFileName(fileName)
+                .setChunkId(chunkId)
+                .setData(ByteString.copyFrom(buffer))
+                .build();
+
+        StorageMessages.StorageMessageWrapper msgWrapper =
+                StorageMessages.StorageMessageWrapper.newBuilder()
+                        .setStoreChunkMsg(storeChunkMsg)
+                        .build();
+
+        return msgWrapper;
     }
 
 
