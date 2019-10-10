@@ -1,4 +1,4 @@
-package edu.usfca.cs.dfs.clientNode;
+package edu.usfca.cs.dfs.fileUtil;
 
 import com.google.protobuf.ByteString;
 import edu.usfca.cs.dfs.StorageMessages;
@@ -17,9 +17,8 @@ import java.util.List;
 
 public class Fileify {
 
-    public static ByteBuffer getFilledBuffer(StorageMessages.ChunkMeta cmMsg) throws IOException {
+    public static ByteBuffer readToBuffer(StorageMessages.ChunkMeta cmMsg) throws IOException {
 
-        //Path filePath = Paths.get(cmMsg.getFileName());
         ByteBuffer directBuf = ByteBuffer.allocateDirect(cmMsg.getChunkSize());
 
         try (
@@ -54,12 +53,32 @@ public class Fileify {
 
 
     //behaviour
+
     //open directory
     //create directory
+    public static void createDirectory(String basePath, String dirName) throws IOException {
+//        String filePath = basePath+"/"+dirName;
+        Path path = Paths.get(basePath, dirName);
+
+        if(!Files.exists(path)) {
+            Files.createDirectory(path);
+        }
+
+    }
+
     //delete directory
+    public static void deleteDirectory(String basePath, String dirName) throws IOException {
+        Path path = Paths.get(basePath, dirName);
+
+        Files.deleteIfExists(path);
+    }
+
     //change directory
+    //public static void todo : anurag
+
+
     // does file exist
-    public boolean doesFileExist(String filePath) {
+    public static boolean doesFileExist(String filePath) {
         Path p = Paths.get(filePath);
         return Files.exists(p);
     }
@@ -79,7 +98,7 @@ public class Fileify {
     //read file
 
     //get file size
-    public long getFileSize(String filename) throws IOException {
+    public static long getFileSize(String filename) throws IOException {
         try(
                 RandomAccessFile reader = new RandomAccessFile(filename, "r");
                 FileChannel fc = reader.getChannel();

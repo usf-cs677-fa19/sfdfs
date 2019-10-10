@@ -8,7 +8,6 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ControllerInboundHandler extends InboundHandler {
 
@@ -22,7 +21,7 @@ public class ControllerInboundHandler extends InboundHandler {
 
         }else if(msg.hasChunkMetaMsg()){
             ///
-            System.out.println("Recieved chunkMetaMsg from client");
+            System.out.println("Received chunkMetaMsg from client");
 
             StorageMessages.ChunkMeta receivedChunkMetaMsg = msg.getChunkMetaMsg();
 
@@ -37,7 +36,7 @@ public class ControllerInboundHandler extends InboundHandler {
 
                 cm.setStorageNodeIds(storageNodesAssigned);
            // }
-                StorageMessages.StorageMessageWrapper msgWrapper = this.buildChunkMeta(cm);
+                StorageMessages.StorageMessageWrapper msgWrapper = ControllerStorageMessagesHelper.buildChunkMeta(cm); //this.buildChunkMeta(cm);
 
                 Channel chan = ctx.channel();
                 ChannelFuture future = chan.write(msgWrapper);
@@ -56,24 +55,24 @@ public class ControllerInboundHandler extends InboundHandler {
 
     }
 
-    private StorageMessages.StorageMessageWrapper buildChunkMeta(ChunkMeta cm) {
-        StorageMessages.ChunkMeta chunkMetaMsg
-                = StorageMessages.ChunkMeta.newBuilder()
-                .setFileName(cm.getFilename())
-                .setChunkId(cm.getChunkId())
-                .setChunkSize(cm.getChunkSize())
-                .setTotalChunks(cm.getTotalChunks())
-                .addAllStorageNodeIds(Arrays.asList(cm.getStorageNodeIds()))
-                .build();
-
-            StorageMessages.StorageMessageWrapper msgWrapper =
-                    StorageMessages.StorageMessageWrapper.newBuilder()
-                            .setChunkMetaMsg(chunkMetaMsg)
-                            .build();
-
-            return msgWrapper;
-
-    }
+//    private StorageMessages.StorageMessageWrapper buildChunkMeta(ChunkMeta cm) {
+//        StorageMessages.ChunkMeta chunkMetaMsg
+//                = StorageMessages.ChunkMeta.newBuilder()
+//                .setFileName(cm.getFilename())
+//                .setChunkId(cm.getChunkId())
+//                .setChunkSize(cm.getChunkSize())
+//                .setTotalChunks(cm.getTotalChunks())
+//                .addAllStorageNodeIds(Arrays.asList(cm.getStorageNodeIds()))
+//                .build();
+//
+//            StorageMessages.StorageMessageWrapper msgWrapper =
+//                    StorageMessages.StorageMessageWrapper.newBuilder()
+//                            .setChunkMetaMsg(chunkMetaMsg)
+//                            .build();
+//
+//            return msgWrapper;
+//
+//    }
 
     private String[] getStorageNodesForChunkMeta(ChunkMeta cm) {
         String[] arr = null;
@@ -85,7 +84,6 @@ public class ControllerInboundHandler extends InboundHandler {
 
     private void recvHeartBeat(StorageMessages.StorageMessageWrapper msg) {
         ControllerNodeHelper.recvHeartBeat(msg);
-
     }
 
 }
