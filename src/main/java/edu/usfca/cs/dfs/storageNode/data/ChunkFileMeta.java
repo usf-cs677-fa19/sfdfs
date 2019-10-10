@@ -12,7 +12,6 @@ public class ChunkFileMeta {
     private final int chunkSize;
     private final int totalChunks;
     private final List<String> storageNodeIds;
-
     private final double entropy;
     private final boolean isCompressed;
     private final long checksum;
