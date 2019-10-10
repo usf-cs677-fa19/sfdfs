@@ -7,13 +7,13 @@ import java.util.Arrays;
 
 public class ClientStorageMessagesHelper {
 
-    public static StorageMessages.StorageMessageWrapper buildChunkMeta(ChunkMeta m) {
+    public static StorageMessages.StorageMessageWrapper buildChunkMeta(String fileName, int chunkId, int chunkSize, int totalChunks) {
         StorageMessages.ChunkMeta chunkMetaMsg
                 = StorageMessages.ChunkMeta.newBuilder()
-                .setFileName(m.getFilename())
-                .setChunkId(m.getChunkId())
-                .setChunkSize(m.getChunkSize())
-                .setTotalChunks(m.getTotalChunks())
+                .setFileName(fileName)
+                .setChunkId(chunkId)
+                .setChunkSize(chunkSize)
+                .setTotalChunks(totalChunks)
                 .build();
 
         StorageMessages.StorageMessageWrapper msgWrapper =

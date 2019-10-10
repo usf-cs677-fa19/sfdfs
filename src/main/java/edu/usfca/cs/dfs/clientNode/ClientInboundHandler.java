@@ -1,7 +1,9 @@
 package edu.usfca.cs.dfs.clientNode;
 
 import com.google.protobuf.ByteString;
+import edu.usfca.cs.dfs.Client;
 import edu.usfca.cs.dfs.StorageMessages;
+import edu.usfca.cs.dfs.data.NodeId;
 import edu.usfca.cs.dfs.fileUtil.Fileify;
 import edu.usfca.cs.dfs.net.InboundHandler;
 import io.netty.channel.ChannelHandlerContext;
@@ -25,17 +27,18 @@ public class ClientInboundHandler extends InboundHandler {
                 for(int i = 0; i < size; i++) {
                     System.out.println(msg.getChunkMetaMsg().getStorageNodeIds(i));
                 }
+
             } else {
                 System.out.println(msg.getChunkMetaMsg().getFileName()+"-"+"NO STORAGE LIST");
             }
 
-            //this.recvChunkMetaMsg(msg); todo : open this
+            this.recvChunkMetaMsg(msg);
         }
 
         ctx.close();  //todo from here to up
     }
 
-    private void recvChunkMetaMsg(StorageMessages.StorageMessageWrapper chunkMetaMsg)  {
+    private void recvChunkMetaMsg(StorageMessages.StorageMessageWrapper chunkMetaMsg){
         //todo anurag
         //check file name, start read position , and chunk size
         // read that much in the buffer
@@ -48,19 +51,28 @@ public class ClientInboundHandler extends InboundHandler {
             e.printStackTrace();
         }
 
-        // a. prepare a storeChunk msg
-        StorageMessages.StorageMessageWrapper storeChunkMsg = this.prepareStoreChunkMsg(cmMsg.getFileName(), cmMsg.getChunkId(), buffer);
-
-        // b. update chunkMeta message by filling checksum field at storage node side
-        // c. send to primary storage node
+        // a. connecting info and prepare a storeChunk msg
+        String[] connectingId = NodeId.getIPAndPort(cmMsg.getStorageNodeIds(0));
+        StorageMessages.StorageMessageWrapper storeChunkMsg = this.prepareStoreChunkMsg(cmMsg, buffer);
+        // b. send to primary storage node
+        try {
+            new Client().runClient(false, "client", connectingId[0], Integer.parseInt(connectingId[1]), storeChunkMsg);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 
-    private StorageMessages.StorageMessageWrapper prepareStoreChunkMsg(String fileName, int chunkId, ByteBuffer buffer) {
+    private StorageMessages.StorageMessageWrapper prepareStoreChunkMsg(StorageMessages.ChunkMeta cmMsg, ByteBuffer buffer) {
         StorageMessages.StoreChunk storeChunkMsg
                 = StorageMessages.StoreChunk.newBuilder()
-                .setFileName(fileName)
-                .setChunkId(chunkId)
+                .setFileName(cmMsg.getFileName())
+                .setChunkId(cmMsg.getChunkId())
+                .setChunkSize(cmMsg.getChunkSize())
+                .setTotalChunks(cmMsg.getTotalChunks())
+                .setStorageNodeIds(0, cmMsg.getStorageNodeIds(0))
+                .setStorageNodeIds(1, cmMsg.getStorageNodeIds(1))
+                .setStorageNodeIds(2, cmMsg.getStorageNodeIds(2))
                 .setData(ByteString.copyFrom(buffer))
                 .build();
 

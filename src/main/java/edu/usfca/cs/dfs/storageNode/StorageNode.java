@@ -37,13 +37,7 @@ public class StorageNode implements SfdfsNode {
 
     private void createSfdfsDirs() {
 
-        try {
-            Fileify.createDirectory("/users/anuragjha/", "sfdfs_"+nodeId);
-        } catch (IOException e) {
-            System.out.println("Cannot create directory, exiting sfdfs");
-            e.printStackTrace();
-            exit(1);  // exiting application
-        }
+        Fileify.createDirectory("/users/anuragjha/", "sfdfs_"+nodeId);
     }
 
     public void keepSendingHeartBeat() {

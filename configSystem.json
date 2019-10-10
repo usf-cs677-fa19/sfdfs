@@ -1,3 +1,6 @@
 [
-    {"nodeType": "controller", "address" : "localhost", "port" : 7777}
+    {"nodeType": "controller", "address" : "localhost", "port" : 7777},
+    {"nodeType": "storage", "address" : "localhost", "port" : 9000},
+    {"nodeType": "storage", "address" : "localhost", "port" : 9001},
+    {"nodeType": "storage", "address" : "localhost", "port" : 9002}
 ]

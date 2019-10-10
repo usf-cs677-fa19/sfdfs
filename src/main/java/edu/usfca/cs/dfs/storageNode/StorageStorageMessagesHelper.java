@@ -24,7 +24,7 @@ public class StorageStorageMessagesHelper {
         StorageMessages.HeartBeat heartBeat = StorageMessages.HeartBeat.newBuilder() // building heartbeat
                 .setIpAddress(address)
                 .setPort(String.valueOf(port))
-                .setSpaceRemainingMB("1024")  // new File("\").getSpace
+                .setSpaceRemainingMB(String.valueOf(1024*1024*1024))  // new File("\").getSpace
                 .build();
 
         StorageMessages.StorageMessageWrapper msgWrapper =

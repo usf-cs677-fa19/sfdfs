@@ -4,11 +4,8 @@ public class ChunkMeta {
 
     private String filename;
     private int chunkId;
-    private int checksum;
     private int chunkSize;
-    //private int chunkNumber;
     private int totalChunks;
-
     private String[] storageNodeIds;
 
     public ChunkMeta() {
@@ -52,11 +49,6 @@ public class ChunkMeta {
 
     public ChunkMeta setChunkId(int chunkId) {
         this.chunkId = chunkId;
-        return this;
-    }
-
-    public ChunkMeta setChecksum(int checksum) {
-        this.checksum = checksum;
         return this;
     }
 

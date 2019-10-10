@@ -19,4 +19,9 @@ public class NodeId {
     public static String getId(String ipAdd, int port) {
         return ipAdd+"-"+port;
     }
+
+    public static String[] getIPAndPort(String nodeId) {
+        return nodeId.split("-");
+    }
+
 }
