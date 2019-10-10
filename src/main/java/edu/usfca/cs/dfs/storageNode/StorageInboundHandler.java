@@ -21,9 +21,9 @@ public class StorageInboundHandler extends InboundHandler {
 
         if(msg.hasStoreChunkMsg()) {
             System.out.println("\n**************************storage receieved store chunk *******************************\n");
-            System.out.println("Size of storage node list : "+ msg.getChunkMetaMsg().getStorageNodeIdsList().size());
+            System.out.println("Size of storage node list : "+ msg.getStoreChunkMsg().getStorageNodeIdsList().size());
             // 1. create a directory, where directory name is 1st storage node in storageNodeIds field
-            String nodeDir = "/users/anuragjha/"+msg.getChunkMetaMsg().getStorageNodeIds(0);
+            String nodeDir = "/users/anuragjha/"+"sfdfs_"+msg.getStoreChunkMsg().getStorageNodeIds(0);
             Fileify.createDirectory(nodeDir);
             // 2. read the bytes in data field - getData()
             byte[] dataArr = msg.getStoreChunkMsg().getData().toByteArray();
@@ -43,7 +43,7 @@ public class StorageInboundHandler extends InboundHandler {
                     msg.getStoreChunkMsg().getChunkId(),
                     msg.getStoreChunkMsg().getChunkSize(),
                     msg.getStoreChunkMsg().getTotalChunks(),
-                    msg.getChunkMetaMsg().getStorageNodeIdsList().subList(0,2),
+                    msg.getStoreChunkMsg().getStorageNodeIdsList(),
                     entropy,
                     isCompressed,
                     checksum
