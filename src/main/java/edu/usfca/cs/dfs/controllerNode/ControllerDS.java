@@ -3,6 +3,7 @@ package edu.usfca.cs.dfs.controllerNode;
 import edu.usfca.cs.dfs.controllerNode.data.StorageNodeDetail;
 //import edu.usfca.cs.dfs.controllerNode.data.StorageNodeGroupRegister;
 import edu.usfca.cs.dfs.data.NodeId;
+import edu.usfca.cs.dfs.filter.BloomFilter;
 
 
 import java.util.ArrayList;
@@ -164,6 +165,28 @@ public class ControllerDS {
 
     public List<String> getReplicaList(String node){
         return this.storageNodeGroupRegister.get(node);
+    }
+
+    public ArrayList<String> checkBloomFiltersForChunk(String chunkName){
+        ArrayList<String> storageNodes = new ArrayList<>();
+
+        if(!storageNodeRegister.isEmpty()){
+            Iterator storageNodeIterator = storageNodeRegister.entrySet().iterator();
+            while (storageNodeIterator.hasNext()) {
+                Map.Entry storageNode = (Map.Entry) storageNodeIterator.next();
+
+                StorageNodeDetail storageNodeDetail1 = (StorageNodeDetail) storageNode.getValue();
+                BloomFilter bloomFilter = storageNodeDetail1.getBloomFilter();
+                boolean inStorageNode = bloomFilter.getFromBloom(chunkName);
+                if(inStorageNode) {
+                    String storageNodeKey = (String) storageNode.getKey();
+                    storageNodes.add(storageNodeKey);
+                }
+            }
+        }else {
+            System.out.println("The StorageNode register is empty! No storage Node Details are stored! ");
+        }
+        return storageNodes;
     }
 
 }
