@@ -13,7 +13,7 @@ public class HeartBeatSender extends TimerTask {
     private int connectingPort;
     //private StorageNodeClient client;
 
-    public HeartBeatSender(StorageNodeClient client, String connectingAddress, int connectingPort, StorageMessages.StorageMessageWrapper heartBeat) {
+    public HeartBeatSender(/*StorageNode node,*/ String connectingAddress, int connectingPort, StorageMessages.StorageMessageWrapper heartBeat) {
         //this.client = client;
         this.connectingAddress = connectingAddress;
         this.connectingPort = connectingPort;

@@ -16,8 +16,9 @@ public class Client {
                           String connectingIpAddress, int connectingPort,
                           StorageMessages.StorageMessageWrapper msgWrapper)
             throws InterruptedException {
+
         EventLoopGroup workerGroup = new NioEventLoopGroup();
-        MessagePipeline pipeline = new MessagePipeline(nodeType); // client pipeline
+        MessagePipeline pipeline = new MessagePipeline(nodeType); // nodeType decides which inboundhandler will be used
 
         Bootstrap bootstrap = new Bootstrap()
                 .group(workerGroup)

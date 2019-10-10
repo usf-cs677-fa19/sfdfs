@@ -34,7 +34,7 @@ public class ControllerDS {
     }
 
     public String getStorageNodeKey(String ipAddress, String port) {
-       return new NodeId(ipAddress,port).getId();
+       return NodeId.getId(ipAddress,port);
        // return ipAddress + port;
     }
 

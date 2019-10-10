@@ -1,36 +1,56 @@
 package edu.usfca.cs.dfs.storageNode;
 
 import edu.usfca.cs.dfs.Client;
+import edu.usfca.cs.dfs.data.NodeId;
+import edu.usfca.cs.dfs.fileUtil.Fileify;
 import edu.usfca.cs.dfs.nodes.NodeClient;
 import edu.usfca.cs.dfs.StorageMessages;
+import edu.usfca.cs.dfs.nodes.SfdfsNode;
 
+import java.io.IOException;
 import java.util.Timer;
 
+import static java.lang.System.exit;
 
-public class StorageNodeClient implements NodeClient {
+
+public class StorageNode implements SfdfsNode {
 
     private String nodeType;
     private String address;
     private int port;
+    private String nodeId;
 
     //private StorageStorageMessagesHelper helper;
 
-    public StorageNodeClient(String nodeType, String address, int port) {
+    public StorageNode(String nodeType, String address, int port) {
         this.nodeType = nodeType;
         this.address = address;
         this.port = port;
+        this.nodeId = NodeId.getId(this.address, this.port);
 
         //this.helper = new StorageStorageMessagesHelper();
+
+        this.createSfdfsDirs(); // creating initial directory structure
+
         this.keepSendingHeartBeat();
+    }
 
+    private void createSfdfsDirs() {
 
+        try {
+            Fileify.createDirectory("/users/anuragjha/", "sfdfs_"+nodeId);
+        } catch (IOException e) {
+            System.out.println("Cannot create directory, exiting sfdfs");
+            e.printStackTrace();
+            exit(1);  // exiting application
+        }
     }
 
     public void keepSendingHeartBeat() {
         Timer timer = new Timer();
         timer.schedule(
                 new HeartBeatSender(
-                        this,
+                        //this,
                         "localhost",
                         7777,
                         StorageStorageMessagesHelper.buildHeartBeat(this.address,this.port)),
