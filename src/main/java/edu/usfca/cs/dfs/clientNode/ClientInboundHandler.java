@@ -10,6 +10,7 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 public class  ClientInboundHandler extends InboundHandler {
 
@@ -17,6 +18,7 @@ public class  ClientInboundHandler extends InboundHandler {
     public void channelRead0(
             ChannelHandlerContext ctx,
             StorageMessages.StorageMessageWrapper msg) {
+
         //copy = msg. todo create a copy and close context here
         System.out.println("IN CLIENT INBOUND HANDLER");
         if(msg.hasChunkMetaMsg()) { // msg returned from controller with storage nodes list
@@ -38,11 +40,11 @@ public class  ClientInboundHandler extends InboundHandler {
         ctx.close();  //todo from here to up
     }
 
-    private void recvChunkMetaMsg(StorageMessages.StorageMessageWrapper chunkMetaMsg){
+    private void recvChunkMetaMsg(StorageMessages.StorageMessageWrapper msg){
         //todo anurag
         //check file name, start read position , and chunk size
         // read that much in the buffer
-        StorageMessages.ChunkMeta cmMsg = chunkMetaMsg.getChunkMetaMsg();
+        StorageMessages.ChunkMeta cmMsg = msg.getChunkMetaMsg();
 
         ByteBuffer buffer = null;
         try {
@@ -54,6 +56,7 @@ public class  ClientInboundHandler extends InboundHandler {
         // a. connecting info and prepare a storeChunk msg
         String[] connectingId = NodeId.getIPAndPort(cmMsg.getStorageNodeIds(0));
         StorageMessages.StorageMessageWrapper storeChunkMsg = this.prepareStoreChunkMsg(cmMsg, buffer);
+        System.out.println("storage nodes assigned : "+ storeChunkMsg.getStoreChunkMsg().getStorageNodeIdsList().size());
         // b. send to primary storage node
         try {
             new Client().runClient(false, "client", connectingId[0], Integer.parseInt(connectingId[1]), storeChunkMsg);
@@ -64,15 +67,15 @@ public class  ClientInboundHandler extends InboundHandler {
     }
 
     private StorageMessages.StorageMessageWrapper prepareStoreChunkMsg(StorageMessages.ChunkMeta cmMsg, ByteBuffer buffer) {
+
+        System.out.println("Size of StorageNodeIds : "+ cmMsg.getStorageNodeIdsList().size());
         StorageMessages.StoreChunk storeChunkMsg
                 = StorageMessages.StoreChunk.newBuilder()
                 .setFileName(cmMsg.getFileName())
                 .setChunkId(cmMsg.getChunkId())
                 .setChunkSize(cmMsg.getChunkSize())
                 .setTotalChunks(cmMsg.getTotalChunks())
-                .setStorageNodeIds(0, cmMsg.getStorageNodeIds(0))
-                .setStorageNodeIds(1, cmMsg.getStorageNodeIds(1))
-                .setStorageNodeIds(2, cmMsg.getStorageNodeIds(2))
+                .addAllStorageNodeIds(cmMsg.getStorageNodeIdsList())
                 .setData(ByteString.copyFrom(buffer))
                 .build();
 

@@ -1,7 +1,7 @@
 package edu.usfca.cs.dfs.controllerNode;
 
 import edu.usfca.cs.dfs.StorageMessages;
-import edu.usfca.cs.dfs.data.ChunkMeta;
+import edu.usfca.cs.dfs.data.ChunkMetaPOJO;
 import edu.usfca.cs.dfs.net.InboundHandler;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -25,7 +25,7 @@ public class ControllerInboundHandler extends InboundHandler {
 
             StorageMessages.ChunkMeta receivedChunkMetaMsg = msg.getChunkMetaMsg();
 
-            ChunkMeta cm = new ChunkMeta()
+            ChunkMetaPOJO cm = new ChunkMetaPOJO()
                     .setFilename(receivedChunkMetaMsg.getFileName())
                     .setChunkId(receivedChunkMetaMsg.getChunkId())
                     .setChunkSize(receivedChunkMetaMsg.getChunkSize())
@@ -74,7 +74,7 @@ public class ControllerInboundHandler extends InboundHandler {
 //
 //    }
 
-    private String[] getStorageNodesForChunkMeta(ChunkMeta cm) {
+    private String[] getStorageNodesForChunkMeta(ChunkMetaPOJO cm) {
         String[] arr = null;
         ArrayList<String> threeNodes = ControllerNodeHelper.getThreeNodes(cm);
         arr = threeNodes.toArray(new String[threeNodes.size()]);

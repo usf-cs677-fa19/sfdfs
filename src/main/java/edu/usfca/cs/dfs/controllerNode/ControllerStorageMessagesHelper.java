@@ -1,14 +1,14 @@
 package edu.usfca.cs.dfs.controllerNode;
 
 import edu.usfca.cs.dfs.StorageMessages;
-import edu.usfca.cs.dfs.data.ChunkMeta;
+import edu.usfca.cs.dfs.data.ChunkMetaPOJO;
 
 import java.util.Arrays;
 
 public class ControllerStorageMessagesHelper {
 
 
-    public static StorageMessages.StorageMessageWrapper buildChunkMeta(ChunkMeta cm) {
+    public static StorageMessages.StorageMessageWrapper buildChunkMeta(ChunkMetaPOJO cm) {
         StorageMessages.ChunkMeta chunkMetaMsg
                 = StorageMessages.ChunkMeta.newBuilder()
                 .setFileName(cm.getFilename())

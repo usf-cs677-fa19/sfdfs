@@ -2,7 +2,7 @@ package edu.usfca.cs.dfs.controllerNode;
 
 import edu.usfca.cs.dfs.StorageMessages;
 //import edu.usfca.cs.dfs.controllerNode.data.StorageNodeGroupRegister;
-import edu.usfca.cs.dfs.data.ChunkMeta;
+import edu.usfca.cs.dfs.data.ChunkMetaPOJO;
 import edu.usfca.cs.dfs.controllerNode.data.StorageNodeDetail;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -34,16 +34,16 @@ public class ControllerNodeHelper{
 
     //for a chunk return 3 storage node
 
-    public static ArrayList<String> getThreeNodes(ChunkMeta chunkMeta){
+    public static ArrayList<String> getThreeNodes(ChunkMetaPOJO chunkMetaPOJO){
         ArrayList<String> threeStorageNodes = new ArrayList<>();
 
-        String primaryNode = ControllerDS.getInstance().findTheStorageNodeToSaveChunk(chunkMeta.getChunkSize());  //get the storage node to
+        String primaryNode = ControllerDS.getInstance().findTheStorageNodeToSaveChunk(chunkMetaPOJO.getChunkSize());  //get the storage node to
 
         System.out.println("Primary node : \n\n"+primaryNode);
         if(primaryNode != "") {                                                                                     //if there is atleast one storage node registered with the client
 
             ArrayList<String> replicaNodesArrayList = (ControllerDS.getInstance())
-                    .checkStorageNodeGroupRegister(primaryNode, chunkMeta.getChunkSize());                          //check if the primary node selected has replicas in the StorageNodeGropuRegister
+                    .checkStorageNodeGroupRegister(primaryNode, chunkMetaPOJO.getChunkSize());                          //check if the primary node selected has replicas in the StorageNodeGropuRegister
 
 
             if (replicaNodesArrayList.size() > 0) {                                                                 //if number of storage nodes registered > 0

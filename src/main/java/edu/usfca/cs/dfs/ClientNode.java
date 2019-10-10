@@ -2,7 +2,6 @@ package edu.usfca.cs.dfs;
 
 import edu.usfca.cs.dfs.clientNode.ClientStorageMessagesHelper;
 import edu.usfca.cs.dfs.fileUtil.Fileify;
-import edu.usfca.cs.dfs.data.ChunkMeta;
 
 import java.io.IOException;
 import java.util.Scanner;

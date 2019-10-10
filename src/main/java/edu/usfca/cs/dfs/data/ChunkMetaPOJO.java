@@ -1,6 +1,6 @@
 package edu.usfca.cs.dfs.data;
 
-public class ChunkMeta {
+public class ChunkMetaPOJO {
 
     private String filename;
     private int chunkId;
@@ -8,11 +8,11 @@ public class ChunkMeta {
     private int totalChunks;
     private String[] storageNodeIds;
 
-    public ChunkMeta() {
+    public ChunkMetaPOJO() {
 
     }
 
-    public ChunkMeta(String filename, int totalChunks, int chunkNumber, int chunkSize){
+    public ChunkMetaPOJO(String filename, int totalChunks, int chunkNumber, int chunkSize){
         this.filename = filename;
         this.totalChunks = totalChunks;
         this.chunkId = chunkNumber;
@@ -42,27 +42,27 @@ public class ChunkMeta {
         return storageNodeIds;
     }
 
-    public ChunkMeta setFilename(String filename) {
+    public ChunkMetaPOJO setFilename(String filename) {
         this.filename = filename;
         return this;
     }
 
-    public ChunkMeta setChunkId(int chunkId) {
+    public ChunkMetaPOJO setChunkId(int chunkId) {
         this.chunkId = chunkId;
         return this;
     }
 
-    public ChunkMeta setChunkSize(int chunkSize) {
+    public ChunkMetaPOJO setChunkSize(int chunkSize) {
         this.chunkSize = chunkSize;
         return this;
     }
 
-    public ChunkMeta setTotalChunks(int totalChunks) {
+    public ChunkMetaPOJO setTotalChunks(int totalChunks) {
         this.totalChunks = totalChunks;
         return this;
     }
 
-    public ChunkMeta setStorageNodeIds(String[] storageNodeIds) {
+    public ChunkMetaPOJO setStorageNodeIds(String[] storageNodeIds) {
         this.storageNodeIds = storageNodeIds;
         return this;
     }
