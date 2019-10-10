@@ -4770,6 +4770,12 @@ public final class StorageMessages {
      */
     com.google.protobuf.ByteString
         getSpaceRemainingMBBytes();
+
+    /**
+     * <code>int32 noOfRequests = 4;</code>
+     * @return The noOfRequests.
+     */
+    int getNoOfRequests();
   }
   /**
    * Protobuf type {@code HeartBeat}
@@ -4835,6 +4841,11 @@ public final class StorageMessages {
               java.lang.String s = input.readStringRequireUtf8();
 
               spaceRemainingMB_ = s;
+              break;
+            }
+            case 32: {
+
+              noOfRequests_ = input.readInt32();
               break;
             }
             default: {
@@ -4977,6 +4988,16 @@ public final class StorageMessages {
       }
     }
 
+    public static final int NOOFREQUESTS_FIELD_NUMBER = 4;
+    private int noOfRequests_;
+    /**
+     * <code>int32 noOfRequests = 4;</code>
+     * @return The noOfRequests.
+     */
+    public int getNoOfRequests() {
+      return noOfRequests_;
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -5000,6 +5021,9 @@ public final class StorageMessages {
       if (!getSpaceRemainingMBBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, spaceRemainingMB_);
       }
+      if (noOfRequests_ != 0) {
+        output.writeInt32(4, noOfRequests_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -5017,6 +5041,10 @@ public final class StorageMessages {
       }
       if (!getSpaceRemainingMBBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, spaceRemainingMB_);
+      }
+      if (noOfRequests_ != 0) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, noOfRequests_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -5039,6 +5067,8 @@ public final class StorageMessages {
           .equals(other.getPort())) return false;
       if (!getSpaceRemainingMB()
           .equals(other.getSpaceRemainingMB())) return false;
+      if (getNoOfRequests()
+          != other.getNoOfRequests()) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -5056,6 +5086,8 @@ public final class StorageMessages {
       hash = (53 * hash) + getPort().hashCode();
       hash = (37 * hash) + SPACEREMAININGMB_FIELD_NUMBER;
       hash = (53 * hash) + getSpaceRemainingMB().hashCode();
+      hash = (37 * hash) + NOOFREQUESTS_FIELD_NUMBER;
+      hash = (53 * hash) + getNoOfRequests();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -5195,6 +5227,8 @@ public final class StorageMessages {
 
         spaceRemainingMB_ = "";
 
+        noOfRequests_ = 0;
+
         return this;
       }
 
@@ -5224,6 +5258,7 @@ public final class StorageMessages {
         result.ipAddress_ = ipAddress_;
         result.port_ = port_;
         result.spaceRemainingMB_ = spaceRemainingMB_;
+        result.noOfRequests_ = noOfRequests_;
         onBuilt();
         return result;
       }
@@ -5283,6 +5318,9 @@ public final class StorageMessages {
         if (!other.getSpaceRemainingMB().isEmpty()) {
           spaceRemainingMB_ = other.spaceRemainingMB_;
           onChanged();
+        }
+        if (other.getNoOfRequests() != 0) {
+          setNoOfRequests(other.getNoOfRequests());
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -5537,6 +5575,36 @@ public final class StorageMessages {
   checkByteStringIsUtf8(value);
         
         spaceRemainingMB_ = value;
+        onChanged();
+        return this;
+      }
+
+      private int noOfRequests_ ;
+      /**
+       * <code>int32 noOfRequests = 4;</code>
+       * @return The noOfRequests.
+       */
+      public int getNoOfRequests() {
+        return noOfRequests_;
+      }
+      /**
+       * <code>int32 noOfRequests = 4;</code>
+       * @param value The noOfRequests to set.
+       * @return This builder for chaining.
+       */
+      public Builder setNoOfRequests(int value) {
+        
+        noOfRequests_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>int32 noOfRequests = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearNoOfRequests() {
+        
+        noOfRequests_ = 0;
         onChanged();
         return this;
       }
@@ -7257,15 +7325,16 @@ public final class StorageMessages {
       "leName\030\001 \001(\t\022\017\n\007chunkId\030\002 \001(\005\"2\n\rChunkLo" +
       "cation\022\020\n\010fileName\030\001 \001(\t\022\017\n\007chunkId\030\002 \001(" +
       "\005\"6\n\025ListChunksAndFileName\022\r\n\005files\030\001 \003(" +
-      "\t\022\016\n\006chunks\030\002 \003(\005\"F\n\tHeartBeat\022\021\n\tipAddr" +
+      "\t\022\016\n\006chunks\030\002 \003(\005\"\\\n\tHeartBeat\022\021\n\tipAddr" +
       "ess\030\001 \001(\t\022\014\n\004port\030\002 \001(\t\022\030\n\020spaceRemainin" +
-      "gMB\030\003 \001(\t\"\334\001\n\025StorageMessageWrapper\022$\n\rs" +
-      "toreChunkMsg\030\001 \001(\0132\013.StoreChunkH\000\022(\n\017ret" +
-      "rieveFileMsg\030\002 \001(\0132\r.RetrieveFileH\000\022\'\n\rr" +
-      "etrieveChunk\030\003 \001(\0132\016.RetrieveChunkH\000\022\037\n\t" +
-      "heartBeat\030\004 \001(\0132\n.HeartBeatH\000\022\"\n\014chunkMe" +
-      "taMsg\030\005 \001(\0132\n.ChunkMetaH\000B\005\n\003msgB\022\n\020edu." +
-      "usfca.cs.dfsb\006proto3"
+      "gMB\030\003 \001(\t\022\024\n\014noOfRequests\030\004 \001(\005\"\334\001\n\025Stor" +
+      "ageMessageWrapper\022$\n\rstoreChunkMsg\030\001 \001(\013" +
+      "2\013.StoreChunkH\000\022(\n\017retrieveFileMsg\030\002 \001(\013" +
+      "2\r.RetrieveFileH\000\022\'\n\rretrieveChunk\030\003 \001(\013" +
+      "2\016.RetrieveChunkH\000\022\037\n\theartBeat\030\004 \001(\0132\n." +
+      "HeartBeatH\000\022\"\n\014chunkMetaMsg\030\005 \001(\0132\n.Chun" +
+      "kMetaH\000B\005\n\003msgB\022\n\020edu.usfca.cs.dfsb\006prot" +
+      "o3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -7312,7 +7381,7 @@ public final class StorageMessages {
     internal_static_HeartBeat_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_HeartBeat_descriptor,
-        new java.lang.String[] { "IpAddress", "Port", "SpaceRemainingMB", });
+        new java.lang.String[] { "IpAddress", "Port", "SpaceRemainingMB", "NoOfRequests", });
     internal_static_StorageMessageWrapper_descriptor =
       getDescriptor().getMessageTypes().get(7);
     internal_static_StorageMessageWrapper_fieldAccessorTable = new

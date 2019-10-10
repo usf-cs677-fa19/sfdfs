@@ -42,6 +42,7 @@ message HeartBeat{
     string ipAddress = 1;
     string port = 2;
     string spaceRemainingMB = 3;
+    int32 noOfRequests = 4;
 }
 
 message StorageMessageWrapper {
