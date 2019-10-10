@@ -95,7 +95,7 @@ public class BloomFilter {
         this.updateN(1);
     }
 
-    private boolean getFromBloom(String data) {
+    public boolean getFromBloom(String data) {
         ArrayList<Integer> results = this.getHashes(data);
         int count = 0;
         for(int result : results) {

@@ -48,6 +48,10 @@ public class StorageNodeDetail {
         this.timeStamp = timeStamp;
     }
 
+    public BloomFilter getBloomFilter() {
+        return bloom;
+    }
+
     private BloomFilter InitBloom() {
         Map<String, String> c = Init.readConfigFileIntoMap("configFilter.json");
         System.out.println(c);
