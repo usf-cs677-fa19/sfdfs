@@ -9,7 +9,7 @@ import io.netty.channel.ChannelHandlerContext;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-public class ClientInboundHandler extends InboundHandler {
+public class  ClientInboundHandler extends InboundHandler {
 
     @Override
     public void channelRead0(
