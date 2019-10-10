@@ -56,12 +56,29 @@ public class Fileify {
 
     //open directory
     //create directory
-    public static void createDirectory(String basePath, String dirName) throws IOException {
+    public static void createDirectory(String basePath, String dirName) {
 //        String filePath = basePath+"/"+dirName;
         Path path = Paths.get(basePath, dirName);
 
         if(!Files.exists(path)) {
-            Files.createDirectory(path);
+            try {
+                Files.createDirectory(path);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    public static void createDirectory(String dirPath) {
+        Path path = Paths.get(dirPath);
+
+        if(!Files.exists(path)) {
+            try {
+                Files.createDirectory(path);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -107,7 +124,29 @@ public class Fileify {
         }
 
     }
-    //write from start
+
+    //write to a file from start
+    public static boolean writeToAFile(String filePath, String content) {
+        Path path = Paths.get(filePath);
+        try {
+            Files.write(path, content.getBytes());
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    public static boolean writeToAFile(String filePath, byte[] content) {
+        Path path = Paths.get(filePath);
+        try {
+            Files.write(path, content);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     // write append
     // close fileChannel
     public void closeFileChannel(FileChannel fc) throws IOException {
