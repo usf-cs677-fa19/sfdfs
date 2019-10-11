@@ -1,8 +1,8 @@
 package edu.usfca.cs.dfs.storageNode;
 
-import edu.usfca.cs.dfs.controllerNode.ControllerDS;
-import edu.usfca.cs.dfs.data.NodeId;
+import edu.usfca.cs.dfs.storageNode.data.ChunkFileMeta;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class StorageNodeDS {
@@ -19,6 +19,26 @@ public class StorageNodeDS {
         return storageNodeDS;
     }
 
-  //  private Map<String,Map<String,>>
+    private Map<String,Map<String, ChunkFileMeta>> storageNodeMetaData = new HashMap<String, Map<String, ChunkFileMeta>>();
+
+
+    //Map<NameofDirectoriesHavingChunks, Map<ChunkFileName,ChunkMetadata>
+    public Map<String,Map<String, ChunkFileMeta>> getStorageNodeMetaData(){
+        return this.storageNodeMetaData;
+    }
+
+    public ChunkFileMeta getTheMetadataOfAChunk(String nameOfDirectoriesHavingChunk, String chunkFileName){
+        ChunkFileMeta chunkFileMeta = null;
+        if (storageNodeMetaData.containsKey(nameOfDirectoriesHavingChunk)) {
+            Map<String, ChunkFileMeta> mapOfChunksToChunkMeta = storageNodeMetaData.get(nameOfDirectoriesHavingChunk);
+
+            if (mapOfChunksToChunkMeta.containsKey(chunkFileName)) {
+                chunkFileMeta = mapOfChunksToChunkMeta.get(chunkFileName);
+            }
+        }
+        return chunkFileMeta;
+    }
+
+
 
 }

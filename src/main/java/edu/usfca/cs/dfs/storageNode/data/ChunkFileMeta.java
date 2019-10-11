@@ -16,7 +16,6 @@ public class ChunkFileMeta {
     private final boolean isCompressed;
     private final long checksum;
 
-
     public ChunkFileMeta(String fileName, int chunkId, int chunkSize, int totalChunks, List<String> storageNodeIds, double entropy, boolean isCompressed, long checksum) {
         this.fileName = fileName;
         this.chunkId = chunkId;
@@ -67,6 +66,4 @@ public class ChunkFileMeta {
     public ChunkFileMeta fromJson(String chunkFileMetaJson) {
         return new Gson().fromJson(chunkFileMetaJson, ChunkFileMeta.class);
     }
-
-
 }

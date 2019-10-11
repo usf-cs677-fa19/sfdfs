@@ -17,7 +17,6 @@ public class CheckAliveStorageNodes extends TimerTask {
         this.checkAliveStorageNodes();
     }
 
-
     public void checkAliveStorageNodes(){
         Iterator hmIterator = ControllerDS.getInstance().getStorageNodeRegister().entrySet().iterator();
         while(hmIterator.hasNext()){
