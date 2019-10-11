@@ -36,13 +36,13 @@ public class ClientNode {
         String fileName = filePath;
         long fileSizeInBytes = Fileify.getFileSize(filePath);
 
-        long chunkSizeInBytes = 10*1024*1024; // todo : read from config
+        long chunkSizeInBytes = 1000000; // todo : read from config
         if (fileSizeInBytes < chunkSizeInBytes) {
             chunkSizeInBytes = fileSizeInBytes;
         }
 
         int totalChunks = this.getTotalChunks(fileSizeInBytes, chunkSizeInBytes);
-        System.out.println("Based on chunk size : "+chunkSizeInBytes/1024+" , File : "+fileName+" : will be broken into : "+totalChunks+ " chunks.");
+        System.out.println("Based on chunk size : "+chunkSizeInBytes+" , File : "+fileName+" : will be broken into : "+totalChunks+ " chunks.");
 
         this.createAndSendMeta(filePath, fileSizeInBytes, chunkSizeInBytes, totalChunks);
 
@@ -76,7 +76,7 @@ public class ClientNode {
         StorageMessages.StorageMessageWrapper msgWrapper = ClientStorageMessagesHelper.buildChunkMeta(
                 fileName,
                 chunkId,
-                (int)(chunkSizeInBytes/1024),
+                (int)(chunkSizeInBytes),
                 totalChunks);
         this.runClient(msgWrapper);
     }
