@@ -19,18 +19,18 @@ public class StorageNodeDS {
         return storageNodeDS;
     }
 
-    private Map<String,Map<String, ChunkFileMeta>> storageNodeMetaData = new HashMap<String, Map<String, ChunkFileMeta>>();
+    private Map<String,Map<String, ChunkFileMeta>> chunksMetaInfo = new HashMap<>();
 
 
-    //Map<NameofDirectoriesHavingChunks, Map<ChunkFileName,ChunkMetadata>
-    public Map<String,Map<String, ChunkFileMeta>> getStorageNodeMetaData(){
-        return this.storageNodeMetaData;
+    //Map<NameOfDirectoriesHavingChunks, Map<ChunkFileName,ChunkMetadata>
+    public Map<String,Map<String, ChunkFileMeta>> getChunksMetaInfo(){
+        return this.chunksMetaInfo;
     }
 
-    public ChunkFileMeta getTheMetadataOfAChunk(String nameOfDirectoriesHavingChunk, String chunkFileName){
+    public ChunkFileMeta getChunkMetaInfo(String nameOfDirectoriesHavingChunk, String chunkFileName){
         ChunkFileMeta chunkFileMeta = null;
-        if (storageNodeMetaData.containsKey(nameOfDirectoriesHavingChunk)) {
-            Map<String, ChunkFileMeta> mapOfChunksToChunkMeta = storageNodeMetaData.get(nameOfDirectoriesHavingChunk);
+        if (chunksMetaInfo.containsKey(nameOfDirectoriesHavingChunk)) {
+            Map<String, ChunkFileMeta> mapOfChunksToChunkMeta = chunksMetaInfo.get(nameOfDirectoriesHavingChunk);
 
             if (mapOfChunksToChunkMeta.containsKey(chunkFileName)) {
                 chunkFileMeta = mapOfChunksToChunkMeta.get(chunkFileName);

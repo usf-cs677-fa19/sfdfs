@@ -36,7 +36,7 @@ public class StorageNode implements SfdfsNode {
     }
 
     private void createSfdfsDirs() {
-        Fileify.createDirectory("/users/manalipatil/", "sfdfs_"+nodeId);
+        Fileify.createDirectory("/users/anuragjha/", "sfdfs_"+nodeId);
     }
 
     public void keepSendingHeartBeat() {
