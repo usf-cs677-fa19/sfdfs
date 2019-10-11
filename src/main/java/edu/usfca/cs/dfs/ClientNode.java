@@ -76,7 +76,7 @@ public class ClientNode {
         StorageMessages.StorageMessageWrapper msgWrapper = ClientStorageMessagesHelper.buildChunkMeta(
                 fileName,
                 chunkId,
-                (int) chunkSizeInBytes,
+                (int)(chunkSizeInBytes),
                 totalChunks);
         this.runClient(msgWrapper);
     }

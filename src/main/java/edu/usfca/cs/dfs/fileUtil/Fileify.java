@@ -26,7 +26,7 @@ public class Fileify {
             FileChannel chan = reader.getChannel();
             ) {
             // Sets the file-pointer offset
-            reader.seek(cmMsg.getChunkId() * cmMsg.getChunkSize());
+            reader.seek((cmMsg.getChunkId()-1) * cmMsg.getChunkSize());
             // read bytes into directBuf
             int bytesRead = chan.read(directBuf);
             System.out.println("No of bytes read : "+ bytesRead);
@@ -77,7 +77,7 @@ public class Fileify {
             try {
                 Files.createDirectory(path);
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("dir already exists");
             }
         }
 
