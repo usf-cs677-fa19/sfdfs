@@ -101,6 +101,21 @@ public class ClientNode {
     }
 
 
+    //// get
+        private StorageMessages.StorageMessageWrapper buildRetrieveFileRequest(String fileName){
+
+        StorageMessages.RetrieveFile retrieveFile = StorageMessages.RetrieveFile.newBuilder()
+                                                .setFileName(fileName).build();
+
+        StorageMessages.StorageMessageWrapper msgWrapper = StorageMessages.StorageMessageWrapper.newBuilder()
+                .setRetrieveFileMsg(retrieveFile)
+                .build();
+
+        return msgWrapper;
+        }
+
+    /// closing get
+
     public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
         ClientNode c = new ClientNode("localhost", 7777);
 
@@ -112,6 +127,11 @@ public class ClientNode {
                 if(inCmdParams.length == 2) {
                     if(inCmdParams[0].equalsIgnoreCase("store")) {
                         c.store(inCmdParams[1]);
+                    }else if(inCmdParams[0].equalsIgnoreCase("get")) {
+                        System.out.println("The get command \n");
+                        String filename = inCmdParams[1];
+                        StorageMessages.StorageMessageWrapper messageWrapper = c.buildRetrieveFileRequest(filename);
+                        c.runClient(messageWrapper);
                     }
                 }
                 if(scanner.nextLine().equalsIgnoreCase("ok")) {

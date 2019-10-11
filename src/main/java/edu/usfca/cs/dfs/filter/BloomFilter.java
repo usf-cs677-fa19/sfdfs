@@ -55,7 +55,7 @@ public class BloomFilter {
      * put functions adds a string to bloom filter
      * @param data string
      */
-    private void put(String data) {
+    public void put(String data) {
         this.putInBloom(data);
     }
 

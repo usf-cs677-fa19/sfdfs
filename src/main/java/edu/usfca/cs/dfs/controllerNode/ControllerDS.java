@@ -2,6 +2,7 @@ package edu.usfca.cs.dfs.controllerNode;
 
 import edu.usfca.cs.dfs.controllerNode.data.StorageNodeDetail;
 //import edu.usfca.cs.dfs.controllerNode.data.StorageNodeGroupRegister;
+import edu.usfca.cs.dfs.data.FileChunkId;
 import edu.usfca.cs.dfs.data.NodeId;
 import edu.usfca.cs.dfs.filter.BloomFilter;
 
@@ -180,8 +181,11 @@ public class ControllerDS {
                 BloomFilter bloomFilter = storageNodeDetail1.getBloomFilter();
                 boolean inStorageNode = bloomFilter.getFromBloom(chunkName);
                 if(inStorageNode) {
+                    System.out.println("present in the bloomfilter!!!");
                     String storageNodeKey = (String) storageNode.getKey();
                     storageNodes.add(storageNodeKey);
+                }else{
+                    System.out.println("Not in this bloomfilter!!!");
                 }
             }
         }else {
@@ -190,4 +194,19 @@ public class ControllerDS {
         return storageNodes;
     }
 
+    public boolean storeChunkInBloomFilter(String storageNodeKey,String fileName,int chunkNumber){
+        boolean stored = false;
+       String chunkName =  FileChunkId.getFileChunkId(fileName,chunkNumber);
+
+        if(!storageNodeRegister.isEmpty()){
+           if(storageNodeRegister.containsKey(storageNodeKey)){
+                StorageNodeDetail storageNodeDetail = storageNodeRegister.get(storageNodeKey);
+                storageNodeDetail.storeInBloomFilter(chunkName);
+                stored = true;
+           }
+        }else {
+            System.out.println("StorageNodeRegister is empty!");
+        }
+        return stored;
+    }
 }

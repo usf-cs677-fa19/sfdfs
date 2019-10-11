@@ -52,6 +52,10 @@ public class StorageNodeDetail {
         return bloom;
     }
 
+    public void storeInBloomFilter(String chunkName){
+        this.bloom.put(chunkName);
+    }
+
     private BloomFilter InitBloom() {
         Map<String, String> c = Init.readConfigFileIntoMap("configFilter.json");
         System.out.println(c);

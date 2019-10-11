@@ -4,6 +4,9 @@ import edu.usfca.cs.dfs.StorageMessages;
 //import edu.usfca.cs.dfs.controllerNode.data.StorageNodeGroupRegister;
 import edu.usfca.cs.dfs.data.ChunkMetaPOJO;
 import edu.usfca.cs.dfs.controllerNode.data.StorageNodeDetail;
+import edu.usfca.cs.dfs.data.FileChunkId;
+import edu.usfca.cs.dfs.storageNode.StorageStorageMessagesHelper;
+
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Timer;
@@ -58,4 +61,14 @@ public class ControllerNodeHelper{
         }
         return threeStorageNodes;
     }
+
+    public static ArrayList<String> getStorageNodeFromBloomFiltersForChunk(String filename, int chunkNumber) {
+
+        String chunkName = FileChunkId.getFileChunkId(filename, chunkNumber);
+
+        //check in bloomfilter and get list of chunkholders
+        ArrayList<String> storageNodes = ControllerDS.getInstance().checkBloomFiltersForChunk(chunkName);
+        return storageNodes;
+    }
+
 }
