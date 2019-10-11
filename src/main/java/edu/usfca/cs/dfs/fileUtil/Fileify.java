@@ -20,13 +20,14 @@ public class Fileify {
     public static ByteBuffer readToBuffer(StorageMessages.ChunkMeta cmMsg) throws IOException {
 
         ByteBuffer directBuf = ByteBuffer.allocateDirect(cmMsg.getChunkSize());
+        int generalChunkSize = 1000000; // todo : read from confiig
 
         try (
             RandomAccessFile reader = new RandomAccessFile(cmMsg.getFileName(), "r");
             FileChannel chan = reader.getChannel();
             ) {
             // Sets the file-pointer offset
-            reader.seek((cmMsg.getChunkId()-1) * cmMsg.getChunkSize());
+            reader.seek((cmMsg.getChunkId()-1) * generalChunkSize);
             // read bytes into directBuf
             int bytesRead = chan.read(directBuf);
             System.out.println("No of bytes read : "+ bytesRead);
@@ -37,6 +38,9 @@ public class Fileify {
         }
 
     }
+
+
+
 
 
 
