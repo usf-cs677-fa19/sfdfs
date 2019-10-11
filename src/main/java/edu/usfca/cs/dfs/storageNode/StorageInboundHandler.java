@@ -7,15 +7,11 @@ import edu.usfca.cs.dfs.fileUtil.Entropy;
 import edu.usfca.cs.dfs.fileUtil.Fileify;
 import edu.usfca.cs.dfs.fileUtil.Zipper;
 import edu.usfca.cs.dfs.net.InboundHandler;
-import edu.usfca.cs.dfs.nodes.SfdfsNode;
 import edu.usfca.cs.dfs.storageNode.data.ChunkFileMeta;
 import io.netty.channel.ChannelHandlerContext;
 
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+
 
 public class StorageInboundHandler extends InboundHandler {
 
@@ -73,7 +69,9 @@ public class StorageInboundHandler extends InboundHandler {
         }
         ctx.close();
 
+        //
         // forwarding storeChunk to other replica
+        //
         if (msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(0))) { // in primary node
             // change toaddress in strorechunk message to 2nd replica and send to 2nd replica
             String[] sendingInfo = NodeId.getIPAndPort(msg.getStoreChunkMsg().getStorageNodeIds(1));
