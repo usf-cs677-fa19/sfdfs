@@ -18,7 +18,7 @@ public class StorageNode implements SfdfsNode {
     private String nodeType;
     private String address;
     private int port;
-    private String nodeId;
+    public String nodeId;
 
     //private StorageStorageMessagesHelper helper;
 
