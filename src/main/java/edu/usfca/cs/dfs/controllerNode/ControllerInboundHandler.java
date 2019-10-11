@@ -42,8 +42,12 @@ public class ControllerInboundHandler extends InboundHandler {
                 ChannelFuture future = chan.write(msgWrapper);
                 chan.flush();
 //            //future.addListener(ChannelFutureListener.CLOSE);
+
+            //todo here - handle context
 //
                 System.out.println("Sent RetrieveFileMsg back to  client");
+
+            ctx.close();
 
 
         }else {

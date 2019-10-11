@@ -78,6 +78,18 @@ public final class StorageMessages {
      * @return The data.
      */
     com.google.protobuf.ByteString getData();
+
+    /**
+     * <code>string toStorageNodeId = 7;</code>
+     * @return The toStorageNodeId.
+     */
+    java.lang.String getToStorageNodeId();
+    /**
+     * <code>string toStorageNodeId = 7;</code>
+     * @return The bytes for toStorageNodeId.
+     */
+    com.google.protobuf.ByteString
+        getToStorageNodeIdBytes();
   }
   /**
    * Protobuf type {@code StoreChunk}
@@ -95,6 +107,7 @@ public final class StorageMessages {
       fileName_ = "";
       storageNodeIds_ = com.google.protobuf.LazyStringArrayList.EMPTY;
       data_ = com.google.protobuf.ByteString.EMPTY;
+      toStorageNodeId_ = "";
     }
 
     @java.lang.Override
@@ -161,6 +174,12 @@ public final class StorageMessages {
             case 50: {
 
               data_ = input.readBytes();
+              break;
+            }
+            case 58: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              toStorageNodeId_ = s;
               break;
             }
             default: {
@@ -309,6 +328,42 @@ public final class StorageMessages {
       return data_;
     }
 
+    public static final int TOSTORAGENODEID_FIELD_NUMBER = 7;
+    private volatile java.lang.Object toStorageNodeId_;
+    /**
+     * <code>string toStorageNodeId = 7;</code>
+     * @return The toStorageNodeId.
+     */
+    public java.lang.String getToStorageNodeId() {
+      java.lang.Object ref = toStorageNodeId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        toStorageNodeId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string toStorageNodeId = 7;</code>
+     * @return The bytes for toStorageNodeId.
+     */
+    public com.google.protobuf.ByteString
+        getToStorageNodeIdBytes() {
+      java.lang.Object ref = toStorageNodeId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        toStorageNodeId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -340,6 +395,9 @@ public final class StorageMessages {
       }
       if (!data_.isEmpty()) {
         output.writeBytes(6, data_);
+      }
+      if (!getToStorageNodeIdBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 7, toStorageNodeId_);
       }
       unknownFields.writeTo(output);
     }
@@ -377,6 +435,9 @@ public final class StorageMessages {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(6, data_);
       }
+      if (!getToStorageNodeIdBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(7, toStorageNodeId_);
+      }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
       return size;
@@ -404,6 +465,8 @@ public final class StorageMessages {
           .equals(other.getStorageNodeIdsList())) return false;
       if (!getData()
           .equals(other.getData())) return false;
+      if (!getToStorageNodeId()
+          .equals(other.getToStorageNodeId())) return false;
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -429,6 +492,8 @@ public final class StorageMessages {
       }
       hash = (37 * hash) + DATA_FIELD_NUMBER;
       hash = (53 * hash) + getData().hashCode();
+      hash = (37 * hash) + TOSTORAGENODEID_FIELD_NUMBER;
+      hash = (53 * hash) + getToStorageNodeId().hashCode();
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
       return hash;
@@ -574,6 +639,8 @@ public final class StorageMessages {
         bitField0_ = (bitField0_ & ~0x00000001);
         data_ = com.google.protobuf.ByteString.EMPTY;
 
+        toStorageNodeId_ = "";
+
         return this;
       }
 
@@ -611,6 +678,7 @@ public final class StorageMessages {
         }
         result.storageNodeIds_ = storageNodeIds_;
         result.data_ = data_;
+        result.toStorageNodeId_ = toStorageNodeId_;
         onBuilt();
         return result;
       }
@@ -684,6 +752,10 @@ public final class StorageMessages {
         }
         if (other.getData() != com.google.protobuf.ByteString.EMPTY) {
           setData(other.getData());
+        }
+        if (!other.getToStorageNodeId().isEmpty()) {
+          toStorageNodeId_ = other.toStorageNodeId_;
+          onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -1020,6 +1092,82 @@ public final class StorageMessages {
       public Builder clearData() {
         
         data_ = getDefaultInstance().getData();
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object toStorageNodeId_ = "";
+      /**
+       * <code>string toStorageNodeId = 7;</code>
+       * @return The toStorageNodeId.
+       */
+      public java.lang.String getToStorageNodeId() {
+        java.lang.Object ref = toStorageNodeId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          toStorageNodeId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string toStorageNodeId = 7;</code>
+       * @return The bytes for toStorageNodeId.
+       */
+      public com.google.protobuf.ByteString
+          getToStorageNodeIdBytes() {
+        java.lang.Object ref = toStorageNodeId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          toStorageNodeId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string toStorageNodeId = 7;</code>
+       * @param value The toStorageNodeId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setToStorageNodeId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        toStorageNodeId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string toStorageNodeId = 7;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearToStorageNodeId() {
+        
+        toStorageNodeId_ = getDefaultInstance().getToStorageNodeId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string toStorageNodeId = 7;</code>
+       * @param value The bytes for toStorageNodeId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setToStorageNodeIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        toStorageNodeId_ = value;
         onChanged();
         return this;
       }
@@ -7314,27 +7462,27 @@ public final class StorageMessages {
       descriptor;
   static {
     java.lang.String[] descriptorData = {
-      "\n\026storage_messages.proto\"}\n\nStoreChunk\022\020" +
-      "\n\010fileName\030\001 \001(\t\022\017\n\007chunkId\030\002 \001(\005\022\021\n\tchu" +
-      "nkSize\030\003 \001(\005\022\023\n\013totalChunks\030\004 \001(\005\022\026\n\016sto" +
-      "rageNodeIds\030\005 \003(\t\022\014\n\004data\030\006 \001(\014\"n\n\tChunk" +
-      "Meta\022\020\n\010fileName\030\001 \001(\t\022\017\n\007chunkId\030\002 \001(\005\022" +
-      "\021\n\tchunkSize\030\003 \001(\005\022\023\n\013totalChunks\030\004 \001(\005\022" +
-      "\026\n\016storageNodeIds\030\005 \003(\t\" \n\014RetrieveFile\022" +
-      "\020\n\010fileName\030\001 \001(\t\"2\n\rRetrieveChunk\022\020\n\010fi" +
-      "leName\030\001 \001(\t\022\017\n\007chunkId\030\002 \001(\005\"2\n\rChunkLo" +
-      "cation\022\020\n\010fileName\030\001 \001(\t\022\017\n\007chunkId\030\002 \001(" +
-      "\005\"6\n\025ListChunksAndFileName\022\r\n\005files\030\001 \003(" +
-      "\t\022\016\n\006chunks\030\002 \003(\005\"\\\n\tHeartBeat\022\021\n\tipAddr" +
-      "ess\030\001 \001(\t\022\014\n\004port\030\002 \001(\t\022\030\n\020spaceRemainin" +
-      "gMB\030\003 \001(\t\022\024\n\014noOfRequests\030\004 \001(\005\"\334\001\n\025Stor" +
-      "ageMessageWrapper\022$\n\rstoreChunkMsg\030\001 \001(\013" +
-      "2\013.StoreChunkH\000\022(\n\017retrieveFileMsg\030\002 \001(\013" +
-      "2\r.RetrieveFileH\000\022\'\n\rretrieveChunk\030\003 \001(\013" +
-      "2\016.RetrieveChunkH\000\022\037\n\theartBeat\030\004 \001(\0132\n." +
-      "HeartBeatH\000\022\"\n\014chunkMetaMsg\030\005 \001(\0132\n.Chun" +
-      "kMetaH\000B\005\n\003msgB\022\n\020edu.usfca.cs.dfsb\006prot" +
-      "o3"
+      "\n\026storage_messages.proto\"\226\001\n\nStoreChunk\022" +
+      "\020\n\010fileName\030\001 \001(\t\022\017\n\007chunkId\030\002 \001(\005\022\021\n\tch" +
+      "unkSize\030\003 \001(\005\022\023\n\013totalChunks\030\004 \001(\005\022\026\n\016st" +
+      "orageNodeIds\030\005 \003(\t\022\014\n\004data\030\006 \001(\014\022\027\n\017toSt" +
+      "orageNodeId\030\007 \001(\t\"n\n\tChunkMeta\022\020\n\010fileNa" +
+      "me\030\001 \001(\t\022\017\n\007chunkId\030\002 \001(\005\022\021\n\tchunkSize\030\003" +
+      " \001(\005\022\023\n\013totalChunks\030\004 \001(\005\022\026\n\016storageNode" +
+      "Ids\030\005 \003(\t\" \n\014RetrieveFile\022\020\n\010fileName\030\001 " +
+      "\001(\t\"2\n\rRetrieveChunk\022\020\n\010fileName\030\001 \001(\t\022\017" +
+      "\n\007chunkId\030\002 \001(\005\"2\n\rChunkLocation\022\020\n\010file" +
+      "Name\030\001 \001(\t\022\017\n\007chunkId\030\002 \001(\005\"6\n\025ListChunk" +
+      "sAndFileName\022\r\n\005files\030\001 \003(\t\022\016\n\006chunks\030\002 " +
+      "\003(\005\"\\\n\tHeartBeat\022\021\n\tipAddress\030\001 \001(\t\022\014\n\004p" +
+      "ort\030\002 \001(\t\022\030\n\020spaceRemainingMB\030\003 \001(\t\022\024\n\014n" +
+      "oOfRequests\030\004 \001(\005\"\334\001\n\025StorageMessageWrap" +
+      "per\022$\n\rstoreChunkMsg\030\001 \001(\0132\013.StoreChunkH" +
+      "\000\022(\n\017retrieveFileMsg\030\002 \001(\0132\r.RetrieveFil" +
+      "eH\000\022\'\n\rretrieveChunk\030\003 \001(\0132\016.RetrieveChu" +
+      "nkH\000\022\037\n\theartBeat\030\004 \001(\0132\n.HeartBeatH\000\022\"\n" +
+      "\014chunkMetaMsg\030\005 \001(\0132\n.ChunkMetaH\000B\005\n\003msg" +
+      "B\022\n\020edu.usfca.cs.dfsb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -7345,7 +7493,7 @@ public final class StorageMessages {
     internal_static_StoreChunk_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_StoreChunk_descriptor,
-        new java.lang.String[] { "FileName", "ChunkId", "ChunkSize", "TotalChunks", "StorageNodeIds", "Data", });
+        new java.lang.String[] { "FileName", "ChunkId", "ChunkSize", "TotalChunks", "StorageNodeIds", "Data", "ToStorageNodeId", });
     internal_static_ChunkMeta_descriptor =
       getDescriptor().getMessageTypes().get(1);
     internal_static_ChunkMeta_fieldAccessorTable = new

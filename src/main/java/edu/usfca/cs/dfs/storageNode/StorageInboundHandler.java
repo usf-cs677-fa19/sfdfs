@@ -1,10 +1,13 @@
 package edu.usfca.cs.dfs.storageNode;
 
+import edu.usfca.cs.dfs.Client;
 import edu.usfca.cs.dfs.StorageMessages;
+import edu.usfca.cs.dfs.data.NodeId;
 import edu.usfca.cs.dfs.fileUtil.Entropy;
 import edu.usfca.cs.dfs.fileUtil.Fileify;
 import edu.usfca.cs.dfs.fileUtil.Zipper;
 import edu.usfca.cs.dfs.net.InboundHandler;
+import edu.usfca.cs.dfs.nodes.SfdfsNode;
 import edu.usfca.cs.dfs.storageNode.data.ChunkFileMeta;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -23,7 +26,7 @@ public class StorageInboundHandler extends InboundHandler {
             System.out.println("\n**************************storage receieved store chunk *******************************\n");
             System.out.println("Size of storage node list : "+ msg.getStoreChunkMsg().getStorageNodeIdsList().size());
             // 1. create a directory, where directory name is 1st storage node in storageNodeIds field
-            String nodeDir = "/users/anuragjha/"+"sfdfs_"+msg.getStoreChunkMsg().getStorageNodeIds(0);
+            String nodeDir = "/users/anuragjha/"+"sfdfs_"+ msg.getStoreChunkMsg().getToStorageNodeId()+"/"+msg.getStoreChunkMsg().getStorageNodeIds(0);
             Fileify.createDirectory(nodeDir);
             // 2. read the bytes in data field - getData()
             byte[] dataArr = msg.getStoreChunkMsg().getData().toByteArray();
@@ -68,6 +71,35 @@ public class StorageInboundHandler extends InboundHandler {
             }
 
         }
+        ctx.close();
+
+        // forwarding storeChunk to other replica
+        if (msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(0))) { // in primary node
+            // change toaddress in strorechunk message to 2nd replica and send to 2nd replica
+            String[] sendingInfo = NodeId.getIPAndPort(msg.getStoreChunkMsg().getStorageNodeIds(1));
+            try {
+                new Client().runClient(
+                        false, "storage", sendingInfo[0], Integer.parseInt(sendingInfo[1]),
+                        StorageStorageMessagesHelper.prepareStoreChunkMsgForReplica(msg, 1));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        } else if(msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(1))) { //in 1st replica
+            // change toaddress in strorechunk message to 3rd replica and send to 3rd replica
+            String[] sendingInfo = NodeId.getIPAndPort(msg.getStoreChunkMsg().getStorageNodeIds(2));
+            try {
+                new Client().runClient(
+                        false, "storage", sendingInfo[0], Integer.parseInt(sendingInfo[1]),
+                        StorageStorageMessagesHelper.prepareStoreChunkMsgForReplica(msg, 2));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        } else if(msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(2))) { // in 2nd replica
+
+        }
 
     }
+
 }

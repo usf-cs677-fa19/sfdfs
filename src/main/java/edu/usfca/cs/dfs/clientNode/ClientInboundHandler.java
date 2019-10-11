@@ -40,7 +40,7 @@ public class  ClientInboundHandler extends InboundHandler {
         ctx.close();  //todo from here to up
     }
 
-    private void recvChunkMetaMsg(StorageMessages.StorageMessageWrapper msg){
+    private void recvChunkMetaMsg( StorageMessages.StorageMessageWrapper msg){
         //todo anurag
         //check file name, start read position , and chunk size
         // read that much in the buffer
@@ -55,7 +55,7 @@ public class  ClientInboundHandler extends InboundHandler {
 
         // a. connecting info and prepare a storeChunk msg
         String[] connectingId = NodeId.getIPAndPort(cmMsg.getStorageNodeIds(0));
-        StorageMessages.StorageMessageWrapper storeChunkMsg = this.prepareStoreChunkMsg(cmMsg, buffer);
+        StorageMessages.StorageMessageWrapper storeChunkMsg = ClientStorageMessagesHelper.prepareStoreChunkMsg(cmMsg, buffer);
         System.out.println("storage nodes assigned : "+ storeChunkMsg.getStoreChunkMsg().getStorageNodeIdsList().size());
         // b. send to primary storage node
         try {
@@ -66,26 +66,27 @@ public class  ClientInboundHandler extends InboundHandler {
 
     }
 
-    private StorageMessages.StorageMessageWrapper prepareStoreChunkMsg(StorageMessages.ChunkMeta cmMsg, ByteBuffer buffer) {
-
-        System.out.println("Size of StorageNodeIds : "+ cmMsg.getStorageNodeIdsList().size());
-        StorageMessages.StoreChunk storeChunkMsg
-                = StorageMessages.StoreChunk.newBuilder()
-                .setFileName(cmMsg.getFileName())
-                .setChunkId(cmMsg.getChunkId())
-                .setChunkSize(cmMsg.getChunkSize())
-                .setTotalChunks(cmMsg.getTotalChunks())
-                .addAllStorageNodeIds(cmMsg.getStorageNodeIdsList())
-                .setData(ByteString.copyFrom(buffer))
-                .build();
-
-        StorageMessages.StorageMessageWrapper msgWrapper =
-                StorageMessages.StorageMessageWrapper.newBuilder()
-                        .setStoreChunkMsg(storeChunkMsg)
-                        .build();
-
-        return msgWrapper;
-    }
+//    private StorageMessages.StorageMessageWrapper prepareStoreChunkMsg(StorageMessages.ChunkMeta cmMsg, ByteBuffer buffer) {
+//
+//        System.out.println("Size of StorageNodeIds : "+ cmMsg.getStorageNodeIdsList().size());
+//        StorageMessages.StoreChunk storeChunkMsg
+//                = StorageMessages.StoreChunk.newBuilder()
+//                .setFileName(cmMsg.getFileName())
+//                .setChunkId(cmMsg.getChunkId())
+//                .setChunkSize(cmMsg.getChunkSize())
+//                .setTotalChunks(cmMsg.getTotalChunks())
+//                .addAllStorageNodeIds(cmMsg.getStorageNodeIdsList())
+//                .setData(ByteString.copyFrom(buffer))
+//                .setToStorageNodeId(cmMsg.getStorageNodeIdsList().get(0))
+//                .build();
+//
+//        StorageMessages.StorageMessageWrapper msgWrapper =
+//                StorageMessages.StorageMessageWrapper.newBuilder()
+//                        .setStoreChunkMsg(storeChunkMsg)
+//                        .build();
+//
+//        return msgWrapper;
+//    }
 
 
 }

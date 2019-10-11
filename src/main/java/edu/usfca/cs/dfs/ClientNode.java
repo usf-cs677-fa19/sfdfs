@@ -114,15 +114,15 @@ public class ClientNode {
                         c.store(inCmdParams[1]);
                     }
                 }
-                if(scanner.nextLine().equalsIgnoreCase("ok")) {
-
-
-                    StorageMessages.StorageMessageWrapper msgWrapper =
-                            ClientStorageMessagesHelper.buildChunkMeta("fileName", 5, 102, 7);
-
-                    c.runClient(msgWrapper);
-
-                }
+//                if(scanner.nextLine().equalsIgnoreCase("ok")) {
+//
+//
+//                    StorageMessages.StorageMessageWrapper msgWrapper =
+//                            ClientStorageMessagesHelper.buildChunkMeta("fileName", 5, 102, 7);
+//
+//                    c.runClient(msgWrapper);
+//
+//                }
             }
         }
 
