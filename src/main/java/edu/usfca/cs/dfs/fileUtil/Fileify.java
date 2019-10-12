@@ -2,6 +2,7 @@ package edu.usfca.cs.dfs.fileUtil;
 
 import com.google.protobuf.ByteString;
 import edu.usfca.cs.dfs.StorageMessages;
+import edu.usfca.cs.dfs.init.ConfigSystemParams;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 
@@ -17,10 +18,10 @@ import java.util.List;
 
 public class Fileify {
 
-    public static ByteBuffer readToBuffer(StorageMessages.ChunkMeta cmMsg) throws IOException {
+    public static ByteBuffer readToBuffer(StorageMessages.ChunkMeta cmMsg, int generalChunkSize) throws IOException {
 
         ByteBuffer directBuf = ByteBuffer.allocateDirect(cmMsg.getChunkSize());
-        int generalChunkSize = 1000000; // todo : read from confiig
+        //int generalChunkSize = //ConfigSystemParams.params[0].getGeneralChunkSize();//1000000; // todo : read from confiig
 
         try (
             RandomAccessFile reader = new RandomAccessFile(cmMsg.getFileName(), "r");

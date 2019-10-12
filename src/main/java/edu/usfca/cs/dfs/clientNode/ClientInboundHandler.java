@@ -2,9 +2,12 @@ package edu.usfca.cs.dfs.clientNode;
 
 import com.google.protobuf.ByteString;
 import edu.usfca.cs.dfs.Client;
+import edu.usfca.cs.dfs.ClientNode;
 import edu.usfca.cs.dfs.StorageMessages;
+import edu.usfca.cs.dfs.data.FileChunkId;
 import edu.usfca.cs.dfs.data.NodeId;
 import edu.usfca.cs.dfs.fileUtil.Fileify;
+import edu.usfca.cs.dfs.init.ClientParams;
 import edu.usfca.cs.dfs.net.InboundHandler;
 import io.netty.channel.ChannelHandlerContext;
 
@@ -19,7 +22,6 @@ public class  ClientInboundHandler extends InboundHandler {
             ChannelHandlerContext ctx,
             StorageMessages.StorageMessageWrapper msg) {
 
-        //copy = msg. todo create a copy and close context here
         System.out.println("IN CLIENT INBOUND HANDLER");
         if(msg.hasChunkMetaMsg()) { // msg returned from controller with storage nodes list
             System.out.println("\nChunkMetaMsg received in CLIENT INBOUND HANDLER");
@@ -41,52 +43,32 @@ public class  ClientInboundHandler extends InboundHandler {
     }
 
     private void recvChunkMetaMsg( StorageMessages.StorageMessageWrapper msg){
-        //todo anurag
         //check file name, start read position , and chunk size
-        // read that much in the buffer
         StorageMessages.ChunkMeta cmMsg = msg.getChunkMetaMsg();
-
+        // read that much in the buffer
         ByteBuffer buffer = null;
         try {
-            buffer = Fileify.readToBuffer(cmMsg); // filling buffer full
+            buffer = Fileify.readToBuffer(cmMsg, ClientParams.getGeneralChunkSize()); // filling buffer full
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         // a. connecting info and prepare a storeChunk msg
-        String[] connectingId = NodeId.getIPAndPort(cmMsg.getStorageNodeIds(0));
-        StorageMessages.StorageMessageWrapper storeChunkMsg = ClientStorageMessagesHelper.prepareStoreChunkMsg(cmMsg, buffer);
-        System.out.println("storage nodes assigned : "+ storeChunkMsg.getStoreChunkMsg().getStorageNodeIdsList().size());
+        String[] connectingInfo = NodeId.getIPAndPort(cmMsg.getStorageNodeIds(0));
+        StorageMessages.StorageMessageWrapper storeChunkMsg =
+                ClientStorageMessagesHelper.prepareStoreChunkMsg(cmMsg, buffer);
+        System.out.println("storage nodes assigned to "
+                + FileChunkId.getFileChunkId(cmMsg.getFileName(), cmMsg.getChunkId())
+                +" are : "
+                + storeChunkMsg.getStoreChunkMsg().getStorageNodeIdsList());
         // b. send to primary storage node
         try {
-            new Client().runClient(false, "client", connectingId[0], Integer.parseInt(connectingId[1]), storeChunkMsg);
+            new Client().runClient(false, ClientParams.getNodeType(), connectingInfo[0], Integer.parseInt(connectingInfo[1]), storeChunkMsg);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
     }
 
-//    private StorageMessages.StorageMessageWrapper prepareStoreChunkMsg(StorageMessages.ChunkMeta cmMsg, ByteBuffer buffer) {
-//
-//        System.out.println("Size of StorageNodeIds : "+ cmMsg.getStorageNodeIdsList().size());
-//        StorageMessages.StoreChunk storeChunkMsg
-//                = StorageMessages.StoreChunk.newBuilder()
-//                .setFileName(cmMsg.getFileName())
-//                .setChunkId(cmMsg.getChunkId())
-//                .setChunkSize(cmMsg.getChunkSize())
-//                .setTotalChunks(cmMsg.getTotalChunks())
-//                .addAllStorageNodeIds(cmMsg.getStorageNodeIdsList())
-//                .setData(ByteString.copyFrom(buffer))
-//                .setToStorageNodeId(cmMsg.getStorageNodeIdsList().get(0))
-//                .build();
-//
-//        StorageMessages.StorageMessageWrapper msgWrapper =
-//                StorageMessages.StorageMessageWrapper.newBuilder()
-//                        .setStoreChunkMsg(storeChunkMsg)
-//                        .build();
-//
-//        return msgWrapper;
-//    }
 
 
 }

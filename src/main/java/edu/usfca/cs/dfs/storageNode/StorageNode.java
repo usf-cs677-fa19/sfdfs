@@ -15,17 +15,19 @@ import static java.lang.System.exit;
 
 public class StorageNode implements SfdfsNode {
 
-    private String nodeType;
+    private final String nodeType;
     private String address;
     private int port;
-    public String nodeId;
+    private int generalChunkSize;
+    private String nodeId;
 
     //private StorageStorageMessagesHelper helper;
 
-    public StorageNode(String nodeType, String address, int port) {
+    public StorageNode(String nodeType, String address, int port, int generalChunkSize) {
         this.nodeType = nodeType;
         this.address = address;
         this.port = port;
+        this.generalChunkSize = generalChunkSize;
         this.nodeId = NodeId.getId(this.address, this.port);
 
         //this.helper = new StorageStorageMessagesHelper();
