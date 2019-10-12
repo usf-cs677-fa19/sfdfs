@@ -11,6 +11,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.concurrent.Future;
 
 public class ControllerInboundHandler extends InboundHandler {
@@ -85,6 +86,15 @@ public class ControllerInboundHandler extends InboundHandler {
 
         }else if(msg.hasStorageChunkMeta()){
             System.out.println("\n\n\n\n Controller recieved the meta for first chunk from Storage Node!!!!!");
+
+            String fileName = msg.getStorageChunkMeta().getFileName();
+            int chunkId = msg.getStorageChunkMeta().getChunkId();
+            int totalChunks = msg.getStorageChunkMeta().getTotalChunks();
+
+            HashMap<String,ArrayList<String>> mapping = ControllerDS.getInstance().getMappingOfChunkIdToStorageNodes(fileName,totalChunks);
+
+            
+
         }
         else {
             StorageMessages.StoreChunk storeChunkMsg

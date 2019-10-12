@@ -58,6 +58,14 @@ message HeartBeat{
     int32 noOfRequests = 4;
 }
 
+message StorageNodesHavingChunk {
+    repeated string storageNode = 1;
+}
+
+message MapingChunkIdToStorageNodes{
+    map<string,StorageNodesHavingChunk> maping = 1;
+}
+
 message StorageMessageWrapper {
     oneof msg {
         StoreChunk storeChunkMsg = 1;
@@ -67,6 +75,8 @@ message StorageMessageWrapper {
         ChunkMeta chunkMetaMsg = 5;
         RetrieveChunkMeta retrieveChunkMeta = 6;
         StorageChunkMeta storageChunkMeta = 7;
+        StorageNodesHavingChunk storageNodesHavingChunk = 8;
+        MapingChunkIdToStorageNodes mapingChunkIdToStorageNodes = 9;
     }
 }
 
