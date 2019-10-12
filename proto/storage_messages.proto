@@ -65,8 +65,8 @@ message BecomePrimary{
 }
 
 message NewPrimaryAlert{
-    string oldIpAddress = 1;
-    string oldPort = 2;
+    string forIpAddress = 1;
+    string forPort = 2;
     string newIpAddress = 3;
     string newPort = 4;
 }

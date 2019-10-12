@@ -8016,28 +8016,28 @@ public final class StorageMessages {
       com.google.protobuf.MessageOrBuilder {
 
     /**
-     * <code>string oldIpAddress = 1;</code>
-     * @return The oldIpAddress.
+     * <code>string forIpAddress = 1;</code>
+     * @return The forIpAddress.
      */
-    java.lang.String getOldIpAddress();
+    java.lang.String getForIpAddress();
     /**
-     * <code>string oldIpAddress = 1;</code>
-     * @return The bytes for oldIpAddress.
+     * <code>string forIpAddress = 1;</code>
+     * @return The bytes for forIpAddress.
      */
     com.google.protobuf.ByteString
-        getOldIpAddressBytes();
+        getForIpAddressBytes();
 
     /**
-     * <code>string oldPort = 2;</code>
-     * @return The oldPort.
+     * <code>string forPort = 2;</code>
+     * @return The forPort.
      */
-    java.lang.String getOldPort();
+    java.lang.String getForPort();
     /**
-     * <code>string oldPort = 2;</code>
-     * @return The bytes for oldPort.
+     * <code>string forPort = 2;</code>
+     * @return The bytes for forPort.
      */
     com.google.protobuf.ByteString
-        getOldPortBytes();
+        getForPortBytes();
 
     /**
      * <code>string newIpAddress = 3;</code>
@@ -8076,8 +8076,8 @@ public final class StorageMessages {
       super(builder);
     }
     private NewPrimaryAlert() {
-      oldIpAddress_ = "";
-      oldPort_ = "";
+      forIpAddress_ = "";
+      forPort_ = "";
       newIpAddress_ = "";
       newPort_ = "";
     }
@@ -8115,13 +8115,13 @@ public final class StorageMessages {
             case 10: {
               java.lang.String s = input.readStringRequireUtf8();
 
-              oldIpAddress_ = s;
+              forIpAddress_ = s;
               break;
             }
             case 18: {
               java.lang.String s = input.readStringRequireUtf8();
 
-              oldPort_ = s;
+              forPort_ = s;
               break;
             }
             case 26: {
@@ -8168,72 +8168,72 @@ public final class StorageMessages {
               edu.usfca.cs.dfs.StorageMessages.NewPrimaryAlert.class, edu.usfca.cs.dfs.StorageMessages.NewPrimaryAlert.Builder.class);
     }
 
-    public static final int OLDIPADDRESS_FIELD_NUMBER = 1;
-    private volatile java.lang.Object oldIpAddress_;
+    public static final int FORIPADDRESS_FIELD_NUMBER = 1;
+    private volatile java.lang.Object forIpAddress_;
     /**
-     * <code>string oldIpAddress = 1;</code>
-     * @return The oldIpAddress.
+     * <code>string forIpAddress = 1;</code>
+     * @return The forIpAddress.
      */
-    public java.lang.String getOldIpAddress() {
-      java.lang.Object ref = oldIpAddress_;
+    public java.lang.String getForIpAddress() {
+      java.lang.Object ref = forIpAddress_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        oldIpAddress_ = s;
+        forIpAddress_ = s;
         return s;
       }
     }
     /**
-     * <code>string oldIpAddress = 1;</code>
-     * @return The bytes for oldIpAddress.
+     * <code>string forIpAddress = 1;</code>
+     * @return The bytes for forIpAddress.
      */
     public com.google.protobuf.ByteString
-        getOldIpAddressBytes() {
-      java.lang.Object ref = oldIpAddress_;
+        getForIpAddressBytes() {
+      java.lang.Object ref = forIpAddress_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        oldIpAddress_ = b;
+        forIpAddress_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
       }
     }
 
-    public static final int OLDPORT_FIELD_NUMBER = 2;
-    private volatile java.lang.Object oldPort_;
+    public static final int FORPORT_FIELD_NUMBER = 2;
+    private volatile java.lang.Object forPort_;
     /**
-     * <code>string oldPort = 2;</code>
-     * @return The oldPort.
+     * <code>string forPort = 2;</code>
+     * @return The forPort.
      */
-    public java.lang.String getOldPort() {
-      java.lang.Object ref = oldPort_;
+    public java.lang.String getForPort() {
+      java.lang.Object ref = forPort_;
       if (ref instanceof java.lang.String) {
         return (java.lang.String) ref;
       } else {
         com.google.protobuf.ByteString bs = 
             (com.google.protobuf.ByteString) ref;
         java.lang.String s = bs.toStringUtf8();
-        oldPort_ = s;
+        forPort_ = s;
         return s;
       }
     }
     /**
-     * <code>string oldPort = 2;</code>
-     * @return The bytes for oldPort.
+     * <code>string forPort = 2;</code>
+     * @return The bytes for forPort.
      */
     public com.google.protobuf.ByteString
-        getOldPortBytes() {
-      java.lang.Object ref = oldPort_;
+        getForPortBytes() {
+      java.lang.Object ref = forPort_;
       if (ref instanceof java.lang.String) {
         com.google.protobuf.ByteString b = 
             com.google.protobuf.ByteString.copyFromUtf8(
                 (java.lang.String) ref);
-        oldPort_ = b;
+        forPort_ = b;
         return b;
       } else {
         return (com.google.protobuf.ByteString) ref;
@@ -8326,11 +8326,11 @@ public final class StorageMessages {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
-      if (!getOldIpAddressBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, oldIpAddress_);
+      if (!getForIpAddressBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, forIpAddress_);
       }
-      if (!getOldPortBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, oldPort_);
+      if (!getForPortBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, forPort_);
       }
       if (!getNewIpAddressBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 3, newIpAddress_);
@@ -8347,11 +8347,11 @@ public final class StorageMessages {
       if (size != -1) return size;
 
       size = 0;
-      if (!getOldIpAddressBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, oldIpAddress_);
+      if (!getForIpAddressBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, forIpAddress_);
       }
-      if (!getOldPortBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, oldPort_);
+      if (!getForPortBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, forPort_);
       }
       if (!getNewIpAddressBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, newIpAddress_);
@@ -8374,10 +8374,10 @@ public final class StorageMessages {
       }
       edu.usfca.cs.dfs.StorageMessages.NewPrimaryAlert other = (edu.usfca.cs.dfs.StorageMessages.NewPrimaryAlert) obj;
 
-      if (!getOldIpAddress()
-          .equals(other.getOldIpAddress())) return false;
-      if (!getOldPort()
-          .equals(other.getOldPort())) return false;
+      if (!getForIpAddress()
+          .equals(other.getForIpAddress())) return false;
+      if (!getForPort()
+          .equals(other.getForPort())) return false;
       if (!getNewIpAddress()
           .equals(other.getNewIpAddress())) return false;
       if (!getNewPort()
@@ -8393,10 +8393,10 @@ public final class StorageMessages {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + OLDIPADDRESS_FIELD_NUMBER;
-      hash = (53 * hash) + getOldIpAddress().hashCode();
-      hash = (37 * hash) + OLDPORT_FIELD_NUMBER;
-      hash = (53 * hash) + getOldPort().hashCode();
+      hash = (37 * hash) + FORIPADDRESS_FIELD_NUMBER;
+      hash = (53 * hash) + getForIpAddress().hashCode();
+      hash = (37 * hash) + FORPORT_FIELD_NUMBER;
+      hash = (53 * hash) + getForPort().hashCode();
       hash = (37 * hash) + NEWIPADDRESS_FIELD_NUMBER;
       hash = (53 * hash) + getNewIpAddress().hashCode();
       hash = (37 * hash) + NEWPORT_FIELD_NUMBER;
@@ -8534,9 +8534,9 @@ public final class StorageMessages {
       @java.lang.Override
       public Builder clear() {
         super.clear();
-        oldIpAddress_ = "";
+        forIpAddress_ = "";
 
-        oldPort_ = "";
+        forPort_ = "";
 
         newIpAddress_ = "";
 
@@ -8568,8 +8568,8 @@ public final class StorageMessages {
       @java.lang.Override
       public edu.usfca.cs.dfs.StorageMessages.NewPrimaryAlert buildPartial() {
         edu.usfca.cs.dfs.StorageMessages.NewPrimaryAlert result = new edu.usfca.cs.dfs.StorageMessages.NewPrimaryAlert(this);
-        result.oldIpAddress_ = oldIpAddress_;
-        result.oldPort_ = oldPort_;
+        result.forIpAddress_ = forIpAddress_;
+        result.forPort_ = forPort_;
         result.newIpAddress_ = newIpAddress_;
         result.newPort_ = newPort_;
         onBuilt();
@@ -8620,12 +8620,12 @@ public final class StorageMessages {
 
       public Builder mergeFrom(edu.usfca.cs.dfs.StorageMessages.NewPrimaryAlert other) {
         if (other == edu.usfca.cs.dfs.StorageMessages.NewPrimaryAlert.getDefaultInstance()) return this;
-        if (!other.getOldIpAddress().isEmpty()) {
-          oldIpAddress_ = other.oldIpAddress_;
+        if (!other.getForIpAddress().isEmpty()) {
+          forIpAddress_ = other.forIpAddress_;
           onChanged();
         }
-        if (!other.getOldPort().isEmpty()) {
-          oldPort_ = other.oldPort_;
+        if (!other.getForPort().isEmpty()) {
+          forPort_ = other.forPort_;
           onChanged();
         }
         if (!other.getNewIpAddress().isEmpty()) {
@@ -8665,154 +8665,154 @@ public final class StorageMessages {
         return this;
       }
 
-      private java.lang.Object oldIpAddress_ = "";
+      private java.lang.Object forIpAddress_ = "";
       /**
-       * <code>string oldIpAddress = 1;</code>
-       * @return The oldIpAddress.
+       * <code>string forIpAddress = 1;</code>
+       * @return The forIpAddress.
        */
-      public java.lang.String getOldIpAddress() {
-        java.lang.Object ref = oldIpAddress_;
+      public java.lang.String getForIpAddress() {
+        java.lang.Object ref = forIpAddress_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          oldIpAddress_ = s;
+          forIpAddress_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>string oldIpAddress = 1;</code>
-       * @return The bytes for oldIpAddress.
+       * <code>string forIpAddress = 1;</code>
+       * @return The bytes for forIpAddress.
        */
       public com.google.protobuf.ByteString
-          getOldIpAddressBytes() {
-        java.lang.Object ref = oldIpAddress_;
+          getForIpAddressBytes() {
+        java.lang.Object ref = forIpAddress_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          oldIpAddress_ = b;
+          forIpAddress_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>string oldIpAddress = 1;</code>
-       * @param value The oldIpAddress to set.
+       * <code>string forIpAddress = 1;</code>
+       * @param value The forIpAddress to set.
        * @return This builder for chaining.
        */
-      public Builder setOldIpAddress(
+      public Builder setForIpAddress(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   
-        oldIpAddress_ = value;
+        forIpAddress_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string oldIpAddress = 1;</code>
+       * <code>string forIpAddress = 1;</code>
        * @return This builder for chaining.
        */
-      public Builder clearOldIpAddress() {
+      public Builder clearForIpAddress() {
         
-        oldIpAddress_ = getDefaultInstance().getOldIpAddress();
+        forIpAddress_ = getDefaultInstance().getForIpAddress();
         onChanged();
         return this;
       }
       /**
-       * <code>string oldIpAddress = 1;</code>
-       * @param value The bytes for oldIpAddress to set.
+       * <code>string forIpAddress = 1;</code>
+       * @param value The bytes for forIpAddress to set.
        * @return This builder for chaining.
        */
-      public Builder setOldIpAddressBytes(
+      public Builder setForIpAddressBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
-        oldIpAddress_ = value;
+        forIpAddress_ = value;
         onChanged();
         return this;
       }
 
-      private java.lang.Object oldPort_ = "";
+      private java.lang.Object forPort_ = "";
       /**
-       * <code>string oldPort = 2;</code>
-       * @return The oldPort.
+       * <code>string forPort = 2;</code>
+       * @return The forPort.
        */
-      public java.lang.String getOldPort() {
-        java.lang.Object ref = oldPort_;
+      public java.lang.String getForPort() {
+        java.lang.Object ref = forPort_;
         if (!(ref instanceof java.lang.String)) {
           com.google.protobuf.ByteString bs =
               (com.google.protobuf.ByteString) ref;
           java.lang.String s = bs.toStringUtf8();
-          oldPort_ = s;
+          forPort_ = s;
           return s;
         } else {
           return (java.lang.String) ref;
         }
       }
       /**
-       * <code>string oldPort = 2;</code>
-       * @return The bytes for oldPort.
+       * <code>string forPort = 2;</code>
+       * @return The bytes for forPort.
        */
       public com.google.protobuf.ByteString
-          getOldPortBytes() {
-        java.lang.Object ref = oldPort_;
+          getForPortBytes() {
+        java.lang.Object ref = forPort_;
         if (ref instanceof String) {
           com.google.protobuf.ByteString b = 
               com.google.protobuf.ByteString.copyFromUtf8(
                   (java.lang.String) ref);
-          oldPort_ = b;
+          forPort_ = b;
           return b;
         } else {
           return (com.google.protobuf.ByteString) ref;
         }
       }
       /**
-       * <code>string oldPort = 2;</code>
-       * @param value The oldPort to set.
+       * <code>string forPort = 2;</code>
+       * @param value The forPort to set.
        * @return This builder for chaining.
        */
-      public Builder setOldPort(
+      public Builder setForPort(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
   
-        oldPort_ = value;
+        forPort_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>string oldPort = 2;</code>
+       * <code>string forPort = 2;</code>
        * @return This builder for chaining.
        */
-      public Builder clearOldPort() {
+      public Builder clearForPort() {
         
-        oldPort_ = getDefaultInstance().getOldPort();
+        forPort_ = getDefaultInstance().getForPort();
         onChanged();
         return this;
       }
       /**
-       * <code>string oldPort = 2;</code>
-       * @param value The bytes for oldPort to set.
+       * <code>string forPort = 2;</code>
+       * @param value The bytes for forPort to set.
        * @return This builder for chaining.
        */
-      public Builder setOldPortBytes(
+      public Builder setForPortBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
         
-        oldPort_ = value;
+        forPort_ = value;
         onChanged();
         return this;
       }
@@ -13432,8 +13432,8 @@ public final class StorageMessages {
       "t\030\002 \001(\t\022\030\n\020spaceRemainingMB\030\003 \001(\t\022\024\n\014noO" +
       "fRequests\030\004 \001(\005\"F\n\rBecomePrimary\022\024\n\014forA" +
       "pAddress\030\001 \001(\t\022\017\n\007forPort\030\002 \001(\t\022\016\n\006askId" +
-      "s\030\003 \003(\t\"_\n\017NewPrimaryAlert\022\024\n\014oldIpAddre" +
-      "ss\030\001 \001(\t\022\017\n\007oldPort\030\002 \001(\t\022\024\n\014newIpAddres" +
+      "s\030\003 \003(\t\"_\n\017NewPrimaryAlert\022\024\n\014forIpAddre" +
+      "ss\030\001 \001(\t\022\017\n\007forPort\030\002 \001(\t\022\024\n\014newIpAddres" +
       "s\030\003 \001(\t\022\017\n\007newPort\030\004 \001(\t\".\n\027StorageNodes" +
       "HavingChunk\022\023\n\013storageNode\030\001 \003(\t\"\242\001\n\034Map" +
       "pingChunkIdToStorageNodes\0229\n\006maping\030\001 \003(" +
@@ -13525,7 +13525,7 @@ public final class StorageMessages {
     internal_static_NewPrimaryAlert_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_NewPrimaryAlert_descriptor,
-        new java.lang.String[] { "OldIpAddress", "OldPort", "NewIpAddress", "NewPort", });
+        new java.lang.String[] { "ForIpAddress", "ForPort", "NewIpAddress", "NewPort", });
     internal_static_StorageNodesHavingChunk_descriptor =
       getDescriptor().getMessageTypes().get(11);
     internal_static_StorageNodesHavingChunk_fieldAccessorTable = new

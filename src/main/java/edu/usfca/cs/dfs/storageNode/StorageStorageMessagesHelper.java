@@ -5,6 +5,7 @@ import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.storageNode.data.ChunkFileMeta;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 
 public class StorageStorageMessagesHelper {
 //
@@ -78,6 +79,23 @@ public class StorageStorageMessagesHelper {
         return msgWrapper;
     }
 
+
+    public static StorageMessages.StorageMessageWrapper buildNewPrimaryAlert(String forAddress, String forPort){
+
+        StorageMessages.NewPrimaryAlert newPrimaryAlertMsg = StorageMessages.NewPrimaryAlert.newBuilder()
+                .setForIpAddress(forAddress)
+                .setForPort(forPort)
+                .setNewIpAddress(StorageNodeDS.getInstance().getIpAddress())
+                .setNewPort(String.valueOf(StorageNodeDS.getInstance().getPort()))
+                .build();
+
+        StorageMessages.StorageMessageWrapper msgWrapper =
+                StorageMessages.StorageMessageWrapper.newBuilder()
+                        .setNewPrimaryAlert(newPrimaryAlertMsg)
+                        .build();
+
+        return msgWrapper;
+    }
 
 
 }

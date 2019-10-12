@@ -67,6 +67,23 @@ public class ControllerStorageMessagesHelper {
         return msgWrapper;
     }
 
+
+    public static StorageMessages.StorageMessageWrapper buildBecomePrimary(String forAddress, String forPort, ArrayList<String> askIds){
+
+        StorageMessages.BecomePrimary becomePrimaryMsg = StorageMessages.BecomePrimary.newBuilder()
+                .setForApAddress(forAddress)
+                .setForPort(forPort)
+                .addAllAskIds(askIds)
+                .build();
+
+        StorageMessages.StorageMessageWrapper msgWrapper =
+                StorageMessages.StorageMessageWrapper.newBuilder()
+                        .setBecomePrimary(becomePrimaryMsg)
+                        .build();
+
+        return msgWrapper;
+    }
+
 //    public static StorageMessages.StorageMessageWrapper StorageNodesHavingChunk(){
 //
 //    }
