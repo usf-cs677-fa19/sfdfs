@@ -6,7 +6,6 @@ import edu.usfca.cs.dfs.data.ChunkMetaPOJO;
 import edu.usfca.cs.dfs.data.FileChunkId;
 import edu.usfca.cs.dfs.data.NodeId;
 import edu.usfca.cs.dfs.net.InboundHandler;
-import edu.usfca.cs.dfs.storageNode.StorageStorageMessagesHelper;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
@@ -84,7 +83,10 @@ public class ControllerInboundHandler extends InboundHandler {
             ctx.close();
 
 
-        }else {
+        }else if(msg.hasStorageChunkMeta()){
+            System.out.println("\n\n\n\n Controller recieved the meta for first chunk from Storage Node!!!!!");
+        }
+        else {
             StorageMessages.StoreChunk storeChunkMsg
                     = msg.getStoreChunkMsg();
             System.out.println("Storing file name: "

@@ -21,6 +21,13 @@ message ChunkMeta {
     repeated string storageNodeIds = 5;
 }
 
+message StorageChunkMeta {
+    string fileName = 1;
+    int32 chunkId = 2;
+    int32 totalChunks = 4;
+}
+
+
 message RetrieveChunkMeta{
     string fileChunkId = 1;
 }
@@ -59,6 +66,7 @@ message StorageMessageWrapper {
         HeartBeat heartBeat = 4;
         ChunkMeta chunkMetaMsg = 5;
         RetrieveChunkMeta retrieveChunkMeta = 6;
+        StorageChunkMeta storageChunkMeta = 7;
     }
 }
 
