@@ -7,7 +7,7 @@ import java.nio.ByteBuffer;
 
 public class ClientStorageMessagesHelper {
 
-    public static StorageMessages.StorageMessageWrapper buildChunkMeta(String fileName, int chunkId, int chunkSize, int totalChunks) {
+    public static StorageMessages.StorageMessageWrapper prepareChunkMeta(String fileName, int chunkId, int chunkSize, int totalChunks) {
         StorageMessages.ChunkMeta chunkMetaMsg
                 = StorageMessages.ChunkMeta.newBuilder()
                 .setFileName(fileName)
@@ -42,6 +42,18 @@ public class ClientStorageMessagesHelper {
                 StorageMessages.StorageMessageWrapper.newBuilder()
                         .setStoreChunkMsg(storeChunkMsg)
                         .build();
+
+        return msgWrapper;
+    }
+
+    public static StorageMessages.StorageMessageWrapper prepareRetrieveFileMsg(String fileName){
+
+        StorageMessages.RetrieveFile retrieveFile = StorageMessages.RetrieveFile.newBuilder()
+                .setFileName(fileName).build();
+
+        StorageMessages.StorageMessageWrapper msgWrapper = StorageMessages.StorageMessageWrapper.newBuilder()
+                .setRetrieveFileMsg(retrieveFile)
+                .build();
 
         return msgWrapper;
     }

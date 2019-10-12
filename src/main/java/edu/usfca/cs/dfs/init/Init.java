@@ -48,6 +48,16 @@ public class Init {
 
     }
 
+//    /**
+//     * Reads the config file in Map
+//     * @param filename
+//     */
+//    public static Object[] readConfigFileIntoMap(String filename, Class c) {
+////        return new Gson().fromJson(Fileify.readUsingBufferedReader(filename), Map.class); Todo:decide on this or below
+//        return new Gson().fromJson(Init.readUsingFileChannel(filename,4096), c);
+//
+//    }
+
 
     /**
      * readUsingFileChannel using RandomAccessFile and ByteArrayOutputStream

@@ -50,8 +50,8 @@ public class ServerMessageRouter {
      *
      * @param port The port to listen on
      */
-    public void listen(int port) {
-        ChannelFuture cf = bootstrap.bind(port).syncUninterruptibly();
+    public void listen(String address, int port) {
+        ChannelFuture cf = bootstrap.bind(address, port).syncUninterruptibly();
         ports.put(port, cf);
     }
 

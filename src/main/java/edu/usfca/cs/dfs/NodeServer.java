@@ -21,29 +21,28 @@ public class NodeServer {
         this.nodeParam = nodeParam;
     }
 
-    private void start(String nodeType, int port)
+    private void start(ConfigSystemParam nodeParam/*String nodeType, String ipAddress, int port,*/ )
             throws IOException {
-        messageRouter = new ServerMessageRouter(nodeType);
-        messageRouter.listen(port);
-        System.out.println("Listening for connections on port : "+port);
-    }
+        messageRouter = new ServerMessageRouter(nodeParam.getNodeType()); // nodeType = storage or controller or client
+        messageRouter.listen(nodeParam.getAddress(), nodeParam.getPort()); // ipAddress and port
 
-    public void run()
-            throws IOException {
+        System.out.println(nodeParam.toString());
+        System.out.println("Listening for connections on address : "+nodeParam.getAddress()+":"+nodeParam.getPort());
 
-        this.start(nodeParam.getNodeType(), nodeParam.getPort());
 
         if(nodeParam.getNodeType().equals("storage")) { // if storage  node
-            this.node = new StorageNode(nodeParam.getNodeType(), nodeParam.getAddress(), nodeParam.getPort());
+            new StorageNode(nodeParam.getNodeType(), nodeParam.getAddress(), nodeParam.getPort(), nodeParam.getGeneralChunkSize());
 
-        } else if(nodeParam.getNodeType().equals("controller")) {
-
+        } else if(nodeParam.getNodeType().equals("controller")) { // if controller  node
             ControllerNodeHelper.checkAliveStorageNodes();
-            //ControllerDS controllerDS = new ControllerDS();
-            //ControllerNodeHelper.getControllerNodeHelper();
-            //new ControllerNodeHelper(/*controllerDS*/);
 
         }
+
+    }
+
+    public void run() throws IOException {
+        this.start(nodeParam);
+        //this.start(nodeParam.getNodeType(), nodeParam.getPort());
 
     }
 }

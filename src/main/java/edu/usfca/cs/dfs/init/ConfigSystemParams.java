@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 
 public class ConfigSystemParams {
 
-    private ConfigSystemParam[] params;
+    public static ConfigSystemParam[] params;
 
     public ConfigSystemParams(String filename) {
         params = this.buildConfigSystemParams(filename);

@@ -2,6 +2,9 @@ package edu.usfca.cs.dfs;
 
 import edu.usfca.cs.dfs.clientNode.ClientStorageMessagesHelper;
 import edu.usfca.cs.dfs.fileUtil.Fileify;
+import edu.usfca.cs.dfs.init.ClientParams;
+import edu.usfca.cs.dfs.init.ConfigReader;
+import edu.usfca.cs.dfs.init.Init;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -9,13 +12,8 @@ import java.util.concurrent.ExecutionException;
 
 public class ClientNode {
 
-    private final String nodeType = "client";
-    private String connectingIpAddress;
-    private int connectingPort;
-
-    public ClientNode(String controllerIpAddress, int port) { // todo : read controller address and port from config file
-        this.connectingIpAddress = controllerIpAddress;
-        this.connectingPort = port;
+    public ClientNode(String fileName) {
+        ClientParams.buildClientParams(fileName);
     }
 
     public void store(String filePath) {
@@ -27,37 +25,35 @@ public class ClientNode {
         }
     }
 
+    public void get(String filePath) {
+        System.out.println("Getting file : "+filePath);
+        StorageMessages.StorageMessageWrapper messageWrapper = ClientStorageMessagesHelper.prepareRetrieveFileMsg(filePath);
+        try {
+            this.runClient(messageWrapper);
+        } catch (IOException | ExecutionException | InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void storeFileInSfdfs(String filePath) throws IOException, ExecutionException, InterruptedException { //
        if (!Fileify.doesFileExist(filePath)) {
-           System.out.println("File does not exist");
+           System.out.println("File does not exist on client side");
            return;
         }
-
-        String fileName = filePath;
         long fileSizeInBytes = Fileify.getFileSize(filePath);
 
-        long chunkSizeInBytes = 1000000; // todo : read from config
+        long chunkSizeInBytes = ClientParams.getGeneralChunkSize();//.1000000; // todo : read from config
         if (fileSizeInBytes < chunkSizeInBytes) {
             chunkSizeInBytes = fileSizeInBytes;
         }
 
-        int totalChunks = this.getTotalChunks(fileSizeInBytes, chunkSizeInBytes);
-        System.out.println("Based on chunk size : "+chunkSizeInBytes+" , File : "+fileName+" : will be broken into : "+totalChunks+ " chunks.");
+        int totalChunks = (int)(fileSizeInBytes/(chunkSizeInBytes))+1;//this.getTotalChunks(fileSizeInBytes, chunkSizeInBytes);
+
+        System.out.println("Based on chunk size : "+chunkSizeInBytes+" , File : "+filePath+" : will be broken into : "+totalChunks+ " chunks.");
 
         this.createAndSendMeta(filePath, fileSizeInBytes, chunkSizeInBytes, totalChunks);
 
     }
-
-    /**
-     * createAndSendMeta func
-     * @param fileName
-     * @param fileSizeInBytes
-     * @param chunkSizeInBytes
-     * @param totalChunks
-     * @throws IOException
-     * @throws ExecutionException
-     * @throws InterruptedException
-     */
 
     public void createAndSendMeta(String fileName, long fileSizeInBytes, long chunkSizeInBytes, int totalChunks) throws IOException, ExecutionException, InterruptedException {
         for(int i=1; i<totalChunks; i++) {
@@ -65,19 +61,20 @@ public class ClientNode {
         }
 
         long lastChunkSize = fileSizeInBytes - chunkSizeInBytes*(totalChunks-1);
-        int lastChunkId = totalChunks;
-        this.createAndSendMetaHelper(fileName, lastChunkId, lastChunkSize, totalChunks);
+        if(lastChunkSize > 0) {
+            int lastChunkId = totalChunks;
+            this.createAndSendMetaHelper(fileName, lastChunkId, lastChunkSize, totalChunks);
+        }
+
     }
 
     // todo: parallize async method
-    public void createAndSendMetaHelper(String fileName, int chunkId, long chunkSizeInBytes, int totalChunks) throws IOException, ExecutionException, InterruptedException {
-        //ChunkMeta m = this.createChunkMeta(fileName, chunkId, (int)(chunkSizeInBytes/1024), totalChunks);
+    public void createAndSendMetaHelper(String fileName, int chunkId, long chunkSizeInBytes, int totalChunks)
+            throws IOException, ExecutionException, InterruptedException {
 
-        StorageMessages.StorageMessageWrapper msgWrapper = ClientStorageMessagesHelper.buildChunkMeta(
-                fileName,
-                chunkId,
-                (int)(chunkSizeInBytes),
-                totalChunks);
+        StorageMessages.StorageMessageWrapper msgWrapper =
+                ClientStorageMessagesHelper.prepareChunkMeta(fileName, chunkId, (int)(chunkSizeInBytes), totalChunks);
+
         this.runClient(msgWrapper);
     }
 
@@ -85,67 +82,58 @@ public class ClientNode {
         return (int)(fileSize/(chunkSizeInBytes))+1;
     }
 
-//    public ChunkMeta createChunkMeta(String fileName, int i, int chunkSizeInBytes, int totalChunks) {
-//        return new ChunkMeta()
-//                .setFilename(fileName)
-//                .setChunkId(i)
-//                .setChunkSize((int)(chunkSizeInBytes/1024))
-//                .setTotalChunks(totalChunks);
-//    }
-
 
     public void runClient(StorageMessages.StorageMessageWrapper msgWrapper)
             throws IOException, ExecutionException, InterruptedException {
 
-        new Client().runClient(true, nodeType, this.connectingIpAddress, this.connectingPort, msgWrapper);
+        new Client().runClient(true,
+                ClientParams.getNodeType(),
+                ClientParams.getConnectingAddress(),
+                ClientParams.getConnectingPort(),
+                msgWrapper);
     }
 
 
     //// get
-        private StorageMessages.StorageMessageWrapper buildRetrieveFileRequest(String fileName){
 
-        StorageMessages.RetrieveFile retrieveFile = StorageMessages.RetrieveFile.newBuilder()
-                                                .setFileName(fileName).build();
 
-        StorageMessages.StorageMessageWrapper msgWrapper = StorageMessages.StorageMessageWrapper.newBuilder()
-                .setRetrieveFileMsg(retrieveFile)
-                .build();
-
-        return msgWrapper;
-        }
+//        private StorageMessages.StorageMessageWrapper buildRetrieveFileRequest(String fileName){
+//
+//        StorageMessages.RetrieveFile retrieveFile = StorageMessages.RetrieveFile.newBuilder()
+//                                                .setFileName(fileName).build();
+//
+//        StorageMessages.StorageMessageWrapper msgWrapper = StorageMessages.StorageMessageWrapper.newBuilder()
+//                .setRetrieveFileMsg(retrieveFile)
+//                .build();
+//
+//        return msgWrapper;
+//        }
 
     /// closing get
 
-    public static void main(String[] args) throws IOException, ExecutionException, InterruptedException {
-        ClientNode c = new ClientNode("localhost", 7777);
+    public static void main(String[] args) {
+        if(Init.isCorrectArgs(args)) {
+            ClientNode c = new ClientNode(args[0]);
+            for (; ; ) {
+                Scanner scanner = new Scanner(System.in);
+                if (scanner.hasNextLine()) {
+                    String inCmd = scanner.nextLine();
+                    String[] inCmdParams = inCmd.split(" ");
+                    if(inCmdParams.length == 2) {
 
-        for (; ; ) {
-            Scanner scanner = new Scanner(System.in);
-            if (scanner.hasNextLine()) {
-                String inCmd = scanner.nextLine();
-                String[] inCmdParams = inCmd.split(" ");
-                if(inCmdParams.length == 2) {
-                    if(inCmdParams[0].equalsIgnoreCase("store")) {
-                        c.store(inCmdParams[1]);
-                    }else if(inCmdParams[0].equalsIgnoreCase("get")) {
-                        System.out.println("The get command \n");
-                        String filename = inCmdParams[1];
-                        StorageMessages.StorageMessageWrapper messageWrapper = c.buildRetrieveFileRequest(filename);
-                        c.runClient(messageWrapper);
+
+                        if(inCmdParams[0].equalsIgnoreCase("store")) { // storing a file
+                            c.store(inCmdParams[1]);
+                        }
+                        else if(inCmdParams[0].equalsIgnoreCase("get")) { // retrieving a file
+                            c.get(inCmdParams[1]);
+                        }
+
+
                     }
                 }
-//                if(scanner.nextLine().equalsIgnoreCase("ok")) {
-//
-//
-//                    StorageMessages.StorageMessageWrapper msgWrapper =
-//                            ClientStorageMessagesHelper.buildChunkMeta("fileName", 5, 102, 7);
-//
-//                    c.runClient(msgWrapper);
-//
-//                }
             }
         }
-
     }
 
 }
