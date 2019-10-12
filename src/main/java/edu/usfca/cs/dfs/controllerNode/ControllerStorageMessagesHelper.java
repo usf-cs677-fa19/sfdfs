@@ -4,7 +4,10 @@ import com.google.protobuf.Descriptors;
 import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.data.ChunkMetaPOJO;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class ControllerStorageMessagesHelper {
 
@@ -45,11 +48,11 @@ public class ControllerStorageMessagesHelper {
 //    public static StorageMessages.StorageMessageWrapper StorageNodesHavingChunk(){
 //
 //    }
+
+//    public static StorageMessages.StorageMessageWrapper buildMapingChunkIdToStorageNodes(HashMap<String, ArrayList<String>> mapping){
+//        StorageMessages.MapingChunkIdToStorageNodes mapingChunkIdToStorageNodes= StorageMessages.MapingChunkIdToStorageNodes.newBuilder()
 //
-//    public static StorageMessages.StorageMessageWrapper buildMapingChunkIdToStorageNodes(){
-//        StorageMessages.MapingChunkIdToStorageNodes = StorageMessages.MapingChunkIdToStorageNodes.newBuilder().
-//
-//    }
+//   }
 //
 //    private static void setTargetField(final StorageMessages.MapingChunkIdToStorageNodes.Builder target, final Object sourceObject, final String targetField)
 //            throws IllegalArgumentException {

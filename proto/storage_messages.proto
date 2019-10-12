@@ -79,9 +79,6 @@ message MapingChunkIdToStorageNodes{
     map<string,StorageNodesHavingChunk> maping = 1;
 }
 
-
-
-
 message StorageMessageWrapper {
     oneof msg {
         StoreChunk storeChunkMsg = 1;
