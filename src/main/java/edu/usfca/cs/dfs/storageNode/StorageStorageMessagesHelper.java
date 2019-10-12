@@ -2,6 +2,7 @@ package edu.usfca.cs.dfs.storageNode;
 
 import com.google.protobuf.ByteString;
 import edu.usfca.cs.dfs.StorageMessages;
+import edu.usfca.cs.dfs.storageNode.data.ChunkFileMeta;
 
 import java.nio.ByteBuffer;
 
@@ -62,6 +63,21 @@ public class StorageStorageMessagesHelper {
 
         return msgWrapper;
     }
+
+    public static StorageMessages.StorageMessageWrapper prepareChunkMetaInfo(ChunkFileMeta chunkFileMeta){
+        StorageMessages.StorageChunkMeta chunkMetaInfo = StorageMessages.StorageChunkMeta.newBuilder()
+                .setFileName(chunkFileMeta.getFileName())
+                .setChunkId(chunkFileMeta.getChunkId())
+                .setTotalChunks(chunkFileMeta.getTotalChunks()).build();
+
+        StorageMessages.StorageMessageWrapper msgWrapper =
+                StorageMessages.StorageMessageWrapper.newBuilder()
+                        .setStorageChunkMeta(chunkMetaInfo)
+                        .build();
+
+        return msgWrapper;
+    }
+
 
 
 }
