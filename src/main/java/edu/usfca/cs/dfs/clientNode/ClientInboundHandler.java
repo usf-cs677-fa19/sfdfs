@@ -35,7 +35,16 @@ public class  ClientInboundHandler extends InboundHandler {
             }
 
             this.recvChunkMetaMsg(msg);
+
+
         }
+        else if(msg.hasMapingChunkIdToStorageNodes()){
+            System.out.println("\n Recieved mapping from controller : todo send the request for file to all nodes!!");
+        }
+        else {
+            System.out.println("\n Donno what message receieved");
+        }
+
 
         ctx.close();  //todo from here to up
     }

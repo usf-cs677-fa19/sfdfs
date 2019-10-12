@@ -24,24 +24,23 @@ public class ControllerInboundHandler extends InboundHandler {
         if(msg.hasHeartBeat()) {  // if message is a heartbeat
             this.recvHeartBeat(msg);
 
-        }else if(msg.hasRetrieveFileMsg()){ // controller receieving a:  RetrieveFile message from client
+        }
+        else if(msg.hasRetrieveFileMsg()){ // controller receieving a:  RetrieveFile message from client
             // should return file containing mapping of each chunk to storage node //Map<ChunkName,StorageNode>
             System.out.println("Request from client to retrieve file!!!");
             String filename = msg.getRetrieveFileMsg().getFileName();
-            System.out.println("File name to retrieve : "+filename);
             //get list of storage nodes from bloomFilter, for chunk 1
             ArrayList<String> storageNodes = ControllerNodeHelper.getStorageNodeFromBloomFiltersForChunk(filename,1);
-
-            System.out.println("Storage Nodes containing this chunk : "+storageNodes);
             // for First node in the list Send RetrieveChunkMeta To Storage
             if(storageNodes.size() == 0){
                 System.out.println("No Storage Nodes have the file!!!");
             } else {
                 String fileChunkId = FileChunkId.getFileChunkId(filename,1);
-                sendRetrieveChunkMetaToStorage(ctx, storageNodes.get(0), fileChunkId);
+                sendRetrieveChunkMetaToStorage(storageNodes.get(0), fileChunkId);
             }
-        } else if(msg.hasChunkMetaMsg()){ //
-            ///
+
+        }
+        else if(msg.hasChunkMetaMsg()){
             System.out.println("Received chunkMetaMsg from client");
 
             StorageMessages.ChunkMeta receivedChunkMetaMsg = msg.getChunkMetaMsg();
@@ -84,8 +83,9 @@ public class ControllerInboundHandler extends InboundHandler {
             ctx.close();
 
 
-        }else if(msg.hasStorageChunkMeta()){
-            System.out.println("\n\n\n\n Controller recieved the meta for first chunk from Storage Node!!!!!");
+        }
+        else if(msg.hasStorageChunkMeta()){
+            System.out.println("\n Controller recieved the meta for first chunk from Storage Node!!!!!");
 
             String fileName = msg.getStorageChunkMeta().getFileName();
             int chunkId = msg.getStorageChunkMeta().getChunkId();
@@ -93,8 +93,22 @@ public class ControllerInboundHandler extends InboundHandler {
 
             HashMap<String,ArrayList<String>> mapping = ControllerDS.getInstance().getMappingOfChunkIdToStorageNodes(fileName,totalChunks);
 
-            
+            StorageMessages.StorageMessageWrapper msgWrapper = ControllerStorageMessagesHelper.buildMappingChunkIdToStorageNodes(mapping);
 
+            System.out.println("Sending the storage nodes to client!!!");
+            System.out.println(ctx.channel().remoteAddress()+"     "+ctx.channel().localAddress());
+
+            ctx.close();
+
+            Channel chan = ctx.channel();
+            ChannelFuture future = chan.write(msgWrapper);
+            chan.flush();
+
+            ctx.close();
+
+
+            System.out.println("Closing context in msg.hasStorageChunkMeta()");
+            System.out.println(ctx.channel().remoteAddress()+"     "+ctx.channel().localAddress());
         }
         else {
             StorageMessages.StoreChunk storeChunkMsg
@@ -137,7 +151,7 @@ public class ControllerInboundHandler extends InboundHandler {
     }
 
 
-    public static void sendRetrieveChunkMetaToStorage(ChannelHandlerContext recveivedCtx, String storageNode,String fileChunkId ){
+    public static void sendRetrieveChunkMetaToStorage(String storageNode,String fileChunkId ){
 
         System.out.println("Trying to connect to the primary storage Node");
         String[] connectingInfo = NodeId.getIPAndPort(storageNode);
@@ -154,7 +168,7 @@ public class ControllerInboundHandler extends InboundHandler {
         //contact the storage node to get the metadata of the First Chunk
 
         try {
-            new Client().runClient(true,"controller",connectingAddress,connectingPort,msgWrapper);
+            ChannelFuture write = new Client().runClient(true,"controller",connectingAddress,connectingPort,msgWrapper);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

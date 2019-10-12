@@ -178,11 +178,11 @@ public class ControllerDS {
                 BloomFilter bloomFilter = storageNodeDetail1.getBloomFilter();
                 boolean inStorageNode = bloomFilter.getFromBloom(chunkName);
                 if(inStorageNode) {
-                    System.out.println("present in the bloomfilter!!!");
+                   // System.out.println("present in the bloomfilter!!!");
                     String storageNodeKey = (String) storageNode.getKey();
                     storageNodes.add(storageNodeKey);
                 }else{
-                    System.out.println("Not in this bloomfilter!!!");
+                    //System.out.println("Not in this bloomfilter!!!");
                 }
             }
         }else {

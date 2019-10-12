@@ -12,7 +12,7 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 
 public class Client {
 
-    public void runClient(boolean waitForCtxToClose, String nodeType,
+    public ChannelFuture runClient(boolean waitForCtxToClose, String nodeType,
                           String connectingIpAddress, int connectingPort,
                           StorageMessages.StorageMessageWrapper msgWrapper)
             throws InterruptedException {
@@ -42,6 +42,9 @@ public class Client {
         if(!waitForCtxToClose) {
             this.shutDownEventLoopGroup(workerGroup); /* Quit as soon as message is sent */
         }
+
+        return write;
+
     }
 
     private void shutDownEventLoopGroup(EventLoopGroup workerGroup) {
