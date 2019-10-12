@@ -7,10 +7,7 @@ import edu.usfca.cs.dfs.data.NodeId;
 import edu.usfca.cs.dfs.filter.BloomFilter;
 
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ControllerDS {
@@ -208,5 +205,26 @@ public class ControllerDS {
             System.out.println("StorageNodeRegister is empty!");
         }
         return stored;
+    }
+
+    public HashMap<String,ArrayList<String>> getMappingOfChunkIdToStorageNodes(String fileName ,int totalchunks){
+        HashMap<String,ArrayList<String>> chunkIdToStorageNodeIds = new HashMap<String, ArrayList<String>>();
+
+        for(int i = 1; i <= totalchunks;i++){
+
+            String chunkId = FileChunkId.getFileChunkId(fileName,i);
+
+            ArrayList<String> storageNodeIdsForAChunk = checkBloomFiltersForChunk(chunkId);
+
+            if(storageNodeIdsForAChunk.size() == 0){
+                System.out.println("No Storage Nodes found !!!");
+                System.out.println("File cannot be found because one chunk is missing from the bloomfilters of the storage nodes!!");
+                return null;
+            } else if (storageNodeIdsForAChunk.size() == 1){
+                System.out.println("Chunk present in only one Storage Node!!");
+            }
+            chunkIdToStorageNodeIds.put(chunkId,storageNodeIdsForAChunk);
+        }
+        return chunkIdToStorageNodeIds;
     }
 }

@@ -20,7 +20,15 @@ public class StorageNodeDS {
     }
 
     private Map<String, ChunkFileMeta> chunksMetaInfo = new HashMap<>();
+    private int requestFivePerSecond;
 
+    public int getRequestFivePerSecond() {
+        return requestFivePerSecond;
+    }
+
+    public void setRequestFivePerSecond(int requestFivePerSecond) {
+        this.requestFivePerSecond = requestFivePerSecond;
+    }
 
     //Map<NameOfDirectoriesHavingChunks, Map<ChunkFileName,ChunkMetadata>
     public Map<String,ChunkFileMeta> getChunksMetaInfo(){
