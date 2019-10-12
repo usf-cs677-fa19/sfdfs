@@ -3,11 +3,13 @@ package edu.usfca.cs.dfs.controllerNode;
 import com.google.protobuf.Descriptors;
 import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.data.ChunkMetaPOJO;
+import edu.usfca.cs.dfs.storageNode.StorageStorageMessagesHelper;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ControllerStorageMessagesHelper {
 
@@ -43,6 +45,26 @@ public class ControllerStorageMessagesHelper {
                             .build();
 
             return msgWrapper;
+    }
+
+    public static StorageMessages.StorageMessageWrapper buildMappingChunkIdToStorageNodes(HashMap<String, ArrayList<String>> mapping){
+
+        StorageMessages.MappingChunkIdToStorageNodes.Builder mappingMsgBuilder = StorageMessages.MappingChunkIdToStorageNodes.newBuilder();
+
+        for(Map.Entry<String, ArrayList<String>> chunkMapping : mapping.entrySet()) {
+            StorageMessages.StorageNodesHavingChunk storageNodesHavingChunkMsg = StorageMessages.StorageNodesHavingChunk.newBuilder()
+                    .addAllStorageNode(chunkMapping.getValue())
+                    .build();
+            mappingMsgBuilder.putMaping(chunkMapping.getKey(), storageNodesHavingChunkMsg);
+        }
+        StorageMessages.MappingChunkIdToStorageNodes mappingMsg = mappingMsgBuilder.build();
+
+        StorageMessages.StorageMessageWrapper msgWrapper =
+                StorageMessages.StorageMessageWrapper.newBuilder()
+                        .setMapingChunkIdToStorageNodes(mappingMsg)
+                        .build();
+
+        return msgWrapper;
     }
 
 //    public static StorageMessages.StorageMessageWrapper StorageNodesHavingChunk(){

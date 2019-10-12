@@ -75,7 +75,7 @@ message StorageNodesHavingChunk {
     repeated string storageNode = 1;
 }
 
-message MapingChunkIdToStorageNodes{
+message MappingChunkIdToStorageNodes{
     map<string,StorageNodesHavingChunk> maping = 1;
 }
 
@@ -91,7 +91,7 @@ message StorageMessageWrapper {
         BecomePrimary becomePrimary = 8;
         NewPrimaryAlert newPrimaryAlert = 9;
         StorageNodesHavingChunk storageNodesHavingChunk = 10;
-        MapingChunkIdToStorageNodes mapingChunkIdToStorageNodes = 11;
+        MappingChunkIdToStorageNodes mapingChunkIdToStorageNodes = 11;
     }
 }
 
