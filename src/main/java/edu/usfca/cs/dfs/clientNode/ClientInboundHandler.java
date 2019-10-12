@@ -1,8 +1,6 @@
 package edu.usfca.cs.dfs.clientNode;
 
-import com.google.protobuf.ByteString;
 import edu.usfca.cs.dfs.Client;
-import edu.usfca.cs.dfs.ClientNode;
 import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.data.FileChunkId;
 import edu.usfca.cs.dfs.data.NodeId;
@@ -13,7 +11,6 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 
 public class  ClientInboundHandler extends InboundHandler {
 
