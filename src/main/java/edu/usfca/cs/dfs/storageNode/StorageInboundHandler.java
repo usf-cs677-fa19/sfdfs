@@ -66,38 +66,43 @@ public class StorageInboundHandler extends InboundHandler {
                 System.out.println("Something went wrong in Meta and Chunk saved on Storage node :-<");
             }
 
-        }
-        ctx.close();
+            ctx.close();
 
-        //
-        // forwarding storeChunk to other replica
-        //
-        if (msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(0))) { // in primary node
-            // change toaddress in strorechunk message to 2nd replica and send to 2nd replica
-            String[] sendingInfo = NodeId.getIPAndPort(msg.getStoreChunkMsg().getStorageNodeIds(1));
-            try {
-                new Client().runClient(
-                        false, "storage", sendingInfo[0], Integer.parseInt(sendingInfo[1]),
-                        StorageStorageMessagesHelper.prepareStoreChunkMsgForReplica(msg, 1));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            //
+            // forwarding storeChunk to other replica
+            //
+            if (msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(0))) { // in primary node
+                // change toaddress in strorechunk message to 2nd replica and send to 2nd replica
+                String[] sendingInfo = NodeId.getIPAndPort(msg.getStoreChunkMsg().getStorageNodeIds(1));
+                try {
+                    new Client().runClient(
+                            false, "storage", sendingInfo[0], Integer.parseInt(sendingInfo[1]),
+                            StorageStorageMessagesHelper.prepareStoreChunkMsgForReplica(msg, 1));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            } else if(msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(1))) { //in 1st replica
+                // change toaddress in strorechunk message to 3rd replica and send to 3rd replica
+                String[] sendingInfo = NodeId.getIPAndPort(msg.getStoreChunkMsg().getStorageNodeIds(2));
+                try {
+                    new Client().runClient(
+                            false, "storage", sendingInfo[0], Integer.parseInt(sendingInfo[1]),
+                            StorageStorageMessagesHelper.prepareStoreChunkMsgForReplica(msg, 2));
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            } else if(msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(2))) { // in 2nd replica
+
             }
+        } // closing msg.hasStoreChunkMsg
 
-        } else if(msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(1))) { //in 1st replica
-            // change toaddress in strorechunk message to 3rd replica and send to 3rd replica
-            String[] sendingInfo = NodeId.getIPAndPort(msg.getStoreChunkMsg().getStorageNodeIds(2));
-            try {
-                new Client().runClient(
-                        false, "storage", sendingInfo[0], Integer.parseInt(sendingInfo[1]),
-                        StorageStorageMessagesHelper.prepareStoreChunkMsgForReplica(msg, 2));
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
-        } else if(msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(2))) { // in 2nd replica
-
-        }
 
     }
+
+
+
 
 }
