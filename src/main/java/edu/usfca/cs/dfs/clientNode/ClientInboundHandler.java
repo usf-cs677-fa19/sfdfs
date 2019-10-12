@@ -20,6 +20,7 @@ public class  ClientInboundHandler extends InboundHandler {
             StorageMessages.StorageMessageWrapper msg) {
 
         System.out.println("IN CLIENT INBOUND HANDLER");
+
         if(msg.hasChunkMetaMsg()) { // msg returned from controller with storage nodes list
             System.out.println("\nChunkMetaMsg received in CLIENT INBOUND HANDLER");
             int size = msg.getChunkMetaMsg().getStorageNodeIdsCount();

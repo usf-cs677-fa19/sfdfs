@@ -71,6 +71,15 @@ message NewPrimaryAlert{
     string newPort = 4;
 }
 
+message StorageNodesHavingChunk {
+    repeated string storageNode = 1;
+}
+
+message MapingChunkIdToStorageNodes{
+    map<string,StorageNodesHavingChunk> maping = 1;
+}
+
+
 
 
 message StorageMessageWrapper {
@@ -82,6 +91,10 @@ message StorageMessageWrapper {
         ChunkMeta chunkMetaMsg = 5;
         RetrieveChunkMeta retrieveChunkMeta = 6;
         StorageChunkMeta storageChunkMeta = 7;
+        BecomePrimary becomePrimary = 8;
+        NewPrimaryAlert newPrimaryAlert = 9;
+        StorageNodesHavingChunk storageNodesHavingChunk = 10;
+        MapingChunkIdToStorageNodes mapingChunkIdToStorageNodes = 11;
     }
 }
 

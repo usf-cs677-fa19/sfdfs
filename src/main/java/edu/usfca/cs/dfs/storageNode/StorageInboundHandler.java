@@ -118,7 +118,6 @@ public class StorageInboundHandler extends InboundHandler {
             chan.flush();
 
             System.out.println("Sent chunkMetaInfo Back to the controller");
-
             ctx.close();
         }
     }
