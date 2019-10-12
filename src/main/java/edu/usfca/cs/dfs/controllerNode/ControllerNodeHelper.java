@@ -71,4 +71,10 @@ public class ControllerNodeHelper{
         return storageNodes;
     }
 
+    public static void handleStorageNodeFail(String nodeIdDown) {
+
+        ControllerDS.getInstance().getStorageNodeGroupRegister();
+
+    }
+
 }

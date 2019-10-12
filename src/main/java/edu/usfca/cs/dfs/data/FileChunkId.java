@@ -10,5 +10,13 @@ public class FileChunkId {
         return filename+"_Chunk_"+chunkNumber;
     }
 
+    public static String[] getFileChunkIds(String filename,int initialChunkNumber, int finalChunkNumber) {
+        String[] chunkIDs = new String[finalChunkNumber - initialChunkNumber];
+        for(int i=initialChunkNumber; i<=finalChunkNumber; i++) {
+            chunkIDs[i] = getFileChunkId(filename, i);
+        }
+        return  chunkIDs;
+    }
+
 
 }

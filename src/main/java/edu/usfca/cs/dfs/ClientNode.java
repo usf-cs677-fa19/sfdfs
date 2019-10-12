@@ -3,7 +3,6 @@ package edu.usfca.cs.dfs;
 import edu.usfca.cs.dfs.clientNode.ClientStorageMessagesHelper;
 import edu.usfca.cs.dfs.fileUtil.Fileify;
 import edu.usfca.cs.dfs.init.ClientParams;
-import edu.usfca.cs.dfs.init.ConfigReader;
 import edu.usfca.cs.dfs.init.Init;
 
 import java.io.IOException;
@@ -42,7 +41,7 @@ public class ClientNode {
         }
         long fileSizeInBytes = Fileify.getFileSize(filePath);
 
-        long chunkSizeInBytes = ClientParams.getGeneralChunkSize();//.1000000; // todo : read from config
+        long chunkSizeInBytes = ClientParams.getGeneralChunkSize();
         if (fileSizeInBytes < chunkSizeInBytes) {
             chunkSizeInBytes = fileSizeInBytes;
         }

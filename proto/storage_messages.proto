@@ -58,13 +58,20 @@ message HeartBeat{
     int32 noOfRequests = 4;
 }
 
-message StorageNodesHavingChunk {
-    repeated string storageNode = 1;
+message BecomePrimary{
+    string forApAddress = 1;
+    string forPort = 2;
+    repeated string askIds = 3;
 }
 
-message MapingChunkIdToStorageNodes{
-    map<string,StorageNodesHavingChunk> maping = 1;
+message NewPrimaryAlert{
+    string oldIpAddress = 1;
+    string oldPort = 2;
+    string newIpAddress = 3;
+    string newPort = 4;
 }
+
+
 
 message StorageMessageWrapper {
     oneof msg {
@@ -75,8 +82,6 @@ message StorageMessageWrapper {
         ChunkMeta chunkMetaMsg = 5;
         RetrieveChunkMeta retrieveChunkMeta = 6;
         StorageChunkMeta storageChunkMeta = 7;
-        StorageNodesHavingChunk storageNodesHavingChunk = 8;
-        MapingChunkIdToStorageNodes mapingChunkIdToStorageNodes = 9;
     }
 }
 

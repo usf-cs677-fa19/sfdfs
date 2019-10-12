@@ -40,6 +40,22 @@ public class Fileify {
 
     }
 
+    public static void copyDirectory(String fromDir, String toDir) {
+
+
+//
+//        String dirPath = "g:/Music/English";
+//        File dir = new File(dirPath);
+//        File[] files = dir.listFiles();
+//        if (files.length == 0) {
+//            System.out.println("The directory is empty");
+//        } else {
+//            for (File aFile : files) {
+//                System.out.println(aFile.getName() + " - " + aFile.length());
+//            }
+//        }
+    }
+
 
 
 
