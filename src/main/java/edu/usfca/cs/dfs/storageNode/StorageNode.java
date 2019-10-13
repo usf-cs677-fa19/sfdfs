@@ -38,14 +38,13 @@ public class StorageNode implements SfdfsNode {
     }
 
     private void createSfdfsDirs() {
-        Fileify.createDirectory("/users/manalipatil/", "sfdfs_"+nodeId);
+        Fileify.createDirectory(System.getProperty("user.home")+"/", "sfdfs_"+nodeId);
     }
 
     public void keepSendingHeartBeat() {
         Timer timer = new Timer();
         timer.schedule(
                 new HeartBeatSender(
-                        //this,
                         "localhost",
                         7777,
                         StorageStorageMessagesHelper.buildHeartBeat(this.address,this.port)),

@@ -1,6 +1,8 @@
 package edu.usfca.cs.dfs;
 
 import edu.usfca.cs.dfs.clientNode.ClientStorageMessagesHelper;
+import edu.usfca.cs.dfs.clientNode.GetThreadTask;
+import edu.usfca.cs.dfs.clientNode.StoreThreadTask;
 import edu.usfca.cs.dfs.fileUtil.Fileify;
 import edu.usfca.cs.dfs.init.ClientParams;
 import edu.usfca.cs.dfs.init.Init;
@@ -22,6 +24,9 @@ public class ClientNode {
             System.out.println("");
             e.printStackTrace();
         }
+
+        //new StoreThreadTask(filePath).run();
+
     }
 
     public void get(String filePath) {
@@ -32,6 +37,8 @@ public class ClientNode {
         } catch (IOException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
+
+        //new GetThreadTask(filePath).run();
     }
 
     public void storeFileInSfdfs(String filePath) throws IOException, ExecutionException, InterruptedException { //
