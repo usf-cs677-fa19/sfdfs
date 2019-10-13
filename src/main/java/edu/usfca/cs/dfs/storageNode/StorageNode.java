@@ -1,53 +1,49 @@
 package edu.usfca.cs.dfs.storageNode;
 
-import edu.usfca.cs.dfs.Client;
-import edu.usfca.cs.dfs.data.NodeId;
-import edu.usfca.cs.dfs.fileUtil.Fileify;
-import edu.usfca.cs.dfs.nodes.NodeClient;
+import edu.usfca.cs.dfs.net.Client;
 import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.nodes.SfdfsNode;
 
-import java.io.IOException;
 import java.util.Timer;
-
-import static java.lang.System.exit;
 
 
 public class StorageNode implements SfdfsNode {
 
-    private final String nodeType;
-    private String address;
-    private int port;
-    private int generalChunkSize;
-    private String nodeId;
+//    private final String nodeType;
+//    private String address;
+//    private int port;
+//    private String controllerAddress;
+//    private int controllerPort;
+//    //private int generalChunkSize;
+//    private String nodeId;
 
     //private StorageStorageMessagesHelper helper;
 
-    public StorageNode(String nodeType, String address, int port, int generalChunkSize) {
-        this.nodeType = nodeType;
-        this.address = address;
-        this.port = port;
-        this.generalChunkSize = generalChunkSize;
-        this.nodeId = NodeId.getId(this.address, this.port);
+    public StorageNode(/*String nodeType, String address, int port*/) {
+//        this.nodeType = nodeType;
+//        this.address = address;
+//        this.port = port;
+//        //this.generalChunkSize = generalChunkSize;
+//        this.nodeId = NodeId.getId(this.address, this.port);
 
         //this.helper = new StorageStorageMessagesHelper();
 
-        this.createSfdfsDirs(); // creating initial directory structure
+        //this.createSfdfsDirs(); // creating initial directory structure
 
         this.keepSendingHeartBeat();
     }
 
-    private void createSfdfsDirs() {
-        Fileify.createDirectory(System.getProperty("user.home")+"/", "sfdfs_"+nodeId);
-    }
+//    private void createSfdfsDirs() {
+//        Fileify.createDirectory(System.getProperty("user.home")+"/", "sfdfs_"+nodeId);
+//    }
 
     public void keepSendingHeartBeat() {
         Timer timer = new Timer();
         timer.schedule(
                 new HeartBeatSender(
-                        "localhost",
-                        7777,
-                        StorageStorageMessagesHelper.buildHeartBeat(this.address,this.port)),
+                        StorageNodeDS.getInstance().getControllerIpAddress(),
+                        StorageNodeDS.getInstance().getControllerPort(),
+                        StorageStorageMessagesHelper.buildHeartBeat(StorageNodeDS.getInstance().getIpAddress(),StorageNodeDS.getInstance().getPort())),
                 0,
                 5000);
     }
@@ -55,7 +51,7 @@ public class StorageNode implements SfdfsNode {
     public void startClient(String connectingAddress, int connectingPort, StorageMessages.StorageMessageWrapper msgWrapper)
             throws InterruptedException {
 
-        new Client().runClient(false, this.nodeType, connectingAddress, connectingPort, msgWrapper);
+        new Client().runClient(false, StorageNodeDS.getInstance().getNodeId(), connectingAddress, connectingPort, msgWrapper);
 //
 //
 //        EventLoopGroup workerGroup = new NioEventLoopGroup();

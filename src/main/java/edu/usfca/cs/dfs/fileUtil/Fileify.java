@@ -2,7 +2,6 @@ package edu.usfca.cs.dfs.fileUtil;
 
 import com.google.protobuf.ByteString;
 import edu.usfca.cs.dfs.StorageMessages;
-import edu.usfca.cs.dfs.init.ConfigSystemParams;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 

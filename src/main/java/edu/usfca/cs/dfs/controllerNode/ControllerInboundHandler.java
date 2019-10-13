@@ -1,6 +1,6 @@
 package edu.usfca.cs.dfs.controllerNode;
 
-import edu.usfca.cs.dfs.Client;
+import edu.usfca.cs.dfs.net.Client;
 import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.data.ChunkMetaPOJO;
 import edu.usfca.cs.dfs.data.FileChunkId;
@@ -12,7 +12,6 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.Future;
 
 public class ControllerInboundHandler extends InboundHandler {
 

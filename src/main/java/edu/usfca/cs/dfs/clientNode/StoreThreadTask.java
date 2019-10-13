@@ -1,6 +1,6 @@
 package edu.usfca.cs.dfs.clientNode;
 
-import edu.usfca.cs.dfs.Client;
+import edu.usfca.cs.dfs.net.Client;
 import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.fileUtil.Fileify;
 import edu.usfca.cs.dfs.init.ClientParams;

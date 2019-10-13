@@ -1,5 +1,6 @@
-package edu.usfca.cs.dfs;
+package edu.usfca.cs.dfs.net;
 
+import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.net.MessagePipeline;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;

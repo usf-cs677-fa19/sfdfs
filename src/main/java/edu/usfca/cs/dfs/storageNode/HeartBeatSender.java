@@ -1,9 +1,8 @@
 package edu.usfca.cs.dfs.storageNode;
 
-import edu.usfca.cs.dfs.Client;
+import edu.usfca.cs.dfs.net.Client;
 import edu.usfca.cs.dfs.StorageMessages;
 
-import java.io.IOException;
 import java.util.TimerTask;
 
 public class HeartBeatSender extends TimerTask {
@@ -18,6 +17,8 @@ public class HeartBeatSender extends TimerTask {
         this.connectingAddress = connectingAddress;
         this.connectingPort = connectingPort;
         this.heartBeat = heartBeat;
+
+
     }
 
     @Override

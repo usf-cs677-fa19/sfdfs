@@ -15,11 +15,11 @@ import java.util.concurrent.Executors;
 
 public class ClientNode {
 
-    ExecutorService executor;
+    private ExecutorService executor;
 
     public ClientNode(String fileName) {
         ClientParams.buildClientParams(fileName);
-        executor = Executors.newFixedThreadPool(10);
+        executor = Executors.newFixedThreadPool(ClientParams.getNoOfThreads());
     }
 
     public void store(String filePath) {

@@ -1,46 +1,67 @@
 package edu.usfca.cs.dfs.init;
 
+import com.google.gson.Gson;
+
 public class ConfigSystemParam {
-    private final String nodeType;
-    private final String address;
-    private final int port;
-    private final int generalChunkSize;
 
-    public ConfigSystemParam(String nodeType, String address, int port) {
-        this.nodeType = nodeType;
-        this.address = address;
-        this.port = port;
-        this.generalChunkSize = 0;
+    private static ConfigSystemParam params;
+
+    private String nodeType;
+    private String address;
+    private int port;
+    //storageNodeSpecific
+    private String controllerAddress;
+    private int controllerPort;
+
+    public ConfigSystemParam() {
     }
 
-    public ConfigSystemParam(String nodeType, String address, int port, int chunkSize) {
-        this.nodeType = nodeType;
-        this.address = address;
-        this.port = port;
-        this.generalChunkSize = chunkSize;
+    public ConfigSystemParam(String filename) {
+        params = this.buildConfigSystemParams(filename);
     }
 
-    public String getNodeType() {
-        return nodeType;
+    public static ConfigSystemParam getParams() {
+        return params;
     }
 
-    public int getPort() {
-        return port;
+    /**
+     * Reads the configSystem.json file into ArrayList<ConfigSystemParam> params
+     * @param filename
+     */
+    private ConfigSystemParam buildConfigSystemParams(String filename) {
+        return (new Gson().fromJson(Init.readUsingFileChannel(filename,4096), ConfigSystemParam.class));
     }
 
-    public String getAddress() {
-        return address;
+
+    public static String getNodeType() {
+        return params.nodeType;
     }
 
-    public int getGeneralChunkSize() {
-        return generalChunkSize;
+    public static int getPort() {
+        return params.port;
     }
 
-    public String toString() {
+    public static String getAddress() {
+        return params.address;
+    }
+
+    public static String getControllerAddress() {
+        return params.controllerAddress;
+    }
+
+    public static int getControllerPort() {
+        return params.controllerPort;
+    }
+
+    //    public int getGeneralChunkSize() {
+//        return generalChunkSize;
+//    }
+
+    public static String getString() {
         return "System Params: \n"+
-                "+nodeType: "+this.nodeType+
-                " ,  address: "+this.address+
-                " ,  port: "+ this.port+
-                " ,  generalChunkSize: "+ this.generalChunkSize+"\n";
+                "nodeType: "+params.nodeType+
+                " ,  address: "+params.address+
+                " ,  port: "+ params.port+
+                "\n";
     }
 }

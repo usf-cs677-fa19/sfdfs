@@ -1,8 +1,7 @@
 package edu.usfca.cs.dfs.storageNode;
 
-import edu.usfca.cs.dfs.Client;
+import edu.usfca.cs.dfs.net.Client;
 import edu.usfca.cs.dfs.StorageMessages;
-import edu.usfca.cs.dfs.controllerNode.ControllerStorageMessagesHelper;
 import edu.usfca.cs.dfs.data.FileChunkId;
 import edu.usfca.cs.dfs.data.NodeId;
 import edu.usfca.cs.dfs.fileUtil.Entropy;

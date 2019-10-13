@@ -10,21 +10,11 @@ public class ClientParams {
     private String connectingAddress;
     private int connectingPort;
     private int generalChunkSize;
+    private int noOfThreads;
 
-//    private ClientParams(String nodeType, String connectingAddress, int connectingPort, int generalChunkSize) {
-//        this.nodeType = nodeType;
-//        this.connectingAddress = connectingAddress;
-//        this.connectingPort = connectingPort;
-//        this.generalChunkSize = generalChunkSize;
-//    }
     public ClientParams() {
-
     }
 
-    /**
-     * Reads the configSystem.json file into ArrayList<ConfigSystemParam> params
-     * @param filename
-     */
     public static void buildClientParams(String filename) {
         params = (new Gson().fromJson(Init.readUsingFileChannel(filename,4096), ClientParams.class));
     }
@@ -43,5 +33,9 @@ public class ClientParams {
 
     public static int getGeneralChunkSize() {
         return params.generalChunkSize;
+    }
+
+    public static int getNoOfThreads() {
+        return params.noOfThreads;
     }
 }
