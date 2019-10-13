@@ -4,6 +4,7 @@ import com.google.protobuf.ByteString;
 import edu.usfca.cs.dfs.StorageMessages;
 
 import java.nio.ByteBuffer;
+import java.util.Map;
 
 public class ClientStorageMessagesHelper {
 
@@ -57,5 +58,11 @@ public class ClientStorageMessagesHelper {
 
         return msgWrapper;
     }
+
+//    public static StorageMessages.StorageMessageWrapper[] prepareRetrieveChunks(Map<String, String> askMapping) {
+////        for(eachMapping : askMapping.entrySet()) {
+////
+////        }
+//    }
 
 }
