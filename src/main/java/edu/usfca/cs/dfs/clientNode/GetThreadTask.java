@@ -21,13 +21,13 @@ public class GetThreadTask implements Runnable {
         StorageMessages.StorageMessageWrapper messageWrapper = ClientStorageMessagesHelper.prepareRetrieveFileMsg(filePath);
         try {
             this.runClient(messageWrapper);
-        } catch (IOException | ExecutionException | InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
     public void runClient(StorageMessages.StorageMessageWrapper msgWrapper)
-            throws IOException, ExecutionException, InterruptedException {
+            throws InterruptedException {
 
         new Client().runClient(true,
                 ClientParams.getNodeType(),
