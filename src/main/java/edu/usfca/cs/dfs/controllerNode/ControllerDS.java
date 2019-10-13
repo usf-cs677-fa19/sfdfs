@@ -1,7 +1,7 @@
 package edu.usfca.cs.dfs.controllerNode;
 
+import edu.usfca.cs.dfs.controllerNode.data.FileMetaData;
 import edu.usfca.cs.dfs.controllerNode.data.StorageNodeDetail;
-//import edu.usfca.cs.dfs.controllerNode.data.StorageNodeGroupRegister;
 import edu.usfca.cs.dfs.data.FileChunkId;
 import edu.usfca.cs.dfs.data.NodeId;
 import edu.usfca.cs.dfs.filter.BloomFilter;
@@ -27,6 +27,41 @@ public class ControllerDS {
     // here key = ip+port
     private Map<String, StorageNodeDetail> storageNodeRegister = new ConcurrentHashMap<>();
     private Map<String, List<String>> storageNodeGroupRegister = new ConcurrentHashMap<>(); //exp
+    //private Map<String,List<String>> requestToClientIdMap = new ConcurrentHashMap<>();
+   // HashMap<String,ArrayList<String>> mapping = new HashMap<>();
+
+    private FileMetaData fileMetaData = null;
+
+    public void setFileMetaData(FileMetaData storageNodeFileMetaData){
+        System.out.println("Setting FileMetaData !");
+        fileMetaData = storageNodeFileMetaData;
+    }
+
+    public FileMetaData getFileMetaData(){
+        System.out.println("Get FileMetaData !");
+        return fileMetaData;
+    }
+
+//   public boolean fillRequestToClientIdMap(String filename , String clientNodeId){
+//
+//       if (requestToClientIdMap.containsKey(filename)){
+//            List<String> storageNodeIds = requestToClientIdMap.get(filename);
+//            storageNodeIds.add(clientNodeId);
+//       }
+//       else{
+//           ArrayList<String> storageNode = new ArrayList<>();
+//           storageNode.add(clientNodeId);
+//           requestToClientIdMap.put(filename,storageNode);
+//       }
+//   }
+
+//    public void fillTheMappingOfChunkIdToStorageNodesForClientRequest(HashMap<String,ArrayList<String>> newMapping){
+//        mapping = newMapping;
+//    }
+//
+//    public HashMap<String,ArrayList<String>> getTheMappingOfChunkIdToStorageNodesForClientRequest(){
+//        return mapping;
+//    }
 
     public Map<String, StorageNodeDetail> getStorageNodeRegister() {
         return storageNodeRegister;

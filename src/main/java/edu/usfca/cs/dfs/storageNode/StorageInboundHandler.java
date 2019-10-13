@@ -102,10 +102,9 @@ public class StorageInboundHandler extends InboundHandler {
             } else if(msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(2))) { // in 2nd replica
 
             }
-
         }
         else if(msg.hasRetrieveChunkMeta()) {
-            System.out.println("RetrieveChunkMeta receieved from controller");
+            System.out.println("RetrieveChunkMeta received from controller");
 
             String fileChunkId = msg.getRetrieveChunkMeta().getFileChunkId();
             ChunkFileMeta chunkFileMeta = StorageNodeDS.getInstance().getChunkMetaInfo(fileChunkId);
@@ -117,7 +116,7 @@ public class StorageInboundHandler extends InboundHandler {
             chan.flush();
 
             System.out.println("Sent chunkMetaInfo Back to the controller");
-            ctx.close();
+           // ctx.close();
         }
     }
 }

@@ -2,6 +2,7 @@ package edu.usfca.cs.dfs.controllerNode;
 
 import edu.usfca.cs.dfs.net.Client;
 import edu.usfca.cs.dfs.StorageMessages;
+import edu.usfca.cs.dfs.controllerNode.data.FileMetaData;
 import edu.usfca.cs.dfs.data.ChunkMetaPOJO;
 import edu.usfca.cs.dfs.data.FileChunkId;
 import edu.usfca.cs.dfs.data.NodeId;
@@ -34,10 +35,30 @@ public class ControllerInboundHandler extends InboundHandler {
             if(storageNodes.size() == 0){
                 System.out.println("No Storage Nodes have the file!!!");
             } else {
+
                 String fileChunkId = FileChunkId.getFileChunkId(filename,1);
                 sendRetrieveChunkMetaToStorage(storageNodes.get(0), fileChunkId);
-            }
 
+                FileMetaData fileMetaData = ControllerDS.getInstance().getFileMetaData();
+
+                if(fileMetaData != null) {
+
+                    System.out.println("FileMetaData : " + fileMetaData);
+                    HashMap<String, ArrayList<String>> mapping = ControllerDS.getInstance().getMappingOfChunkIdToStorageNodes(fileMetaData.getFileName(), fileMetaData.getTotalChunks());
+                    //HashMap<String,ArrayList<String>> mapping = ControllerDS.getInstance().getTheMappingOfChunkIdToStorageNodesForClientRequest();
+                    fileMetaData = null;
+                    if (mapping.size() > 0) {
+
+                        System.out.println("The Mapping in the controller is not empty!!!!");
+                        //  StorageMessages.StorageMessageWrapper msgWrapper = ControllerStorageMessagesHelper.buildMappingChunkIdToStorageNodes(mapping);
+                        StorageMessages.StorageMessageWrapper msgWrapper = ControllerStorageMessagesHelper.buildMappingChunkIdToStorageNodes(mapping);
+
+                        Channel clientChan = ctx.channel();
+                        ChannelFuture clientfuture = clientChan.write(msgWrapper);
+                        clientChan.flush();
+                    }
+                }
+            }
         }
         else if(msg.hasChunkMetaMsg()){
             System.out.println("Received chunkMetaMsg from client");
@@ -61,7 +82,6 @@ public class ControllerInboundHandler extends InboundHandler {
                 if(stored) {
                     chunksStoredInBloomFilters.add(stored);
                 }
-
             if (chunksStoredInBloomFilters.size() == 1){
                 System.out.println("Bloomfilters filled successfully!!!");
             }
@@ -79,35 +99,26 @@ public class ControllerInboundHandler extends InboundHandler {
 //
                 System.out.println("Sent chunkMetaMsg with list of storage nodes back to  client");
 
-            ctx.close();
+            //ctx.close();
 
 
         }
         else if(msg.hasStorageChunkMeta()){
             System.out.println("\n Controller recieved the meta for first chunk from Storage Node!!!!!");
 
-            String fileName = msg.getStorageChunkMeta().getFileName();
-            int chunkId = msg.getStorageChunkMeta().getChunkId();
-            int totalChunks = msg.getStorageChunkMeta().getTotalChunks();
-
-            HashMap<String,ArrayList<String>> mapping = ControllerDS.getInstance().getMappingOfChunkIdToStorageNodes(fileName,totalChunks);
-
-            StorageMessages.StorageMessageWrapper msgWrapper = ControllerStorageMessagesHelper.buildMappingChunkIdToStorageNodes(mapping);
-
-            System.out.println("Sending the storage nodes to client!!!");
-            System.out.println(ctx.channel().remoteAddress()+"     "+ctx.channel().localAddress());
+            ControllerDS.getInstance().setFileMetaData(new FileMetaData(msg.getStorageChunkMeta().getFileName(),
+                    msg.getStorageChunkMeta().getChunkId(),
+                    msg.getStorageChunkMeta().getTotalChunks()));
 
             ctx.close();
+//            String fileName = msg.getStorageChunkMeta().getFileName();
+//            int chunkId = msg.getStorageChunkMeta().getChunkId();
+//            int totalChunks = msg.getStorageChunkMeta().getTotalChunks();
 
-            Channel chan = ctx.channel();
-            ChannelFuture future = chan.write(msgWrapper);
-            chan.flush();
+           // HashMap<String,ArrayList<String>> mapping = ControllerDS.getInstance().getMappingOfChunkIdToStorageNodes(fileName,totalChunks);
 
-            ctx.close();
+           // StorageMessages.StorageMessageWrapper msgWrapper = ControllerStorageMessagesHelper.buildMappingChunkIdToStorageNodes(mapping);
 
-
-            System.out.println("Closing context in msg.hasStorageChunkMeta()");
-            System.out.println(ctx.channel().remoteAddress()+"     "+ctx.channel().localAddress());
         }
         else {
             StorageMessages.StoreChunk storeChunkMsg
@@ -115,7 +126,6 @@ public class ControllerInboundHandler extends InboundHandler {
             System.out.println("Storing file name: "
                     + storeChunkMsg.getFileName());
         }
-
     }
 
 
@@ -126,13 +136,12 @@ public class ControllerInboundHandler extends InboundHandler {
         return arr;
     }
 
-
     private void recvHeartBeat(StorageMessages.StorageMessageWrapper msg) {
         ControllerNodeHelper.recvHeartBeat(msg);
     }
 
 
-    public static void sendRetrieveChunkMetaToStorage(String storageNode,String fileChunkId ){
+    public ChannelFuture sendRetrieveChunkMetaToStorage(String storageNode,String fileChunkId ){
 
         System.out.println("Trying to connect to the primary storage Node");
         String[] connectingInfo = NodeId.getIPAndPort(storageNode);
@@ -147,12 +156,15 @@ public class ControllerInboundHandler extends InboundHandler {
                 ControllerStorageMessagesHelper.buildretrieveChunkMeta(fileChunkId);
 
         //contact the storage node to get the metadata of the First Chunk
-
+        ChannelFuture write= null;
         try {
-            ChannelFuture write = new Client().runClient(true,"controller",connectingAddress,connectingPort,msgWrapper);
+            write = new Client().runClient(true,"controller",connectingAddress,connectingPort,msgWrapper);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        return write;
+
       //  ControllerClient.runControllerClient(connectingAddress,connectingPort, msgWrapper);  not using todo remove this
 
     }
