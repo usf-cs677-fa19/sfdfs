@@ -33,35 +33,12 @@ public class ControllerDS {
     private FileMetaData fileMetaData = null;
 
     public void setFileMetaData(FileMetaData storageNodeFileMetaData){
-        System.out.println("Setting FileMetaData !");
         fileMetaData = storageNodeFileMetaData;
     }
 
     public FileMetaData getFileMetaData(){
-        System.out.println("Get FileMetaData !");
         return fileMetaData;
     }
-
-//   public boolean fillRequestToClientIdMap(String filename , String clientNodeId){
-//
-//       if (requestToClientIdMap.containsKey(filename)){
-//            List<String> storageNodeIds = requestToClientIdMap.get(filename);
-//            storageNodeIds.add(clientNodeId);
-//       }
-//       else{
-//           ArrayList<String> storageNode = new ArrayList<>();
-//           storageNode.add(clientNodeId);
-//           requestToClientIdMap.put(filename,storageNode);
-//       }
-//   }
-
-//    public void fillTheMappingOfChunkIdToStorageNodesForClientRequest(HashMap<String,ArrayList<String>> newMapping){
-//        mapping = newMapping;
-//    }
-//
-//    public HashMap<String,ArrayList<String>> getTheMappingOfChunkIdToStorageNodesForClientRequest(){
-//        return mapping;
-//    }
 
     public Map<String, StorageNodeDetail> getStorageNodeRegister() {
         return storageNodeRegister;
@@ -181,7 +158,7 @@ public class ControllerDS {
 
     public ArrayList<String> checkStorageNodeGroupRegister(String node, int chunkSize){
 
-        System.out.println("Check Storage Node Group Register !!!! \n\n\n");
+        System.out.println("Check Storage Node Group Register !!!! \n");
         ArrayList<String> storageNodePrimaryReplicaDetails = new ArrayList<>();
         if(checkIfPrimaryExists(node)){
             storageNodePrimaryReplicaDetails.add(node);
@@ -252,8 +229,7 @@ public class ControllerDS {
             ArrayList<String> storageNodeIdsForAChunk = checkBloomFiltersForChunk(chunkId);
 
             if(storageNodeIdsForAChunk.size() == 0){
-                System.out.println("No Storage Nodes found !!!");
-                System.out.println("File cannot be found because one chunk is missing from the bloomfilters of the storage nodes!!");
+                System.out.println("No Storage Nodes found !!! File cannot be found because one chunk is missing from the bloom filters of the storage nodes!!");
                 return null;
             } else if (storageNodeIdsForAChunk.size() == 1){
                 System.out.println("Chunk present in only one Storage Node!!");

@@ -1,5 +1,6 @@
 package edu.usfca.cs.dfs.clientNode;
 
+import com.google.protobuf.MapEntry;
 import edu.usfca.cs.dfs.net.Client;
 import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.data.FileChunkId;
@@ -11,6 +12,10 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class  ClientInboundHandler extends InboundHandler {
 
@@ -29,24 +34,29 @@ public class  ClientInboundHandler extends InboundHandler {
                 for(int i = 0; i < size; i++) {
                     System.out.println(msg.getChunkMetaMsg().getStorageNodeIds(i));
                 }
-
             } else {
                 System.out.println(msg.getChunkMetaMsg().getFileName()+"-"+"NO STORAGE LIST");
             }
-
             this.recvChunkMetaMsg(msg);
-
-
         }
         else if(msg.hasMapingChunkIdToStorageNodes()){
             System.out.println("\n Recieved mapping from controller : todo send the request for file to all nodes!!");
+
+            getTheNodeIdToStorageNodeMapping(msg);
         }
         else {
             System.out.println("\n Donno what message receieved");
         }
-
-
         ctx.close();  //todo from here to up
+    }
+
+    private Set<Map.Entry<String, StorageMessages.StorageNodesHavingChunk>> getTheNodeIdToStorageNodeMapping(StorageMessages.StorageMessageWrapper messages){
+       // HashMap<String,ArrayList<String>> mappingOfNodeIdToStorageNodes = new HashMap<>();
+
+        Set<Map.Entry<String, StorageMessages.StorageNodesHavingChunk>> entry =
+                messages.getMapingChunkIdToStorageNodes().getMapingMap().entrySet();
+
+        return entry;
     }
 
     private void recvChunkMetaMsg( StorageMessages.StorageMessageWrapper msg){
@@ -73,9 +83,5 @@ public class  ClientInboundHandler extends InboundHandler {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
-
-
-
 }

@@ -132,20 +132,15 @@ public class ClientNode {
                     String inCmd = scanner.nextLine();
                     String[] inCmdParams = inCmd.split(" ");
                     if(inCmdParams.length == 2) {
-
-
                         if(inCmdParams[0].equalsIgnoreCase("store")) { // storing a file
                             c.store(inCmdParams[1]);
                         }
                         else if(inCmdParams[0].equalsIgnoreCase("get")) { // retrieving a file
                             c.get(inCmdParams[1]);
                         }
-
-
                     }
                 }
             }
         }
     }
-
 }
