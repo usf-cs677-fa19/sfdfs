@@ -72,7 +72,7 @@ public class ControllerInboundHandler extends InboundHandler {
                 StorageMessages.StorageMessageWrapper msgWrapper = ControllerStorageMessagesHelper.buildChunkMeta(cm); //this.buildChunkMeta(cm);
 
                 Channel chan = ctx.channel();
-                ChannelFuture future = chan.write(msgWrapper);
+                ChannelFuture write = chan.write(msgWrapper);
                 chan.flush();
 //            //future.addListener(ChannelFutureListener.CLOSE);
 
@@ -119,24 +119,6 @@ public class ControllerInboundHandler extends InboundHandler {
 
     }
 
-//    private StorageMessages.StorageMessageWrapper buildChunkMeta(ChunkMeta cm) {
-//        StorageMessages.ChunkMeta chunkMetaMsg
-//                = StorageMessages.ChunkMeta.newBuilder()
-//                .setFileName(cm.getFilename())
-//                .setChunkId(cm.getChunkId())
-//                .setChunkSize(cm.getChunkSize())
-//                .setTotalChunks(cm.getTotalChunks())
-//                .addAllStorageNodeIds(Arrays.asList(cm.getStorageNodeIds()))
-//                .build();
-//
-//            StorageMessages.StorageMessageWrapper msgWrapper =
-//                    StorageMessages.StorageMessageWrapper.newBuilder()
-//                            .setChunkMetaMsg(chunkMetaMsg)
-//                            .build();
-//
-//            return msgWrapper;
-//
-//    }
 
     private String[] getStorageNodesForChunkMeta(ChunkMetaPOJO cm) {
         String[] arr = null;
