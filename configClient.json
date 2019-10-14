@@ -1,7 +1,8 @@
 {
   "nodeType": "client",
+  "nodeId": "1",
   "connectingAddress" : "localhost",
   "connectingPort" : "7777",
   "noOfThreads" : 10,
-  "generalChunkSize" : 1000000
+  "generalChunkSize" : 104857600
 }

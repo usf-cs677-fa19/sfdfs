@@ -4,7 +4,7 @@ import com.google.protobuf.ByteString;
 import edu.usfca.cs.dfs.StorageMessages;
 
 import java.nio.ByteBuffer;
-import java.util.Map;
+import java.util.*;
 
 public class ClientStorageMessagesHelper {
 
@@ -59,10 +59,43 @@ public class ClientStorageMessagesHelper {
         return msgWrapper;
     }
 
-//    public static StorageMessages.StorageMessageWrapper[] prepareRetrieveChunks(Map<String, String> askMapping) {
-////        for(eachMapping : askMapping.entrySet()) {
-////
-////        }
-//    }
+    public static ArrayList<Map<String, StorageMessages.StorageMessageWrapper>> prepareRetrieveChunkMapArray(Map<String, StorageMessages.StorageNodesHavingChunk> mapping) {
+        ArrayList<Map<String, StorageMessages.StorageMessageWrapper>> retrieveChunkMapArray = new ArrayList<>();
+
+        for (Map.Entry<String, StorageMessages.StorageNodesHavingChunk> eachMapping : mapping.entrySet()) {
+            retrieveChunkMapArray.add(ClientStorageMessagesHelper.prepareRetrieveChunkMap(eachMapping));
+        }
+        return retrieveChunkMapArray;
+    }
+
+    private static Map<String, StorageMessages.StorageMessageWrapper> prepareRetrieveChunkMap(Map.Entry<String, StorageMessages.StorageNodesHavingChunk> mapping) {
+
+        Map<String,  StorageMessages.StorageMessageWrapper> chunkAskMap = new HashMap<>();
+        //value
+        StorageMessages.StorageMessageWrapper retrieveChunkMsg = ClientStorageMessagesHelper.prepareRetrieveChunk(mapping.getKey());
+        //key(s) - storage node ids
+        if(mapping.getValue().getStorageNodeCount() > 0) {
+            for(int i = 0; i < mapping.getValue().getStorageNodeCount(); i++ ) {
+                String key = mapping.getValue().getStorageNode(i);
+                chunkAskMap.put(key, retrieveChunkMsg);
+            }
+        }
+        return chunkAskMap;
+    }
+
+    private static StorageMessages.StorageMessageWrapper prepareRetrieveChunk(String fileChunkId){
+
+        StorageMessages.RetrieveChunk retrieveChunk = StorageMessages.RetrieveChunk.newBuilder()
+                .setFileChunkId(fileChunkId)
+                .build();
+
+        StorageMessages.StorageMessageWrapper msgWrapper = StorageMessages.StorageMessageWrapper.newBuilder()
+                .setRetrieveChunk(retrieveChunk)
+                .build();
+
+        return msgWrapper;
+    }
+
+
 
 }

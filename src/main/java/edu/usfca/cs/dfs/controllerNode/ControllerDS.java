@@ -88,7 +88,9 @@ public class ControllerDS {
     }
 
     private void existInStorageNodeRegister(String key, StorageNodeDetail snd) {
-        storageNodeRegister.get(key).setSpaceRemainingMB(snd.getSpaceRemainingMB());
+        storageNodeRegister.get(key).setSpaceRemaining(snd.getSpaceRemaining());
+        storageNodeRegister.get(key).setRequestProcessed(snd.getRequestProcessed());
+        storageNodeRegister.get(key).setRetrievalProcessed(snd.getRetrievalProcessed());
         storageNodeRegister.get(key).setTimeStamp(snd.getTimeStamp());
     }
 
@@ -106,7 +108,7 @@ public class ControllerDS {
 
     public String getSNWithMaxSpace(int requiredChunkSize){
         String node = "";
-        int size = 0;
+        long size = 0;
 
         Iterator storageNodeIterator = storageNodeRegister.entrySet().iterator();
         while (storageNodeIterator.hasNext()){
@@ -114,8 +116,8 @@ public class ControllerDS {
 
             StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
 
-            if(size < Integer.parseInt(details.getSpaceRemainingMB())){
-                size =  Integer.parseInt(details.getSpaceRemainingMB());
+            if(size < details.getSpaceRemaining()){
+                size =  details.getSpaceRemaining();
                 node = (String) storageNode.getKey();
             }
         }
@@ -131,17 +133,17 @@ public class ControllerDS {
         ArrayList<String> replicas = new ArrayList<>();
         String replica1 = "";
         String replica2 = "";
-        int size1 = 0;
-        int size2 = 0;
+        long size1 = 0;
+        long size2 = 0;
         if(!storageNodeRegister.isEmpty()){
             Iterator storageNodeIterator = storageNodeRegister.entrySet().iterator();
             while (storageNodeIterator.hasNext()){
                 Map.Entry storageNode = (Map.Entry) storageNodeIterator.next();
                 if(storageNode.getKey() != primaryNodeKey){
                     StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
-                    if(size1 <  Integer.parseInt(details.getSpaceRemainingMB())){
+                    if(size1 <  details.getSpaceRemaining()){
                         size2 = size1;
-                        size1 =  Integer.parseInt(details.getSpaceRemainingMB());
+                        size1 =  details.getSpaceRemainingMB());
 
                         replica2 = replica1;
                         replica1 = (String) storageNode.getKey();

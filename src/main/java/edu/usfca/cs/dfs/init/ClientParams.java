@@ -7,6 +7,7 @@ public class ClientParams {
    private static ClientParams params;
 
     private String nodeType;
+    private String nodeId;
     private String connectingAddress;
     private int connectingPort;
     private int generalChunkSize;
@@ -37,5 +38,9 @@ public class ClientParams {
 
     public static int getNoOfThreads() {
         return params.noOfThreads;
+    }
+
+    public static String getNodeId() {
+        return params.nodeId;
     }
 }

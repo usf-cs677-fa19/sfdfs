@@ -1,11 +1,8 @@
 package edu.usfca.cs.dfs.clientNode;
 
-import edu.usfca.cs.dfs.net.Client;
+import edu.usfca.cs.dfs.net.MessageSender;
 import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.init.ClientParams;
-
-import java.io.IOException;
-import java.util.concurrent.ExecutionException;
 
 public class GetThreadTask implements Runnable {
 
@@ -29,7 +26,7 @@ public class GetThreadTask implements Runnable {
     public void runClient(StorageMessages.StorageMessageWrapper msgWrapper)
             throws InterruptedException {
 
-        new Client().runClient(true,
+        new MessageSender().send(true,
                 ClientParams.getNodeType(),
                 ClientParams.getConnectingAddress(),
                 ClientParams.getConnectingPort(),

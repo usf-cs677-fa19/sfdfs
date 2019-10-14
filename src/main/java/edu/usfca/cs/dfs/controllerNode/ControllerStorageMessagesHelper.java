@@ -55,13 +55,13 @@ public class ControllerStorageMessagesHelper {
             StorageMessages.StorageNodesHavingChunk storageNodesHavingChunkMsg = StorageMessages.StorageNodesHavingChunk.newBuilder()
                     .addAllStorageNode(chunkMapping.getValue())
                     .build();
-            mappingMsgBuilder.putMaping(chunkMapping.getKey(), storageNodesHavingChunkMsg);
+            mappingMsgBuilder.putMapping(chunkMapping.getKey(), storageNodesHavingChunkMsg);
         }
         StorageMessages.MappingChunkIdToStorageNodes mappingMsg = mappingMsgBuilder.build();
 
         StorageMessages.StorageMessageWrapper msgWrapper =
                 StorageMessages.StorageMessageWrapper.newBuilder()
-                        .setMapingChunkIdToStorageNodes(mappingMsg)
+                        .setMappingChunkIdToStorageNodes(mappingMsg)
                         .build();
 
         return msgWrapper;

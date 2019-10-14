@@ -1,6 +1,6 @@
 package edu.usfca.cs.dfs.storageNode;
 
-import edu.usfca.cs.dfs.net.Client;
+import edu.usfca.cs.dfs.net.MessageSender;
 import edu.usfca.cs.dfs.StorageMessages;
 
 import java.util.TimerTask;
@@ -12,7 +12,7 @@ public class HeartBeatSender extends TimerTask {
     private int connectingPort;
     //private StorageNodeClient client;
 
-    public HeartBeatSender(/*StorageNode node,*/ String connectingAddress, int connectingPort, StorageMessages.StorageMessageWrapper heartBeat) {
+    public HeartBeatSender(String connectingAddress, int connectingPort, StorageMessages.StorageMessageWrapper heartBeat) {
         //this.client = client;
         this.connectingAddress = connectingAddress;
         this.connectingPort = connectingPort;
@@ -29,7 +29,7 @@ public class HeartBeatSender extends TimerTask {
     public void sendHeartBeat() {
 
         try {
-            new Client().runClient(false, "storage", connectingAddress, connectingPort, heartBeat);
+            new MessageSender().send(false, "storage", connectingAddress, connectingPort, heartBeat);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

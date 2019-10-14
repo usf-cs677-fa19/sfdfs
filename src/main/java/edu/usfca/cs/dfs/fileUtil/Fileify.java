@@ -1,13 +1,14 @@
 package edu.usfca.cs.dfs.fileUtil;
 
 import com.google.protobuf.ByteString;
+import edu.usfca.cs.dfs.ClientNode;
 import edu.usfca.cs.dfs.StorageMessages;
+import edu.usfca.cs.dfs.data.FileChunkId;
+import edu.usfca.cs.dfs.init.ClientParams;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class Fileify {
 
-    public static ByteBuffer readToBuffer(StorageMessages.ChunkMeta cmMsg, int generalChunkSize) throws IOException {
+    public static ByteBuffer readToBuffer(StorageMessages.ChunkMeta cmMsg, long generalChunkSize) throws IOException {
 
         ByteBuffer directBuf = ByteBuffer.allocateDirect(cmMsg.getChunkSize());
         //int generalChunkSize = //ConfigSystemParams.params[0].getGeneralChunkSize();//1000000; // todo : read from confiig
@@ -27,7 +28,7 @@ public class Fileify {
             FileChannel chan = reader.getChannel();
             ) {
             // Sets the file-pointer offset
-            reader.seek((cmMsg.getChunkId()-1) * generalChunkSize);
+            reader.seek(((long)cmMsg.getChunkId()-1) * generalChunkSize);
             // read bytes into directBuf
             int bytesRead = chan.read(directBuf);
             System.out.println("No of bytes read : "+ bytesRead);
@@ -38,6 +39,78 @@ public class Fileify {
         }
 
     }
+
+    public static ByteBuffer readToBuffer(String chunkPath) throws IOException {
+
+        long chunkSize = Fileify.getFileSize(chunkPath);
+        ByteBuffer directBuf = ByteBuffer.allocateDirect((int)chunkSize);
+
+        try (
+                RandomAccessFile reader = new RandomAccessFile(chunkPath, "r");
+                FileChannel chan = reader.getChannel();
+        ) {
+            // Sets the file-pointer offset
+            reader.seek(0);
+            // read bytes into directBuf
+            int bytesRead = chan.read(directBuf);
+            System.out.println("No of bytes read : "+ bytesRead);
+            // flipping the byte buffer before it can be read
+            directBuf.flip();
+
+            return directBuf;
+        }
+
+    }
+
+
+    public static void writeChunkToFile(StorageMessages.Chunk chunkMsg) {
+        String[] filenameAndChunkId = FileChunkId.splitFileAndChunkId(chunkMsg.getFileChunkId());
+
+        String fileName = filenameAndChunkId[0];
+        String filePath = ClientNode.getInstance().getBasePath()+"/"+fileName;
+
+        int chunkId = Integer.parseInt(filenameAndChunkId[1]);
+        long startingPosition = (long)ClientParams.getGeneralChunkSize() * (chunkId - 1);
+
+        if(Fileify.doesFileExist(filePath)) {
+            Fileify.createFileIfDoesNotExist(filePath);
+        }
+
+
+        try (
+                RandomAccessFile reader = new RandomAccessFile(filePath, "rw");
+                FileChannel chan = reader.getChannel();
+        ) {
+            reader.seek(startingPosition);
+            reader.write(chunkMsg.getData().toByteArray());
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private static void createFileIfDoesNotExist(String filePath) {
+        Path path = Paths.get(filePath);
+
+        if(!Files.exists(path)) {
+            try {
+                Files.createFile(path);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    // does file exist
+    public static boolean doesFileExist(String filePath) {
+        Path p = Paths.get(filePath);
+        return Files.exists(p);
+    }
+
 
     public static void copyDirectory(String fromDir, String toDir) {
 
@@ -114,11 +187,7 @@ public class Fileify {
     //public static void todo : anurag
 
 
-    // does file exist
-    public static boolean doesFileExist(String filePath) {
-        Path p = Paths.get(filePath);
-        return Files.exists(p);
-    }
+
     //create file
     //open filechannel for a file
 //    public FileChannel openFileAndGetFileChannel(String filename, String mode) throws IOException {
@@ -166,6 +235,8 @@ public class Fileify {
             return false;
         }
     }
+
+
 
     // write append
     // close fileChannel

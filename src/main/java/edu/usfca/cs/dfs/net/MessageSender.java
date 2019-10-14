@@ -11,11 +11,11 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
 
-public class Client {
+public class MessageSender {
 
-    public ChannelFuture runClient(boolean waitForCtxToClose, String nodeType,
-                          String connectingIpAddress, int connectingPort,
-                          StorageMessages.StorageMessageWrapper msgWrapper)
+    public ChannelFuture send(boolean waitForCtxToClose, String nodeType,
+                              String connectingIpAddress, int connectingPort,
+                              StorageMessages.StorageMessageWrapper msgWrapper)
             throws InterruptedException {
 
         EventLoopGroup workerGroup = new NioEventLoopGroup();

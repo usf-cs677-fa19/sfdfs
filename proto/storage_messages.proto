@@ -28,17 +28,21 @@ message StorageChunkMeta {
 }
 
 
-message RetrieveChunkMeta{
-    string fileChunkId = 1;
-}
-
 message RetrieveFile {
     string fileName = 1;
 }
 
+message RetrieveChunkMeta{
+    string fileChunkId = 1;
+}
+
 message RetrieveChunk{
-    string fileName = 1;
-    int32 chunkId = 2;
+    string fileChunkId = 1;
+}
+
+message Chunk {
+    string fileChunkId = 2;
+    bytes data = 3;
 }
 
 message ChunkLocation{
@@ -54,8 +58,9 @@ message ListChunksAndFileName{
 message HeartBeat{
     string ipAddress = 1;
     string port = 2;
-    string spaceRemainingMB = 3;
-    int32 noOfRequests = 4;
+    int64 spaceRemaining = 3;
+    int64 requestProcessed = 4;
+    int64 retrievalProcessed = 5;
 }
 
 message BecomePrimary{
@@ -76,7 +81,7 @@ message StorageNodesHavingChunk {
 }
 
 message MappingChunkIdToStorageNodes{
-    map<string,StorageNodesHavingChunk> maping = 1;
+    map<string,StorageNodesHavingChunk> mapping = 1;
 }
 
 message StorageMessageWrapper {
@@ -91,7 +96,8 @@ message StorageMessageWrapper {
         BecomePrimary becomePrimary = 8;
         NewPrimaryAlert newPrimaryAlert = 9;
         StorageNodesHavingChunk storageNodesHavingChunk = 10;
-        MappingChunkIdToStorageNodes mapingChunkIdToStorageNodes = 11;
+        MappingChunkIdToStorageNodes mappingChunkIdToStorageNodes = 11;
+        Chunk chunkMsg = 12;
     }
 }
 

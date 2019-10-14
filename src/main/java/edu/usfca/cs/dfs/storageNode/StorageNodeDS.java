@@ -2,15 +2,16 @@ package edu.usfca.cs.dfs.storageNode;
 
 import edu.usfca.cs.dfs.data.NodeId;
 import edu.usfca.cs.dfs.fileUtil.Fileify;
-import edu.usfca.cs.dfs.init.ClientParams;
 import edu.usfca.cs.dfs.init.ConfigSystemParam;
 import edu.usfca.cs.dfs.storageNode.data.ChunkFileMeta;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 
 public class StorageNodeDS {
@@ -24,8 +25,10 @@ public class StorageNodeDS {
     private int controllerPort;
     private String basePath;
 
-    private int requestFivePerSecond;
-    private int freeSpace;
+    private long spaceRemaining;
+    private long requestProcessed;
+    private long retrievalProcessed;
+
 
 
     private Map<String, ChunkFileMeta> chunksMetaInfo;// = new HashMap<>();
@@ -86,16 +89,22 @@ public class StorageNodeDS {
         return basePath;
     }
 
-    public int getFreeSpace() {
-        return freeSpace;
+    public long getRequestProcessed() {
+        return requestProcessed;
     }
 
-    public int getRequestFivePerSecond() {
-        return requestFivePerSecond;
+    public long getRetrievalProcessed() {
+        return retrievalProcessed;
     }
 
-    public void setRequestFivePerSecond(int requestFivePerSecond) {
-        this.requestFivePerSecond = requestFivePerSecond;
+    public long getSpaceRemaining() {
+        Path path = Paths.get(basePath);
+        try {
+            spaceRemaining = Files.getFileStore(path).getUsableSpace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return spaceRemaining;
     }
 
     //Map<NameOfDirectoriesHavingChunks, Map<ChunkFileName,ChunkMetadata>
@@ -119,7 +128,16 @@ public class StorageNodeDS {
                 new HeartBeatSender(
                         StorageNodeDS.getInstance().getControllerIpAddress(),
                         StorageNodeDS.getInstance().getControllerPort(),
-                        StorageStorageMessagesHelper.buildHeartBeat(StorageNodeDS.getInstance().getIpAddress(),StorageNodeDS.getInstance().getPort())),
+                        StorageStorageMessagesHelper.prepareHeartBeat(
+                                StorageNodeDS.getInstance().getIpAddress(),
+                                StorageNodeDS.getInstance().getPort(),
+                                StorageNodeDS.getInstance().getSpaceRemaining(),
+                                StorageNodeDS.getInstance().getRequestProcessed(),
+                                StorageNodeDS.getInstance().getRetrievalProcessed()
+
+
+                        )
+                ),
                 0,
                 5000);
     }

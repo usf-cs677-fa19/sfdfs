@@ -25,11 +25,14 @@ public class StorageStorageMessagesHelper {
 ////        this.port = port;
 ////    }
 
-    public static StorageMessages.StorageMessageWrapper buildHeartBeat(String address, int port) {
+    public static StorageMessages.StorageMessageWrapper prepareHeartBeat
+            (String address, int port, long spaceRemaining, long requestProcessed, long retrievalProcessed) {
         StorageMessages.HeartBeat heartBeat = StorageMessages.HeartBeat.newBuilder() // building heartbeat
                 .setIpAddress(address)
                 .setPort(String.valueOf(port))
-                .setSpaceRemainingMB(String.valueOf(1024*1024*1024))  // new File("\").getSpace
+                .setSpaceRemaining(spaceRemaining)  // new File("\").getSpace
+                .setRequestProcessed(requestProcessed)
+                .setRetrievalProcessed(retrievalProcessed)
                 .build();
 
         StorageMessages.StorageMessageWrapper msgWrapper =
@@ -74,6 +77,20 @@ public class StorageStorageMessagesHelper {
         StorageMessages.StorageMessageWrapper msgWrapper =
                 StorageMessages.StorageMessageWrapper.newBuilder()
                         .setStorageChunkMeta(chunkMetaInfo)
+                        .build();
+
+        return msgWrapper;
+    }
+
+    public static StorageMessages.StorageMessageWrapper prepareChunkMsg(String fileChunkId, ByteBuffer buff){
+        StorageMessages.Chunk chunk = StorageMessages.Chunk.newBuilder()
+                .setFileChunkId(fileChunkId)
+                .setData(ByteString.copyFrom(buff))
+                .build();
+
+        StorageMessages.StorageMessageWrapper msgWrapper =
+                StorageMessages.StorageMessageWrapper.newBuilder()
+                        .setChunkMsg(chunk)
                         .build();
 
         return msgWrapper;

@@ -12,14 +12,18 @@ public class StorageNodeDetail {
 
     private final String ipAddress;
     private final String port;
-    private String spaceRemainingMB;
+    private long spaceRemaining;
+    private long requestProcessed;
+    private long retrievalProcessed;
     private Instant timeStamp;
     private BloomFilter bloom;
 
-    public StorageNodeDetail(String ipAddress, String port, String spaceRemainingMB, Instant timeStamp) {
+    public StorageNodeDetail(String ipAddress, String port, long spaceRemaining, long requestProcessed, long retrievalProcessed, Instant timeStamp) {
         this.ipAddress = ipAddress;
         this.port = port;
-        this.spaceRemainingMB = spaceRemainingMB;
+        this.spaceRemaining = spaceRemaining;
+        this.requestProcessed = requestProcessed;
+        this.retrievalProcessed = retrievalProcessed;
         this.timeStamp = timeStamp;
         this.bloom = this.InitBloom();
     }
@@ -32,16 +36,32 @@ public class StorageNodeDetail {
         return port;
     }
 
-    public String getSpaceRemainingMB() {
-        return spaceRemainingMB;
+    public long getSpaceRemaining() {
+        return spaceRemaining;
+    }
+
+    public long getRequestProcessed() {
+        return requestProcessed;
+    }
+
+    public long getRetrievalProcessed() {
+        return retrievalProcessed;
     }
 
     public Instant getTimeStamp() {
         return timeStamp;
     }
 
-    public void setSpaceRemainingMB(String spaceRemainingMB) {
-        this.spaceRemainingMB = spaceRemainingMB;
+    public void setSpaceRemaining(long spaceRemaining) {
+        this.spaceRemaining = spaceRemaining;
+    }
+
+    public void setRequestProcessed(long requestProcessed) {
+        this.requestProcessed = requestProcessed;
+    }
+
+    public void setRetrievalProcessed(long retrievalProcessed) {
+        this.retrievalProcessed = retrievalProcessed;
     }
 
     public void setTimeStamp(Instant timeStamp) {

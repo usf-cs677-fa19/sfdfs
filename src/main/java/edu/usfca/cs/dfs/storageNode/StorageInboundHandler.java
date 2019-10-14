@@ -1,6 +1,6 @@
 package edu.usfca.cs.dfs.storageNode;
 
-import edu.usfca.cs.dfs.net.Client;
+import edu.usfca.cs.dfs.net.MessageSender;
 import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.data.FileChunkId;
 import edu.usfca.cs.dfs.data.NodeId;
@@ -13,6 +13,8 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 
@@ -81,7 +83,7 @@ public class StorageInboundHandler extends InboundHandler {
                 // change toaddress in strorechunk message to 2nd replica and send to 2nd replica
                 String[] sendingInfo = NodeId.getIPAndPort(msg.getStoreChunkMsg().getStorageNodeIds(1));
                 try {
-                    new Client().runClient(
+                    new MessageSender().send(
                             false, "storage", sendingInfo[0], Integer.parseInt(sendingInfo[1]),
                             StorageStorageMessagesHelper.prepareStoreChunkMsgForReplica(msg, 1));
                 } catch (InterruptedException e) {
@@ -92,7 +94,7 @@ public class StorageInboundHandler extends InboundHandler {
                 // change toaddress in strorechunk message to 3rd replica and send to 3rd replica
                 String[] sendingInfo = NodeId.getIPAndPort(msg.getStoreChunkMsg().getStorageNodeIds(2));
                 try {
-                    new Client().runClient(
+                    new MessageSender().send(
                             false, "storage", sendingInfo[0], Integer.parseInt(sendingInfo[1]),
                             StorageStorageMessagesHelper.prepareStoreChunkMsgForReplica(msg, 2));
                 } catch (InterruptedException e) {
@@ -102,7 +104,7 @@ public class StorageInboundHandler extends InboundHandler {
             } else if(msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(2))) { // in 2nd replica
 
             }
-        }
+        }  // store chunk and send to replica if needed
         else if(msg.hasRetrieveChunkMeta()) {
             System.out.println("RetrieveChunkMeta received from controller");
 
@@ -118,5 +120,31 @@ public class StorageInboundHandler extends InboundHandler {
             System.out.println("Sent chunkMetaInfo Back to the controller");
            // ctx.close();
         }
+        else if(msg.hasRetrieveChunk()) {  //storage node should send chunkMsg
+            System.out.println("Client asking for a file chunk");
+            ByteBuffer buff;
+
+            String fileChunkId = msg.getRetrieveChunk().getFileChunkId();
+            String pathForFileChunkId = StorageNodeDS.getInstance().getBasePath()+ StorageNodeDS.getInstance().getNodeId()+ "/chunkFiles/"+ fileChunkId;
+            try {
+                buff = Fileify.readToBuffer(pathForFileChunkId);
+
+                StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareChunkMsg(fileChunkId, buff);
+
+
+                Channel chan = ctx.channel();
+                ChannelFuture future = chan.write(msgWrapper);
+                chan.flush();  // sending data back to client
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+
     }
+
+
+
 }

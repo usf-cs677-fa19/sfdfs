@@ -28,7 +28,9 @@ public class ControllerNodeHelper{
         ControllerDS.getInstance().updateStorageNodeRegister(new StorageNodeDetail(
                 msg.getHeartBeat().getIpAddress(),
                 msg.getHeartBeat().getPort(),
-                msg.getHeartBeat().getSpaceRemainingMB(),
+                msg.getHeartBeat().getSpaceRemaining(),
+                msg.getHeartBeat().getRequestProcessed(),
+                msg.getHeartBeat().getRetrievalProcessed(),
                 Instant.now()
         ));
 

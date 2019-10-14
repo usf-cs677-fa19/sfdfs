@@ -1,6 +1,6 @@
 package edu.usfca.cs.dfs.clientNode;
 
-import edu.usfca.cs.dfs.net.Client;
+import edu.usfca.cs.dfs.net.MessageSender;
 import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.fileUtil.Fileify;
 import edu.usfca.cs.dfs.init.ClientParams;
@@ -78,7 +78,7 @@ public class StoreThreadTask implements Runnable {
     public void runClient(StorageMessages.StorageMessageWrapper msgWrapper)
             throws IOException, ExecutionException, InterruptedException {
 
-        new Client().runClient(true,
+        new MessageSender().send(true,
                 ClientParams.getNodeType(),
                 ClientParams.getConnectingAddress(),
                 ClientParams.getConnectingPort(),

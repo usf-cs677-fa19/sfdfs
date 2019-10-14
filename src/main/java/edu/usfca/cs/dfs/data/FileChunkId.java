@@ -18,5 +18,9 @@ public class FileChunkId {
         return  chunkIDs;
     }
 
+    public static String[] splitFileAndChunkId(String fileChunkId) {
+        return fileChunkId.split("_Chunk_");
+    }
+
 
 }

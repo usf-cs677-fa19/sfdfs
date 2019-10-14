@@ -1,16 +1,19 @@
 package edu.usfca.cs.dfs.clientNode;
 
-import edu.usfca.cs.dfs.net.Client;
+import edu.usfca.cs.dfs.net.MessageSender;
 import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.data.FileChunkId;
 import edu.usfca.cs.dfs.data.NodeId;
 import edu.usfca.cs.dfs.fileUtil.Fileify;
 import edu.usfca.cs.dfs.init.ClientParams;
 import edu.usfca.cs.dfs.net.InboundHandler;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.*;
+import java.util.concurrent.*;
 
 public class  ClientInboundHandler extends InboundHandler {
 
@@ -21,7 +24,7 @@ public class  ClientInboundHandler extends InboundHandler {
 
         System.out.println("IN CLIENT INBOUND HANDLER");
 
-        if(msg.hasChunkMetaMsg()) { // msg returned from controller with storage nodes list
+        if(msg.hasChunkMetaMsg()) { // msg returned from controller with storage nodes list // while client want to store chunks
             System.out.println("\nChunkMetaMsg received in CLIENT INBOUND HANDLER");
             int size = msg.getChunkMetaMsg().getStorageNodeIdsCount();
             if (size > 0) {
@@ -38,8 +41,41 @@ public class  ClientInboundHandler extends InboundHandler {
 
 
         }
-        else if(msg.hasMapingChunkIdToStorageNodes()){
-            System.out.println("\n Recieved mapping from controller : todo send the request for file to all nodes!!");
+        else if(msg.hasMappingChunkIdToStorageNodes()) { // client receieved cunk to sn mapping for all chunks for a file
+
+            if(!msg.getMappingChunkIdToStorageNodes().getMappingMap().isEmpty()) {
+                System.out.println("\n Recieved mapping from controller : todo send the request for filechunks to all nodes!!");
+                // key = chunkId, value = StorageNodeList
+                Map<String, StorageMessages.StorageNodesHavingChunk> mapChunkIdToStorageNodes =
+                        msg.getMappingChunkIdToStorageNodes().getMappingMap();
+                // key = storageNodeId, value = messageWrapperToBeSent
+                ArrayList<Map<String, StorageMessages.StorageMessageWrapper>> retrieveChunkMapArray =
+                        ClientStorageMessagesHelper.prepareRetrieveChunkMapArray(mapChunkIdToStorageNodes);
+                ////rotate through Arraylist and send wrapper to storage nodes
+                //rotate through Arraylist prepare Callables and add to callableTasks
+                List<Callable<ChannelFuture>> callableTasks = new ArrayList<>();
+                for(Map<String, StorageMessages.StorageMessageWrapper> retrieveChunkMap : retrieveChunkMapArray) {
+                    callableTasks.add(new AskChunkThreadTask(retrieveChunkMap));
+                }
+
+                ExecutorService executor = Executors.newFixedThreadPool(3); // todo : remove hardcoding
+
+               // String[] result = null;
+                try {
+                    List<Future<ChannelFuture>> result = executor.invokeAll(callableTasks);
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            } else {
+                System.out.println("Received empty mapping, file chunks not found");
+            }
+
+        }
+        else if(msg.hasChunkMsg()) {
+            System.out.println("\n Received chunkMsg from Storage Node");
+            Fileify.writeChunkToFile(msg.getChunkMsg());
         }
         else {
             System.out.println("\n Donno what message receieved");
@@ -69,7 +105,7 @@ public class  ClientInboundHandler extends InboundHandler {
                 + storeChunkMsg.getStoreChunkMsg().getStorageNodeIdsList());
         // b. send to primary storage node
         try {
-            new Client().runClient(false, ClientParams.getNodeType(), connectingInfo[0], Integer.parseInt(connectingInfo[1]), storeChunkMsg);
+            new MessageSender().send(false, ClientParams.getNodeType(), connectingInfo[0], Integer.parseInt(connectingInfo[1]), storeChunkMsg);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

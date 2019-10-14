@@ -1,6 +1,6 @@
 package edu.usfca.cs.dfs.controllerNode;
 
-import edu.usfca.cs.dfs.net.Client;
+import edu.usfca.cs.dfs.net.MessageSender;
 import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.controllerNode.data.FileMetaData;
 import edu.usfca.cs.dfs.data.ChunkMetaPOJO;
@@ -158,7 +158,7 @@ public class ControllerInboundHandler extends InboundHandler {
         //contact the storage node to get the metadata of the First Chunk
         ChannelFuture write= null;
         try {
-            write = new Client().runClient(true,"controller",connectingAddress,connectingPort,msgWrapper);
+            write = new MessageSender().send(true,"controller",connectingAddress,connectingPort,msgWrapper);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
