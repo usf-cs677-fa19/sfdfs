@@ -1,6 +1,6 @@
 {
   "nodeType": "client",
-  "nodeId": "1",
+  "nodeId": "3",
   "connectingAddress" : "localhost",
   "connectingPort" : "7777",
   "noOfThreads" : 10,

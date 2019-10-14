@@ -13,6 +13,8 @@ import io.netty.channel.ChannelHandlerContext;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ControllerInboundHandler extends InboundHandler {
 
@@ -48,6 +50,12 @@ public class ControllerInboundHandler extends InboundHandler {
                     //HashMap<String,ArrayList<String>> mapping = ControllerDS.getInstance().getTheMappingOfChunkIdToStorageNodesForClientRequest();
                     fileMetaData = null;
                     if (mapping.size() > 0) {
+
+                        for(Map.Entry<String, ArrayList<String>>eachMapping : mapping.entrySet()) {
+                            List<String> replicas = ControllerDS.getInstance().getReplicaList(eachMapping.getKey());
+                            eachMapping.getValue().addAll(replicas);
+                        }
+
 
                         System.out.println("The Mapping in the controller is not empty!!!!");
                         //  StorageMessages.StorageMessageWrapper msgWrapper = ControllerStorageMessagesHelper.buildMappingChunkIdToStorageNodes(mapping);
