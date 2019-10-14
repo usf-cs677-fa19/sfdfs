@@ -130,24 +130,44 @@ public class StorageInboundHandler extends InboundHandler {
             ByteBuffer buff;
 
             String fileChunkId = msg.getRetrieveChunk().getFileChunkId();
-            String pathForFileChunkId = StorageNodeDS.getInstance().getBasePath()+ StorageNodeDS.getInstance().getNodeId()+ "/chunkFiles/"+ fileChunkId;
-            if(Fileify.doesFileExist(pathForFileChunkId)) {
-                try {
-
-                    buff = Fileify.readToBuffer(pathForFileChunkId);
-
-                    StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareChunkMsg(fileChunkId, buff);
 
 
-                    Channel chan = ctx.channel();
-                    ChannelFuture future = chan.write(msgWrapper);
-                    chan.flush();  // sending data back to client
+            //collect all dirs in base path
+            String[] dirs = Fileify.getListOFDirs(StorageNodeDS.getInstance().getBasePath());
+            for(String dir : dirs) {
+                String pathForFileChunkId = StorageNodeDS.getInstance().getBasePath()
+                        + dir/* StorageNodeDS.getInstance().getNodeId()*/+ "/chunkFiles/"+ fileChunkId;
+                System.out.println("pathForFileChunkId : "+ pathForFileChunkId);
 
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if(Fileify.doesFileExist(pathForFileChunkId)) {
+                    try {
+
+                        buff = Fileify.readToBuffer(pathForFileChunkId);
+
+                        StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareChunkMsg(fileChunkId, buff);
+
+
+                        Channel chan = ctx.channel();
+                        ChannelFuture future = chan.write(msgWrapper);
+                        chan.flush();  // sending data back to client
+
+                        break;
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
-            }
-        }else if(msg.hasBecomePrimary()){
+            } // end for loop
+
+//
+//            else { // todo : handle condition when file not found
+//                Channel chan = ctx.channel();
+//                ChannelFuture future = chan.write("");
+//                chan.flush();  // sending data back to client
+//            }
+
+        }
+        else if(msg.hasBecomePrimary()){
 
             System.out.println("Become Primary!!!");
             String fromIP = msg.getBecomePrimary().getForApAddress();
