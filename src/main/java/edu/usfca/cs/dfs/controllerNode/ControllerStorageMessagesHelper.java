@@ -6,10 +6,7 @@ import edu.usfca.cs.dfs.data.ChunkMetaPOJO;
 import edu.usfca.cs.dfs.storageNode.StorageStorageMessagesHelper;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class ControllerStorageMessagesHelper {
 
@@ -47,6 +44,7 @@ public class ControllerStorageMessagesHelper {
             return msgWrapper;
     }
 
+
     public static StorageMessages.StorageMessageWrapper buildMappingChunkIdToStorageNodes(HashMap<String, ArrayList<String>> mapping){
 
         StorageMessages.MappingChunkIdToStorageNodes.Builder mappingMsgBuilder = StorageMessages.MappingChunkIdToStorageNodes.newBuilder();
@@ -68,7 +66,7 @@ public class ControllerStorageMessagesHelper {
     }
 
 
-    public static StorageMessages.StorageMessageWrapper buildBecomePrimary(String forAddress, String forPort, ArrayList<String> askIds){
+    public static StorageMessages.StorageMessageWrapper buildBecomePrimary(String forAddress, String forPort, List<String> askIds){
 
         StorageMessages.BecomePrimary becomePrimaryMsg = StorageMessages.BecomePrimary.newBuilder()
                 .setForApAddress(forAddress)
