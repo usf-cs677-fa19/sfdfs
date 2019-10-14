@@ -6,7 +6,8 @@ import edu.usfca.cs.dfs.data.ChunkMetaPOJO;
 import edu.usfca.cs.dfs.controllerNode.data.StorageNodeDetail;
 import edu.usfca.cs.dfs.data.FileChunkId;
 import edu.usfca.cs.dfs.data.NodeId;
-import edu.usfca.cs.dfs.net.Client;
+
+import edu.usfca.cs.dfs.net.MessageSender;
 import edu.usfca.cs.dfs.storageNode.StorageStorageMessagesHelper;
 
 import java.time.Instant;
@@ -93,7 +94,7 @@ public class ControllerNodeHelper{
 
         try {
             System.out.println("Sending the becomePrimaryToStorageNode!!");
-            new Client().runClient(true,"controller",newIP,newPort,msgWrapper);
+            new MessageSender().send(true,"controller",newIP,newPort,msgWrapper);
         } catch (InterruptedException e) {
             System.out.println("Exception in connecting to the Storage node!");
             e.printStackTrace();
