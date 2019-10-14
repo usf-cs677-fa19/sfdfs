@@ -36,7 +36,7 @@ public class StorageNodeDS {
     private StorageNodeDS(){
     }
 
-    public StorageNodeDS(ConfigSystemParam nodeParam) {
+    private StorageNodeDS(ConfigSystemParam nodeParam) {
         this.ipAddress = nodeParam.getAddress();
         this.port = nodeParam.getPort();
         this.nodeId = NodeId.getId(this.ipAddress, this.port);

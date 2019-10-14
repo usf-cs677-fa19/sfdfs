@@ -74,7 +74,7 @@ public class StorageInboundHandler extends InboundHandler {
             boolean isChunkWritten = Fileify.writeToAFile(chunkFilePath, msg.getStoreChunkMsg().getData().toByteArray());
             // 10. check if everything done
             if(isMetaWritten && isChunkWritten) {
-                (StorageNodeDS.getInstance().getChunksMetaInfo()).put(fileChunkId, forMetaFile);
+                StorageNodeDS.getInstance().getChunksMetaInfo().put(fileChunkId, forMetaFile);
                 System.out.println("Meta and Chunk saved on Storage node :->");
             } else {
                 System.out.println("Something went wrong in Meta and Chunk saved on Storage node :-<");
@@ -149,6 +149,7 @@ public class StorageInboundHandler extends InboundHandler {
             }
         }else if(msg.hasBecomePrimary()){
 
+            System.out.println("Become Primary!!!");
             String fromIP = msg.getBecomePrimary().getForApAddress();
             String fromPort = msg.getBecomePrimary().getForPort();
             List<String> selfReplicas = msg.getBecomePrimary().getAskIdsList();
@@ -163,6 +164,10 @@ public class StorageInboundHandler extends InboundHandler {
                 Fileify.copyDirectory(new File(source),new File(destination));
 
                 //replicate the changes to the replicas
+
+                for(String str:selfReplicas){
+                    sendChunksToReplica(str,source);
+                }
 
                 //delete the source folder
 
@@ -183,29 +188,24 @@ public class StorageInboundHandler extends InboundHandler {
     }
 
     private void sendChunksToReplica(String nodeId,String sourcePath){
-
-        File source = new File(sourcePath);
-
+        File source = new File(sourcePath+"/chunkFiles/");
         if(source.isDirectory()){
             File[] files = source.listFiles();
             for(File file : files) {
                 String filename = file.toString();
+                System.out.println("Filename : "+filename);
                 ByteBuffer buff = null;
                 try {
                     buff = Fileify.readToBuffer(filename);
+                    ChunkFileMeta chunkFileMeta = (StorageNodeDS.getInstance().getChunksMetaInfo()).get(filename);
+                    System.out.println("chunkFileMeta.getChunkId()"+chunkFileMeta.getChunkId());
+                    System.out.println("chunkFileMeta.getFileName()"+chunkFileMeta.getFileName());
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-
-
             }
-
-
-
-
         }
-
-
     }
 
 
