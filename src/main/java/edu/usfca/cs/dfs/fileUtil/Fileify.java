@@ -112,21 +112,21 @@ public class Fileify {
     }
 
 
-    public static void copyDirectory(String fromDir, String toDir) {
-
-
+//    public static void copyDirectory(String fromDir, String toDir) {
 //
-//        String dirPath = "g:/Music/English";
-//        File dir = new File(dirPath);
-//        File[] files = dir.listFiles();
-//        if (files.length == 0) {
-//            System.out.println("The directory is empty");
-//        } else {
-//            for (File aFile : files) {
-//                System.out.println(aFile.getName() + " - " + aFile.length());
-//            }
-//        }
-    }
+//
+////
+////        String dirPath = "g:/Music/English";
+////        File dir = new File(dirPath);
+////        File[] files = dir.listFiles();
+////        if (files.length == 0) {
+////            System.out.println("The directory is empty");
+////        } else {
+////            for (File aFile : files) {
+////                System.out.println(aFile.getName() + " - " + aFile.length());
+////            }
+////        }
+//    }
 
 
 
@@ -312,12 +312,16 @@ public class Fileify {
 
 
     public static void copyDirectory(File sourceLocation , File targetLocation){
+
+       // File sourceLocation = new File(sourceLocationString);
+       // File targetLocation = new File(targetLocationString);
         if(sourceLocation.isDirectory()) {
             if (!targetLocation.exists()) {
                 targetLocation.mkdir();
             }
             String[] children = sourceLocation.list();
             for (int i = 0; i < children.length; i++) {
+
                 copyDirectory(new File(sourceLocation, children[i]),
                         new File(targetLocation, children[i]));
             }

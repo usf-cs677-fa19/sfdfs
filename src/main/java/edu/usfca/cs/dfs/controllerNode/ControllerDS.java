@@ -144,7 +144,7 @@ public class ControllerDS {
     }
 
 
-    public ArrayList<String> getReplicas(int requiredChunkSize, String primaryNodeKey){
+    public ArrayList<String> getNewReplicas(int requiredChunkSize, String primaryNodeKey){
         ArrayList<String> replicas = new ArrayList<>();
         String replica1 = "";
         String replica2 = "";
@@ -201,18 +201,17 @@ public class ControllerDS {
         System.out.println("Check Storage Node Group Register !!!! \n");
         ArrayList<String> storageNodePrimaryReplicaDetails = new ArrayList<>();
         if(checkIfPrimaryExists(node)){
-            //storageNodePrimaryReplicaDetails.add(node);
+            storageNodePrimaryReplicaDetails.add(node);
             storageNodePrimaryReplicaDetails.addAll(getReplicaList(node));
-
-           System.out.println("Already exists : "+Arrays.toString(storageNodePrimaryReplicaDetails.toArray()));
-
+           //System.out.println("Already exists : "+Arrays.toString(storageNodePrimaryReplicaDetails.toArray()));
         }else{
             storageNodePrimaryReplicaDetails.add(node);
-            storageNodePrimaryReplicaDetails.addAll(ControllerDS.getInstance().getReplicas(chunkSize,node));
-            storageNodeGroupRegister.put(node,storageNodePrimaryReplicaDetails);
-            System.out.println("New : "+Arrays.toString(storageNodePrimaryReplicaDetails.toArray()));
+            ArrayList<String> replicas = ControllerDS.getInstance().getNewReplicas(chunkSize,node);
+            storageNodePrimaryReplicaDetails.addAll(replicas);
+            storageNodeGroupRegister.put(node,replicas);
+            //System.out.println("New : "+Arrays.toString(storageNodePrimaryReplicaDetails.toArray()));
         }
-        System.out.println("Size of the arraylist being returned : "+storageNodePrimaryReplicaDetails.size());
+       // System.out.println("Size of the arraylist being returned : "+storageNodePrimaryReplicaDetails.size());
         return storageNodePrimaryReplicaDetails;
     }
 
@@ -292,7 +291,9 @@ public class ControllerDS {
     public List<String> getReplicasForTheStorageNode (String nodeId){
         List<String> relicas = null;
         if(storageNodeGroupRegister.containsKey(nodeId)) {
-            return storageNodeGroupRegister.get(nodeId);
+            relicas = storageNodeGroupRegister.get(nodeId);
+            System.out.println("Getting the size of the replicas being returned : "
+                    +relicas.size()+" replicas are "+Arrays.toString(relicas.toArray()));
         }
         return relicas;
     }
@@ -346,9 +347,13 @@ public class ControllerDS {
 
         for(String replica : replicas) {
             StorageNodeDetail storageNodeDetail = storageNodeRegister.get(replica);
-            if(space < storageNodeDetail.getSpaceRemaining()){
-                node = replica;
-                space = storageNodeDetail.getSpaceRemaining();
+            if(storageNodeDetail!=null) {
+                if (space < storageNodeDetail.getSpaceRemaining()) {
+                    node = replica;
+                    space = storageNodeDetail.getSpaceRemaining();
+                }
+            }else{
+                System.out.println("The Storage Node Details for "+replica+" is null.");
             }
         }
 
@@ -360,6 +365,8 @@ public class ControllerDS {
         //Get the replicas of the storage node to be deleted
         System.out.println("Found the list of replicas for the node that is down");
         List<String> replicas = getReplicasForTheStorageNode(nodeId);
+
+
 
         System.out.println("get the list of replicas that the Storage node to be deleted stores");
         //get the list of replicas that the Storage node to be deleted stores
@@ -398,15 +405,11 @@ public class ControllerDS {
             newReplicas.add(getSNWithMaxSpaceExcludingTheSNs(new String[]{newPrimaryNode,storageNodesToExclude}));
         }else if(newReplicas == null){
             newReplicas = new ArrayList<>();
-            newReplicas.addAll(getReplicas(0,newPrimaryNode));
+            newReplicas.addAll(getNewReplicas(0,newPrimaryNode));
             storageNodeGroupRegister.put(newPrimaryNode,newReplicas);
         }
         System.out.println("Replicas : "+newReplicas.toString());
-
         //Contact the new primary and complete the data transfer also complete the replication
         ControllerNodeHelper.becomeNewPrimary(newPrimaryNode,newReplicas,nodeId);
-
     }
-
-
 }
