@@ -158,7 +158,7 @@ public class ControllerDS {
                     StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
                     if(size1 <  details.getSpaceRemaining()){
                         size2 = size1;
-                        size1 =  details.getSpaceRemainingMB());
+                        size1 =  details.getSpaceRemainingM  B());
 
                         replica2 = replica1;
                         replica1 = (String) storageNode.getKey();
