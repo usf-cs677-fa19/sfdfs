@@ -13,7 +13,13 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 
 public class StorageInboundHandler extends InboundHandler {
@@ -77,7 +83,8 @@ public class StorageInboundHandler extends InboundHandler {
             //
             // forwarding storeChunk to other replica
             //
-            if (msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(0))) { // in primary node
+            if (msg.getStoreChunkMsg().getStorageNodeIdsList().size()>0 &&
+                    msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(0))) { // in primary node
                 // change toaddress in strorechunk message to 2nd replica and send to 2nd replica
                 String[] sendingInfo = NodeId.getIPAndPort(msg.getStoreChunkMsg().getStorageNodeIds(1));
                 try {
@@ -88,7 +95,8 @@ public class StorageInboundHandler extends InboundHandler {
                     e.printStackTrace();
                 }
 
-            } else if(msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(1))) { //in 1st replica
+            } else if(msg.getStoreChunkMsg().getStorageNodeIdsList().size()>1 &&
+                    msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(1))) { //in 1st replica
                 // change toaddress in strorechunk message to 3rd replica and send to 3rd replica
                 String[] sendingInfo = NodeId.getIPAndPort(msg.getStoreChunkMsg().getStorageNodeIds(2));
                 try {
@@ -99,7 +107,8 @@ public class StorageInboundHandler extends InboundHandler {
                     e.printStackTrace();
                 }
 
-            } else if(msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(2))) { // in 2nd replica
+            } else if(msg.getStoreChunkMsg().getStorageNodeIdsList().size()>2 &&
+                    msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(2))) { // in 2nd replica
 
             }
         }
@@ -117,6 +126,31 @@ public class StorageInboundHandler extends InboundHandler {
 
             System.out.println("Sent chunkMetaInfo Back to the controller");
            // ctx.close();
+        }else if(msg.hasBecomePrimary()){
+            System.out.println("Message recieved to become primary!!!!");
+
+            String forIP = msg.getBecomePrimary().getForApAddress();
+            String port = msg.getBecomePrimary().getForPort();
+            List<String> replicas = msg.getBecomePrimary().getAskIdsList();
+
+            String nodeId = NodeId.getId(forIP,port);
+
+            String basePath = StorageNodeDS.getInstance().getBasePath();
+
+            String storageNodeToReplicate = basePath+nodeId;
+
+            String selfNodeId = basePath + StorageNodeDS.getInstance().getNodeId();
+
+            Path path = Paths.get(storageNodeToReplicate);
+
+            if(Files.exists(path)){
+                System.out.println("NodeId exists!!!");
+                File dirSource = new File(storageNodeToReplicate);
+                File dirDestination = new File(selfNodeId);
+                Fileify.copyDirectory(dirSource,dirDestination);
+                System.out.println("Copy successfull!!");
+            }
+
         }
     }
 }
