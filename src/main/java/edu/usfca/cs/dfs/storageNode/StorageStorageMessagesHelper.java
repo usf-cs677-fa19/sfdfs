@@ -115,4 +115,26 @@ public class StorageStorageMessagesHelper {
     }
 
 
+    public static StorageMessages.StorageMessageWrapper prepareStoreChunkMsg(StorageMessages.ChunkMeta cmMsg, ByteBuffer buffer) {
+
+        System.out.println("Size of StorageNodeIds : "+ cmMsg.getStorageNodeIdsList().size());
+        StorageMessages.StoreChunk storeChunkMsg
+                = StorageMessages.StoreChunk.newBuilder()
+                .setFileName(cmMsg.getFileName())
+                .setChunkId(cmMsg.getChunkId())
+                .setChunkSize(cmMsg.getChunkSize())
+                .setTotalChunks(cmMsg.getTotalChunks())
+                .addAllStorageNodeIds(cmMsg.getStorageNodeIdsList()) // new storage id at 0
+                .setData(ByteString.copyFrom(buffer))
+                .setToStorageNodeId(cmMsg.getStorageNodeIdsList().get(1))
+                .build();
+
+        StorageMessages.StorageMessageWrapper msgWrapper =
+                StorageMessages.StorageMessageWrapper.newBuilder()
+                        .setStoreChunkMsg(storeChunkMsg)
+                        .build();
+
+        return msgWrapper;
+    }
+
 }

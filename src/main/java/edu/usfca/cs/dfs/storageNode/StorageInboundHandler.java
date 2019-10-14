@@ -13,9 +13,14 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.List;
 
 
 public class StorageInboundHandler extends InboundHandler {
@@ -142,6 +147,60 @@ public class StorageInboundHandler extends InboundHandler {
                     e.printStackTrace();
                 }
             }
+        }else if(msg.hasBecomePrimary()){
+
+            String fromIP = msg.getBecomePrimary().getForApAddress();
+            String fromPort = msg.getBecomePrimary().getForPort();
+            List<String> selfReplicas = msg.getBecomePrimary().getAskIdsList();
+
+            String fromNodeId = NodeId.getId(fromIP,fromPort);
+
+            String source = StorageNodeDS.getInstance().getBasePath()+fromNodeId;
+
+            String destination = StorageNodeDS.getInstance().getBasePath() + StorageNodeDS.getInstance().getNodeId();
+
+            if(checkIfSourceExists(source)){
+                Fileify.copyDirectory(new File(source),new File(destination));
+
+                //replicate the changes to the replicas
+
+                //delete the source folder
+
+            }else{
+                //todo: if the storage node is not the replica of the node to be deleted, Should send the list of replicas of the node to be deleted to contact
+            }
+
+            //respond to the controller
+
+        }
+
+
+    }
+
+    private boolean checkIfSourceExists(String sourcePath){
+        Path path = Paths.get(sourcePath);
+        return Files.exists(path);
+    }
+
+    private void sendChunksToReplica(String nodeId,String sourcePath){
+
+        File source = new File(sourcePath);
+
+        if(source.isDirectory()){
+            File[] files = source.listFiles();
+            for(File file : files) {
+                String filename = file.toString();
+                ByteBuffer buff = null;
+                try {
+                    buff = Fileify.readToBuffer(filename);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+
 
 
         }
