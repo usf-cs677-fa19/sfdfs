@@ -126,19 +126,23 @@ public class StorageInboundHandler extends InboundHandler {
 
             String fileChunkId = msg.getRetrieveChunk().getFileChunkId();
             String pathForFileChunkId = StorageNodeDS.getInstance().getBasePath()+ StorageNodeDS.getInstance().getNodeId()+ "/chunkFiles/"+ fileChunkId;
-            try {
-                buff = Fileify.readToBuffer(pathForFileChunkId);
+            if(Fileify.doesFileExist(pathForFileChunkId)) {
+                try {
 
-                StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareChunkMsg(fileChunkId, buff);
+                    buff = Fileify.readToBuffer(pathForFileChunkId);
+
+                    StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareChunkMsg(fileChunkId, buff);
 
 
-                Channel chan = ctx.channel();
-                ChannelFuture future = chan.write(msgWrapper);
-                chan.flush();  // sending data back to client
+                    Channel chan = ctx.channel();
+                    ChannelFuture future = chan.write(msgWrapper);
+                    chan.flush();  // sending data back to client
 
-            } catch (IOException e) {
-                e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+
 
         }
 
