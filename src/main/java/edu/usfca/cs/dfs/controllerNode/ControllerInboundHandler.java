@@ -100,8 +100,6 @@ public class ControllerInboundHandler extends InboundHandler {
                 System.out.println("Sent chunkMetaMsg with list of storage nodes back to  client");
 
             //ctx.close();
-
-
         }
         else if(msg.hasStorageChunkMeta()){
             System.out.println("\n Controller recieved the meta for first chunk from Storage Node!!!!!");
@@ -118,7 +116,6 @@ public class ControllerInboundHandler extends InboundHandler {
            // HashMap<String,ArrayList<String>> mapping = ControllerDS.getInstance().getMappingOfChunkIdToStorageNodes(fileName,totalChunks);
 
            // StorageMessages.StorageMessageWrapper msgWrapper = ControllerStorageMessagesHelper.buildMappingChunkIdToStorageNodes(mapping);
-
         }
         else {
             StorageMessages.StoreChunk storeChunkMsg
@@ -154,7 +151,6 @@ public class ControllerInboundHandler extends InboundHandler {
         // to be send to storage nodce and recev chunkMeta from storage
         StorageMessages.StorageMessageWrapper msgWrapper =
                 ControllerStorageMessagesHelper.buildretrieveChunkMeta(fileChunkId);
-
         //contact the storage node to get the metadata of the First Chunk
         ChannelFuture write= null;
         try {
@@ -162,11 +158,8 @@ public class ControllerInboundHandler extends InboundHandler {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
         return write;
-
       //  ControllerClient.runControllerClient(connectingAddress,connectingPort, msgWrapper);  not using todo remove this
-
     }
 
 }
