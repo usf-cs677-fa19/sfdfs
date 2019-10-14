@@ -51,10 +51,10 @@ public class ControllerInboundHandler extends InboundHandler {
                     fileMetaData = null;
                     if (mapping.size() > 0) {
 
-                        for(Map.Entry<String, ArrayList<String>>eachMapping : mapping.entrySet()) {
-                            List<String> replicas = ControllerDS.getInstance().getReplicaList(eachMapping.getKey());
-                            eachMapping.getValue().addAll(replicas);
-                        }
+//                        for(String eachMappingKey : mapping.keySet()) { //todo may be getMappingOfChunkIdToStorageNodes
+//                            List<String> replicas = ControllerDS.getInstance().getReplicaList(eachMappingKey);
+//                            mapping.get(eachMappingKey).addAll(replicas);
+//                        } // todo: anurag add replicas for primary
 
 
                         System.out.println("The Mapping in the controller is not empty!!!!");
