@@ -107,7 +107,7 @@ public class ControllerDS {
 
     public String getSNWithMaxSpaceExcludingTheSNs(String[] storageNodes){
         String node = "";
-        int size = 0;
+        long size = 0;
 
         Iterator storageNodeIterator = storageNodeRegister.entrySet().iterator();
         while (storageNodeIterator.hasNext()){
@@ -118,8 +118,8 @@ public class ControllerDS {
                 if(key != storageNodes[1] && key != storageNodes[2]) {
                     StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
 
-                    if (size < Integer.parseInt(details.getSpaceRemainingMB())) {
-                        size = Integer.parseInt(details.getSpaceRemainingMB());
+                    if (size < details.getSpaceRemaining()) {
+                        size = details.getSpaceRemaining();
                         node = (String) storageNode.getKey();
                     }
                 }
@@ -127,8 +127,8 @@ public class ControllerDS {
                 if(key != storageNodes[1] ) {
                     StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
 
-                    if (size < Integer.parseInt(details.getSpaceRemainingMB())) {
-                        size = Integer.parseInt(details.getSpaceRemainingMB());
+                    if (size < details.getSpaceRemaining()) {
+                        size = details.getSpaceRemaining();
                         node = (String) storageNode.getKey();
                     }
                 }
@@ -158,12 +158,12 @@ public class ControllerDS {
                     StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
                     if(size1 <  details.getSpaceRemaining()){
                         size2 = size1;
-                        size1 =  details.getSpaceRemainingM  B());
+                        size1 =  details.getSpaceRemaining();
 
                         replica2 = replica1;
                         replica1 = (String) storageNode.getKey();
-                    }else if(size2 <  Integer.parseInt(details.getSpaceRemainingMB())){
-                        size2 =  Integer.parseInt(details.getSpaceRemainingMB());
+                    }else if(size2 <  details.getSpaceRemaining()){
+                        size2 =  details.getSpaceRemaining();
                         replica2 = (String) storageNode.getKey();
                     }
                 }
@@ -342,13 +342,13 @@ public class ControllerDS {
     public String getReplicaWithMaxSpace(List<String> replicas){
 
         String node = "";
-        int space = 0;
+        long space = 0;
 
         for(String replica : replicas) {
             StorageNodeDetail storageNodeDetail = storageNodeRegister.get(replica);
-            if(space < Integer.parseInt(storageNodeDetail.getSpaceRemainingMB())){
+            if(space < storageNodeDetail.getSpaceRemaining()){
                 node = replica;
-                space = Integer.parseInt(storageNodeDetail.getSpaceRemainingMB());
+                space = storageNodeDetail.getSpaceRemaining();
             }
         }
 
@@ -382,9 +382,13 @@ public class ControllerDS {
 //        }
 //        if(replicaPresentInStorageNodesToReplicate.length() == 0) {
             //Get the new primary node by comparing the replicas
-             newPrimaryNode = getReplicaWithMaxSpace(replicas);
-        System.out.println("New Primary : "+newPrimaryNode);
 
+        if(replicas.size() > 0) {
+            newPrimaryNode = getReplicaWithMaxSpace(replicas);
+            System.out.println("New Primary : " + newPrimaryNode);
+        }else {
+            newPrimaryNode = getSNWithMaxSpace(0);
+        }
 //        }
         List<String> newReplicas = getReplicasForTheStorageNode(newPrimaryNode);
 
