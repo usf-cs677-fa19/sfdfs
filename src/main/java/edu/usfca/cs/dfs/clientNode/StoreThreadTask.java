@@ -39,7 +39,10 @@ public class StoreThreadTask implements Runnable {
             chunkSizeInBytes = fileSizeInBytes;
         }
 
-        int totalChunks = (int)(fileSizeInBytes/(chunkSizeInBytes))+1;//this.getTotalChunks(fileSizeInBytes, chunkSizeInBytes);
+        int totalChunks = (int)(fileSizeInBytes/(chunkSizeInBytes));//this.getTotalChunks(fileSizeInBytes, chunkSizeInBytes);
+        if(!(fileSizeInBytes%chunkSizeInBytes==0)) {
+            totalChunks += 1;
+        }
 
         System.out.println("Based on chunk size : "+chunkSizeInBytes+" , File : "+filePath+" : will be broken into : "+totalChunks+ " chunks.");
 
