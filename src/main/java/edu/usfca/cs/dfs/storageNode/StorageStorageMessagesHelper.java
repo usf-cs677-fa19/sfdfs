@@ -6,6 +6,7 @@ import edu.usfca.cs.dfs.storageNode.data.ChunkFileMeta;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.List;
 
 public class StorageStorageMessagesHelper {
 //
@@ -133,6 +134,25 @@ public class StorageStorageMessagesHelper {
                 StorageMessages.StorageMessageWrapper.newBuilder()
                         .setStoreChunkMsg(storeChunkMsg)
                         .build();
+
+        return msgWrapper;
+    }
+
+    public static StorageMessages.StorageMessageWrapper prepareStoreChunk(String nodeId, List<String> storageNodes,ChunkFileMeta chunkFileMeta){
+
+
+        StorageMessages.StoreChunk  storeChunk = StorageMessages.StoreChunk.newBuilder()
+                .setChunkId(chunkFileMeta.getChunkId())
+                .setChunkSize(chunkFileMeta.getChunkSize())
+                .setFileName(chunkFileMeta.getFileName())
+                .setTotalChunks(chunkFileMeta.getTotalChunks())
+                .addAllStorageNodeIds(storageNodes)
+                .setToStorageNodeId(nodeId)
+                .build();
+
+        StorageMessages.StorageMessageWrapper msgWrapper = StorageMessages.StorageMessageWrapper.newBuilder()
+                .setStoreChunkMsg(storeChunk)
+                .build();
 
         return msgWrapper;
     }

@@ -2,6 +2,8 @@ package edu.usfca.cs.dfs.filter;
 
 
 import com.sangupta.murmur.Murmur3;
+import com.sun.deploy.util.ArrayUtil;
+import com.sun.tools.javac.util.ArrayUtils;
 
 
 import java.util.ArrayList;
@@ -135,10 +137,21 @@ public class BloomFilter {
         for(int i=0; i<k; i++) {
             results.add(Math.abs((int)(hash1 + i * hash2)%this.m));
         }
-
         //System.out.println(results);
         return results;
+    }
 
+    public boolean mergeBloomFilters(BloomFilter newBloomFliter){
+        if(this.bloom.size() == newBloomFliter.bloom.size()) {
+            for (int i=0;i<newBloomFliter.bloom.size();i++){
+                if(!this.bloom.get(i) && newBloomFliter.bloom.get(i)) {
+                    this.bloom.set(i);
+                }
+                this.counter[i] += newBloomFliter.counter[i];
+            }
+            return true;
+        }
+        return false;
     }
 
     public void executeCommand(String line) {

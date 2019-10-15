@@ -26,9 +26,10 @@ public class CheckAliveStorageNodes extends TimerTask {
             if(instant.isBefore(Instant.now().minus(6, ChronoUnit.SECONDS))){
                 System.out.println("Removing the storage node : "+node.getKey()+"\n");
                 String nodeToBeDeleted = (String) node.getKey();
+               StorageNodeDetail storageNodeDetail = (ControllerDS.getInstance().getStorageNodeRegister()).get(nodeToBeDeleted);
                ControllerDS.getInstance().deleteFromStorageNodeRegister(nodeToBeDeleted);
 
-               ControllerDS.getInstance().faultToleranceWhenAStorageNodeIsDown(nodeToBeDeleted);
+               ControllerDS.getInstance().faultToleranceWhenAStorageNodeIsDown(nodeToBeDeleted,storageNodeDetail);
             }
         }
     }

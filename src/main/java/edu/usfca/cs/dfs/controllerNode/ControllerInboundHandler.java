@@ -50,11 +50,11 @@ public class ControllerInboundHandler extends InboundHandler {
                     //HashMap<String,ArrayList<String>> mapping = ControllerDS.getInstance().getTheMappingOfChunkIdToStorageNodesForClientRequest();
                     fileMetaData = null;
                     if (mapping.size() > 0) {
-
-                        for(Map.Entry<String, ArrayList<String>>eachMapping : mapping.entrySet()) {
-                            List<String> replicas = ControllerDS.getInstance().getReplicaList(eachMapping.getKey());
-                            eachMapping.getValue().addAll(replicas);
-                        }
+//
+//                        for(Map.Entry<String, ArrayList<String>>eachMapping : mapping.entrySet()) {
+//                            List<String> replicas = ControllerDS.getInstance().getReplicaList(eachMapping.getKey());
+//                            eachMapping.getValue().addAll(replicas);
+//                        }
 
 
                         System.out.println("The Mapping in the controller is not empty!!!!");
@@ -124,6 +124,10 @@ public class ControllerInboundHandler extends InboundHandler {
            // HashMap<String,ArrayList<String>> mapping = ControllerDS.getInstance().getMappingOfChunkIdToStorageNodes(fileName,totalChunks);
 
            // StorageMessages.StorageMessageWrapper msgWrapper = ControllerStorageMessagesHelper.buildMappingChunkIdToStorageNodes(mapping);
+        }
+        else if(msg.hasReply()){
+            System.out.println("The New primary has successfully replicated data!!");
+            ctx.close();
         }
         else {
             StorageMessages.StoreChunk storeChunkMsg

@@ -36,7 +36,7 @@ public class StorageNodeDS {
     private StorageNodeDS(){
     }
 
-    private StorageNodeDS(ConfigSystemParam nodeParam) {
+    private void setNodeParam(ConfigSystemParam nodeParam) {
         this.ipAddress = nodeParam.getAddress();
         this.port = nodeParam.getPort();
         this.nodeId = NodeId.getId(this.ipAddress, this.port);
@@ -46,13 +46,14 @@ public class StorageNodeDS {
         this.basePath = System.getProperty("user.home")+"/sfdfs_"+ NodeId.getId(this.ipAddress, this.port)+"/";
         Fileify.createDirectory(basePath);
 
-        this.chunksMetaInfo = new HashMap<>();
+        storageNodeDS.chunksMetaInfo = new HashMap<>();
 
     }
 
     public static void setInstance(ConfigSystemParam nodeParam) {
         if(storageNodeDS == null){
-            storageNodeDS =  new StorageNodeDS(nodeParam);
+            storageNodeDS =  new StorageNodeDS();
+            storageNodeDS.setNodeParam(nodeParam);
         }
     }
 
@@ -65,57 +66,57 @@ public class StorageNodeDS {
 
 
     public String getIpAddress() {
-        return ipAddress;
+        return storageNodeDS.ipAddress;
     }
 
 
     public String getNodeId() {
-        return nodeId;
+        return storageNodeDS.nodeId;
     }
 
     public int getPort() {
-        return port;
+        return storageNodeDS.port;
     }
 
     public String getControllerIpAddress() {
-        return controllerIpAddress;
+        return storageNodeDS.controllerIpAddress;
     }
 
     public int getControllerPort() {
-        return controllerPort;
+        return storageNodeDS.controllerPort;
     }
 
     public String getBasePath() {
-        return basePath;
+        return storageNodeDS.basePath;
     }
 
     public long getRequestProcessed() {
-        return requestProcessed;
+        return storageNodeDS.requestProcessed;
     }
 
     public long getRetrievalProcessed() {
-        return retrievalProcessed;
+        return storageNodeDS.retrievalProcessed;
     }
 
     public long getSpaceRemaining() {
-        Path path = Paths.get(basePath);
+        Path path = Paths.get(storageNodeDS.basePath);
         try {
-            spaceRemaining = Files.getFileStore(path).getUsableSpace();
+            storageNodeDS.spaceRemaining = Files.getFileStore(path).getUsableSpace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return spaceRemaining;
+        return storageNodeDS.spaceRemaining;
     }
 
     //Map<NameOfDirectoriesHavingChunks, Map<ChunkFileName,ChunkMetadata>
     public Map<String,ChunkFileMeta> getChunksMetaInfo(){
-        return this.chunksMetaInfo;
+        return storageNodeDS.chunksMetaInfo;
     }
 
     public ChunkFileMeta getChunkMetaInfo(String chunkFileName){
         ChunkFileMeta chunkFileMeta = null;
-            if (chunksMetaInfo.containsKey(chunkFileName)) {
-                chunkFileMeta = chunksMetaInfo.get(chunkFileName);
+            if (storageNodeDS.chunksMetaInfo.containsKey(chunkFileName)) {
+                chunkFileMeta = storageNodeDS.chunksMetaInfo.get(chunkFileName);
             }
         return chunkFileMeta;
     }

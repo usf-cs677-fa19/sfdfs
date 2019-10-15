@@ -19,6 +19,7 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -84,7 +85,8 @@ public class StorageInboundHandler extends InboundHandler {
             //
             // forwarding storeChunk to other replica
             //
-            if (msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(0))) { // in primary node
+            if ( msg.getStoreChunkMsg().getStorageNodeIdsList().size() > 1 &&
+                    msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(0))) { // in primary node
                 // change toaddress in strorechunk message to 2nd replica and send to 2nd replica
                 String[] sendingInfo = NodeId.getIPAndPort(msg.getStoreChunkMsg().getStorageNodeIds(1));
                 try {
@@ -95,7 +97,8 @@ public class StorageInboundHandler extends InboundHandler {
                     e.printStackTrace();
                 }
 
-            } else if(msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(1))) { //in 1st replica
+            } else if(msg.getStoreChunkMsg().getStorageNodeIdsList().size() > 2 &&
+                    msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(1))) { //in 1st replica
                 // change toaddress in strorechunk message to 3rd replica and send to 3rd replica
                 String[] sendingInfo = NodeId.getIPAndPort(msg.getStoreChunkMsg().getStorageNodeIds(2));
                 try {
@@ -133,16 +136,23 @@ public class StorageInboundHandler extends InboundHandler {
             String pathForFileChunkId = StorageNodeDS.getInstance().getBasePath()+ StorageNodeDS.getInstance().getNodeId()+ "/chunkFiles/"+ fileChunkId;
             if(Fileify.doesFileExist(pathForFileChunkId)) {
                 try {
-
                     buff = Fileify.readToBuffer(pathForFileChunkId);
+                    //todo : create checksum of the buff
+                    byte[] arr = new byte[buff.remaining()];
+                    buff.get(arr);
+                    long checksumNew = Arrays.hashCode(arr);
+                    long checksumExisting = StorageNodeDS.getInstance().getChunkMetaInfo(fileChunkId).getChecksum();
+                    //todo : match it with checksum in the mata data
+                    if(checksumNew == checksumExisting) {
+                        System.out.println("Checksum matches....... :) :) ");
+                        StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareChunkMsg(fileChunkId, buff);
 
-                    StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareChunkMsg(fileChunkId, buff);
-
-
-                    Channel chan = ctx.channel();
-                    ChannelFuture future = chan.write(msgWrapper);
-                    chan.flush();  // sending data back to client
-
+                        Channel chan = ctx.channel();
+                        ChannelFuture future = chan.write(msgWrapper);
+                        chan.flush();  // sending data back to client
+                    }else{
+                        System.out.println("Checksum does not match :( :(");
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -160,26 +170,32 @@ public class StorageInboundHandler extends InboundHandler {
 
             String destination = StorageNodeDS.getInstance().getBasePath() + StorageNodeDS.getInstance().getNodeId();
 
-            if(checkIfSourceExists(source)){
-                Fileify.copyDirectory(new File(source),new File(destination));
+            if(checkIfSourceExists(source)){ Fileify.copyDirectory(new File(source),new File(destination));
 
                 //replicate the changes to the replicas
+             List<String> storageNodes = new ArrayList<>();
+             storageNodes.add(StorageNodeDS.getInstance().getNodeId());
+             storageNodes.addAll(selfReplicas);
+            String toReplica = selfReplicas.get(0) ;
+            sendChunksToReplica(toReplica,source,storageNodes);
 
-                for(String str:selfReplicas){
-                    sendChunksToReplica(str,source);
-                }
+            StorageMessages.NewPrimaryReply reply = StorageMessages.NewPrimaryReply.newBuilder()
+                                                    .setReplicated(true)
+                                                    .build();
 
+            StorageMessages.StorageMessageWrapper msgWrapper = StorageMessages.StorageMessageWrapper.newBuilder()
+                    .setReply(reply)
+                    .build();
+
+                Channel chan = ctx.channel();
+                ChannelFuture future = chan.write(msgWrapper);
+                chan.flush();  // sending data back to client
                 //delete the source folder
-
             }else{
                 //todo: if the storage node is not the replica of the node to be deleted, Should send the list of replicas of the node to be deleted to contact
             }
-
             //respond to the controller
-
         }
-
-
     }
 
     private boolean checkIfSourceExists(String sourcePath){
@@ -187,27 +203,29 @@ public class StorageInboundHandler extends InboundHandler {
         return Files.exists(path);
     }
 
-    private void sendChunksToReplica(String nodeId,String sourcePath){
+    private void sendChunksToReplica(String nodeId,String sourcePath,List<String> storageNodes){
         File source = new File(sourcePath+"/chunkFiles/");
         if(source.isDirectory()){
             File[] files = source.listFiles();
             for(File file : files) {
                 String filename = file.toString();
-                System.out.println("Filename : "+filename);
+                String[] filepaths = file.toString().split("/");
+                System.out.println("Filename : "+filepaths[filepaths.length-1]);
                 ByteBuffer buff = null;
                 try {
                     buff = Fileify.readToBuffer(filename);
-                    ChunkFileMeta chunkFileMeta = (StorageNodeDS.getInstance().getChunksMetaInfo()).get(filename);
-                    System.out.println("chunkFileMeta.getChunkId()"+chunkFileMeta.getChunkId());
-                    System.out.println("chunkFileMeta.getFileName()"+chunkFileMeta.getFileName());
+                    ChunkFileMeta chunkFileMeta = StorageNodeDS.getInstance().getChunksMetaInfo().get(filepaths[filepaths.length-1]);
 
-                } catch (IOException e) {
+                    StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareStoreChunk(nodeId,storageNodes,chunkFileMeta);
+
+                    String[] connectingIPAddressAndPort = NodeId.getIPAndPort(nodeId);
+
+                   new MessageSender().send(false,"storage",connectingIPAddressAndPort[0],Integer.parseInt(connectingIPAddressAndPort[1]),msgWrapper);
+                } catch (IOException | InterruptedException e) {
+                    System.out.println("Exception while sending chunks to replicas of the new primary!!");
                     e.printStackTrace();
                 }
             }
         }
     }
-
-
-
 }

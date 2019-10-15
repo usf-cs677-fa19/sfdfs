@@ -360,13 +360,11 @@ public class ControllerDS {
         return node;
     }
 
-    public  void faultToleranceWhenAStorageNodeIsDown(String nodeId){
+    public  void faultToleranceWhenAStorageNodeIsDown(String nodeId,StorageNodeDetail oldStorageNodeDetail){
 
         //Get the replicas of the storage node to be deleted
         System.out.println("Found the list of replicas for the node that is down");
         List<String> replicas = getReplicasForTheStorageNode(nodeId);
-
-
 
         System.out.println("get the list of replicas that the Storage node to be deleted stores");
         //get the list of replicas that the Storage node to be deleted stores
@@ -402,7 +400,13 @@ public class ControllerDS {
         if(newReplicas != null && newReplicas.size() == 1){
             //Get one more replica and add in this list
             String storageNodesToExclude = newReplicas.get(0);
-            newReplicas.add(getSNWithMaxSpaceExcludingTheSNs(new String[]{newPrimaryNode,storageNodesToExclude}));
+
+            String replica = getSNWithMaxSpaceExcludingTheSNs(new String[]{newPrimaryNode,storageNodesToExclude});
+            List<String> oldReplicas = storageNodeGroupRegister.get(newPrimaryNode);
+            oldReplicas.add(replica);
+            storageNodeGroupRegister.put(newPrimaryNode,oldReplicas);
+
+            newReplicas.add(replica);
         }else if(newReplicas == null){
             newReplicas = new ArrayList<>();
             newReplicas.addAll(getNewReplicas(0,newPrimaryNode));
@@ -411,5 +415,20 @@ public class ControllerDS {
         System.out.println("Replicas : "+newReplicas.toString());
         //Contact the new primary and complete the data transfer also complete the replication
         ControllerNodeHelper.becomeNewPrimary(newPrimaryNode,newReplicas,nodeId);
+
+        //update the bloomfilters
+        boolean result = updateBloomFilter(newPrimaryNode,oldStorageNodeDetail);
+
+        System.out.println("Bloomfilter updated successfully : "+result);
+        //choose a new node for replicas and
+
     }
+
+    public boolean updateBloomFilter(String newPrimary,StorageNodeDetail storageNodeDetail){
+        StorageNodeDetail storageNodeDetailNew = storageNodeRegister.get(newPrimary);
+        BloomFilter filteNew = storageNodeDetailNew.getBloomFilter();
+        BloomFilter filterOld = storageNodeDetail.getBloomFilter();
+        return filteNew.mergeBloomFilters(filterOld);
+    }
+
 }
