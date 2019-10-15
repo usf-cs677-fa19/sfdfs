@@ -63,7 +63,6 @@ public class Fileify {
 
     }
 
-
     public static void writeChunkToFile(StorageMessages.Chunk chunkMsg) {
         String[] filenameAndChunkId = FileChunkId.splitFileAndChunkId(chunkMsg.getFileChunkId());
 
@@ -105,63 +104,10 @@ public class Fileify {
         }
     }
 
-
     // does file exist
     public static boolean doesFileExist(String filePath) {
         Path p = Paths.get(filePath);
         return Files.exists(p);
-    }
-
-
-//    public static void copyDirectory(String fromDir, String toDir) {
-//
-//
-////
-////        String dirPath = "g:/Music/English";
-////        File dir = new File(dirPath);
-////        File[] files = dir.listFiles();
-////        if (files.length == 0) {
-////            System.out.println("The directory is empty");
-////        } else {
-////            for (File aFile : files) {
-////                System.out.println(aFile.getName() + " - " + aFile.length());
-////            }
-////        }
-//    }
-
-
-
-
-
-
-
-//    public static ChunkMeta getFilledBuffer(String filePath, StorageMessages.ChunkMeta cmMsg) throws IOException {
-//        Path path = Paths.get(filePath/*"data/test.xml"*/);
-//
-//        AsynchronousFileChannel fileChannel =
-//                AsynchronousFileChannel.open(path, StandardOpenOption.READ);
-//
-//    }todo: anurag
-
-    //private static String HOME = System.getProperty("user.home"); todo : use it for storage node to check if file exist
-
-
-    //behaviour
-
-    //open directory
-    //create directory
-    public static void createDirectory(String basePath, String dirName) {
-//        String filePath = basePath+"/"+dirName;
-        Path path = Paths.get(basePath, dirName);
-
-        if(!Files.exists(path)) {
-            try {
-                Files.createDirectory(path);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
     }
 
     public static void createDirectory(String dirPath) {
@@ -184,8 +130,7 @@ public class Fileify {
         Files.deleteIfExists(path);
     }
 
-
-    public static String[] getListOFDirs(String basePath) {
+    public static String[] getListOfDirs(String basePath) {
         File file = new File(basePath);
         String[] directories = file.list(new FilenameFilter() {
             @Override
@@ -197,6 +142,17 @@ public class Fileify {
         return directories;
     }
 
+    public static String[] getListOfFiles(String dirPath) {
+        File file = new File(dirPath);
+        String[] files = file.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File current, String name) {
+                return new File(current, name).isFile();
+            }
+        });
+        System.out.println(Arrays.toString(files));
+        return files;
+    }
 
     //get file size
     public static long getFileSize(String filename) throws IOException {
@@ -220,6 +176,7 @@ public class Fileify {
             return false;
         }
     }
+
     public static boolean writeToAFile(String filePath, byte[] content) {
         Path path = Paths.get(filePath);
         try {
@@ -230,82 +187,6 @@ public class Fileify {
             return false;
         }
     }
-
-
-
-    // write append
-    // close fileChannel
-    public void closeFileChannel(FileChannel fc) throws IOException {
-        fc.close();
-    }
-
-//    /**
-//     * readFileInChunks reads a file in chunks of byte array, writes to channel and adds to list of Channel Futures
-//     * @param filename
-//     * @param chan
-//     * @param writes
-//     * @param chunkSize
-//     * @return
-//     * @throws IOException
-//     */
-////    public static void transferFileInChunks(String filename, Channel chan, List<ChannelFuture> writes, int chunkSize)
-////            throws IOException {
-////        ByteBuffer buf = ByteBuffer.allocate(chunkSize);
-////
-////        try(
-////                RandomAccessFile reader = new RandomAccessFile(filename,"r");
-////                FileChannel fc = reader.getChannel();
-////                ByteArrayOutputStream out = new ByteArrayOutputStream();
-////        ) {
-////            System.out.println("File Transfer started");
-////
-////            while((fc.read(buf))>0) {
-////
-////                out.write(buf.array(),0,buf.position());
-////
-////                //PrefixedMessage msg = new PrefixedMessage(out.toByteArray()); //
-////
-////
-////
-//////                public StorageMessages.StorageMessageWrapper buildStoreChunk(String address, int port) {
-////                    StorageMessages.StoreChunk storeChunk = StorageMessages.StoreChunk.newBuilder() // building heartbeat
-////                            .setFileName("filename")
-////                            .setChunkId(1)
-////                            .setData(ByteString.copyFrom(out.toByteArray()))
-////                            .build();
-////
-////                    StorageMessages.StorageMessageWrapper msgWrapper =
-////                            StorageMessages.StorageMessageWrapper.newBuilder()
-////                                    .setStoreChunkMsg(storeChunk)
-////                                    .build();
-////
-//////                    return msgWrapper;
-//////                }
-////
-////
-////
-////
-////                //PrefixedMessage msg = new PrefixedMessage(buf.array());
-////
-////                //System.out.println("Msg this round : \n"+new String(msg.payload()));
-////                writes.add(chan.write(storeChunk));
-////
-////                buf.clear();
-////                out.reset();
-////                chan.flush();
-////            }
-////
-//////            chan.flush();
-////            for (ChannelFuture write : writes) {
-////                write.syncUninterruptibly();
-////            }
-////
-////        }
-////        System.out.println("File Transfer completed");
-////
-////    }
-
-
 
     public static void copyDirectory(File sourceLocation , File targetLocation){
 

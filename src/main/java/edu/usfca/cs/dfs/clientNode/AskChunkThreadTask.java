@@ -30,11 +30,11 @@ public class AskChunkThreadTask implements Callable {
                     Integer.parseInt(connectingInfo[1]),
                     entry.getValue());
 
-            f.get(200, TimeUnit.MILLISECONDS);
-            if(!f.isCancelled()) {
-//                System.out.println("AskChunkThreadTask : !f.isCancelled() : ");
-                return f;
-            }
+//            f.get(200, TimeUnit.MILLISECONDS);
+//            if(!f.isCancelled()) {
+////                System.out.println("AskChunkThreadTask : !f.isCancelled() : ");
+//                return f;
+//            }
         }
         return null;
     }

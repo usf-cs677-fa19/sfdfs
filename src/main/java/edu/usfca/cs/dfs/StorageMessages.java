@@ -4619,6 +4619,12 @@ public final class StorageMessages {
       com.google.protobuf.MessageOrBuilder {
 
     /**
+     * <code>bool found = 1;</code>
+     * @return The found.
+     */
+    boolean getFound();
+
+    /**
      * <code>string fileChunkId = 2;</code>
      * @return The fileChunkId.
      */
@@ -4683,6 +4689,11 @@ public final class StorageMessages {
             case 0:
               done = true;
               break;
+            case 8: {
+
+              found_ = input.readBool();
+              break;
+            }
             case 18: {
               java.lang.String s = input.readStringRequireUtf8();
 
@@ -4724,6 +4735,16 @@ public final class StorageMessages {
       return edu.usfca.cs.dfs.StorageMessages.internal_static_Chunk_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               edu.usfca.cs.dfs.StorageMessages.Chunk.class, edu.usfca.cs.dfs.StorageMessages.Chunk.Builder.class);
+    }
+
+    public static final int FOUND_FIELD_NUMBER = 1;
+    private boolean found_;
+    /**
+     * <code>bool found = 1;</code>
+     * @return The found.
+     */
+    public boolean getFound() {
+      return found_;
     }
 
     public static final int FILECHUNKID_FIELD_NUMBER = 2;
@@ -4786,6 +4807,9 @@ public final class StorageMessages {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      if (found_ != false) {
+        output.writeBool(1, found_);
+      }
       if (!getFileChunkIdBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, fileChunkId_);
       }
@@ -4801,6 +4825,10 @@ public final class StorageMessages {
       if (size != -1) return size;
 
       size = 0;
+      if (found_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(1, found_);
+      }
       if (!getFileChunkIdBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, fileChunkId_);
       }
@@ -4823,6 +4851,8 @@ public final class StorageMessages {
       }
       edu.usfca.cs.dfs.StorageMessages.Chunk other = (edu.usfca.cs.dfs.StorageMessages.Chunk) obj;
 
+      if (getFound()
+          != other.getFound()) return false;
       if (!getFileChunkId()
           .equals(other.getFileChunkId())) return false;
       if (!getData()
@@ -4838,6 +4868,9 @@ public final class StorageMessages {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + FOUND_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getFound());
       hash = (37 * hash) + FILECHUNKID_FIELD_NUMBER;
       hash = (53 * hash) + getFileChunkId().hashCode();
       hash = (37 * hash) + DATA_FIELD_NUMBER;
@@ -4975,6 +5008,8 @@ public final class StorageMessages {
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        found_ = false;
+
         fileChunkId_ = "";
 
         data_ = com.google.protobuf.ByteString.EMPTY;
@@ -5005,6 +5040,7 @@ public final class StorageMessages {
       @java.lang.Override
       public edu.usfca.cs.dfs.StorageMessages.Chunk buildPartial() {
         edu.usfca.cs.dfs.StorageMessages.Chunk result = new edu.usfca.cs.dfs.StorageMessages.Chunk(this);
+        result.found_ = found_;
         result.fileChunkId_ = fileChunkId_;
         result.data_ = data_;
         onBuilt();
@@ -5055,6 +5091,9 @@ public final class StorageMessages {
 
       public Builder mergeFrom(edu.usfca.cs.dfs.StorageMessages.Chunk other) {
         if (other == edu.usfca.cs.dfs.StorageMessages.Chunk.getDefaultInstance()) return this;
+        if (other.getFound() != false) {
+          setFound(other.getFound());
+        }
         if (!other.getFileChunkId().isEmpty()) {
           fileChunkId_ = other.fileChunkId_;
           onChanged();
@@ -5088,6 +5127,36 @@ public final class StorageMessages {
             mergeFrom(parsedMessage);
           }
         }
+        return this;
+      }
+
+      private boolean found_ ;
+      /**
+       * <code>bool found = 1;</code>
+       * @return The found.
+       */
+      public boolean getFound() {
+        return found_;
+      }
+      /**
+       * <code>bool found = 1;</code>
+       * @param value The found to set.
+       * @return This builder for chaining.
+       */
+      public Builder setFound(boolean value) {
+        
+        found_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool found = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearFound() {
+        
+        found_ = false;
+        onChanged();
         return this;
       }
 
@@ -15871,43 +15940,44 @@ public final class StorageMessages {
       "\004 \001(\005\" \n\014RetrieveFile\022\020\n\010fileName\030\001 \001(\t\"" +
       "(\n\021RetrieveChunkMeta\022\023\n\013fileChunkId\030\001 \001(" +
       "\t\"$\n\rRetrieveChunk\022\023\n\013fileChunkId\030\001 \001(\t\"" +
-      "*\n\005Chunk\022\023\n\013fileChunkId\030\002 \001(\t\022\014\n\004data\030\003 " +
-      "\001(\014\"2\n\rChunkLocation\022\020\n\010fileName\030\001 \001(\t\022\017" +
-      "\n\007chunkId\030\002 \001(\005\"6\n\025ListChunksAndFileName" +
-      "\022\r\n\005files\030\001 \003(\t\022\016\n\006chunks\030\002 \003(\005\"z\n\tHeart" +
-      "Beat\022\021\n\tipAddress\030\001 \001(\t\022\014\n\004port\030\002 \001(\t\022\026\n" +
-      "\016spaceRemaining\030\003 \001(\003\022\030\n\020requestProcesse" +
-      "d\030\004 \001(\003\022\032\n\022retrievalProcessed\030\005 \001(\003\"F\n\rB" +
-      "ecomePrimary\022\024\n\014forApAddress\030\001 \001(\t\022\017\n\007fo" +
-      "rPort\030\002 \001(\t\022\016\n\006askIds\030\003 \003(\t\"_\n\017NewPrimar" +
-      "yAlert\022\024\n\014forIpAddress\030\001 \001(\t\022\017\n\007forPort\030" +
-      "\002 \001(\t\022\024\n\014newIpAddress\030\003 \001(\t\022\017\n\007newPort\030\004" +
-      " \001(\t\"?\n\020CreateNewReplica\022\025\n\rlostReplicaI" +
-      "d\030\001 \001(\t\022\024\n\014newReplicaId\030\002 \001(\t\".\n\027Storage" +
-      "NodesHavingChunk\022\023\n\013storageNode\030\001 \003(\t\"\245\001" +
-      "\n\034MappingChunkIdToStorageNodes\022;\n\007mappin" +
-      "g\030\001 \003(\0132*.MappingChunkIdToStorageNodes.M" +
-      "appingEntry\032H\n\014MappingEntry\022\013\n\003key\030\001 \001(\t" +
-      "\022\'\n\005value\030\002 \001(\0132\030.StorageNodesHavingChun" +
-      "k:\0028\001\"%\n\017NewPrimaryReply\022\022\n\nreplicated\030\001" +
-      " \001(\010\"\242\005\n\025StorageMessageWrapper\022$\n\rstoreC" +
-      "hunkMsg\030\001 \001(\0132\013.StoreChunkH\000\022(\n\017retrieve" +
-      "FileMsg\030\002 \001(\0132\r.RetrieveFileH\000\022*\n\020retrie" +
-      "veChunkMsg\030\003 \001(\0132\016.RetrieveChunkH\000\022\"\n\014he" +
-      "artBeatMsg\030\004 \001(\0132\n.HeartBeatH\000\022\"\n\014chunkM" +
-      "etaMsg\030\005 \001(\0132\n.ChunkMetaH\000\0222\n\024retrieveCh" +
-      "unkMetaMsg\030\006 \001(\0132\022.RetrieveChunkMetaH\000\0220" +
-      "\n\023storageChunkMetaMsg\030\007 \001(\0132\021.StorageChu" +
-      "nkMetaH\000\022*\n\020becomePrimaryMsg\030\010 \001(\0132\016.Bec" +
-      "omePrimaryH\000\022.\n\022newPrimaryAlertMsg\030\t \001(\013" +
-      "2\020.NewPrimaryAlertH\000\022>\n\032storageNodesHavi" +
-      "ngChunkMsg\030\n \001(\0132\030.StorageNodesHavingChu" +
-      "nkH\000\022H\n\037mappingChunkIdToStorageNodesMsg\030" +
-      "\013 \001(\0132\035.MappingChunkIdToStorageNodesH\000\022\032" +
-      "\n\010chunkMsg\030\014 \001(\0132\006.ChunkH\000\022$\n\010replyMsg\030\r" +
-      " \001(\0132\020.NewPrimaryReplyH\000\0220\n\023createNewRep" +
-      "licaMsg\030\016 \001(\0132\021.CreateNewReplicaH\000B\005\n\003ms" +
-      "gB\022\n\020edu.usfca.cs.dfsb\006proto3"
+      "9\n\005Chunk\022\r\n\005found\030\001 \001(\010\022\023\n\013fileChunkId\030\002" +
+      " \001(\t\022\014\n\004data\030\003 \001(\014\"2\n\rChunkLocation\022\020\n\010f" +
+      "ileName\030\001 \001(\t\022\017\n\007chunkId\030\002 \001(\005\"6\n\025ListCh" +
+      "unksAndFileName\022\r\n\005files\030\001 \003(\t\022\016\n\006chunks" +
+      "\030\002 \003(\005\"z\n\tHeartBeat\022\021\n\tipAddress\030\001 \001(\t\022\014" +
+      "\n\004port\030\002 \001(\t\022\026\n\016spaceRemaining\030\003 \001(\003\022\030\n\020" +
+      "requestProcessed\030\004 \001(\003\022\032\n\022retrievalProce" +
+      "ssed\030\005 \001(\003\"F\n\rBecomePrimary\022\024\n\014forApAddr" +
+      "ess\030\001 \001(\t\022\017\n\007forPort\030\002 \001(\t\022\016\n\006askIds\030\003 \003" +
+      "(\t\"_\n\017NewPrimaryAlert\022\024\n\014forIpAddress\030\001 " +
+      "\001(\t\022\017\n\007forPort\030\002 \001(\t\022\024\n\014newIpAddress\030\003 \001" +
+      "(\t\022\017\n\007newPort\030\004 \001(\t\"?\n\020CreateNewReplica\022" +
+      "\025\n\rlostReplicaId\030\001 \001(\t\022\024\n\014newReplicaId\030\002" +
+      " \001(\t\".\n\027StorageNodesHavingChunk\022\023\n\013stora" +
+      "geNode\030\001 \003(\t\"\245\001\n\034MappingChunkIdToStorage" +
+      "Nodes\022;\n\007mapping\030\001 \003(\0132*.MappingChunkIdT" +
+      "oStorageNodes.MappingEntry\032H\n\014MappingEnt" +
+      "ry\022\013\n\003key\030\001 \001(\t\022\'\n\005value\030\002 \001(\0132\030.Storage" +
+      "NodesHavingChunk:\0028\001\"%\n\017NewPrimaryReply\022" +
+      "\022\n\nreplicated\030\001 \001(\010\"\242\005\n\025StorageMessageWr" +
+      "apper\022$\n\rstoreChunkMsg\030\001 \001(\0132\013.StoreChun" +
+      "kH\000\022(\n\017retrieveFileMsg\030\002 \001(\0132\r.RetrieveF" +
+      "ileH\000\022*\n\020retrieveChunkMsg\030\003 \001(\0132\016.Retrie" +
+      "veChunkH\000\022\"\n\014heartBeatMsg\030\004 \001(\0132\n.HeartB" +
+      "eatH\000\022\"\n\014chunkMetaMsg\030\005 \001(\0132\n.ChunkMetaH" +
+      "\000\0222\n\024retrieveChunkMetaMsg\030\006 \001(\0132\022.Retrie" +
+      "veChunkMetaH\000\0220\n\023storageChunkMetaMsg\030\007 \001" +
+      "(\0132\021.StorageChunkMetaH\000\022*\n\020becomePrimary" +
+      "Msg\030\010 \001(\0132\016.BecomePrimaryH\000\022.\n\022newPrimar" +
+      "yAlertMsg\030\t \001(\0132\020.NewPrimaryAlertH\000\022>\n\032s" +
+      "torageNodesHavingChunkMsg\030\n \001(\0132\030.Storag" +
+      "eNodesHavingChunkH\000\022H\n\037mappingChunkIdToS" +
+      "torageNodesMsg\030\013 \001(\0132\035.MappingChunkIdToS" +
+      "torageNodesH\000\022\032\n\010chunkMsg\030\014 \001(\0132\006.ChunkH" +
+      "\000\022$\n\010replyMsg\030\r \001(\0132\020.NewPrimaryReplyH\000\022" +
+      "0\n\023createNewReplicaMsg\030\016 \001(\0132\021.CreateNew" +
+      "ReplicaH\000B\005\n\003msgB\022\n\020edu.usfca.cs.dfsb\006pr" +
+      "oto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -15954,7 +16024,7 @@ public final class StorageMessages {
     internal_static_Chunk_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Chunk_descriptor,
-        new java.lang.String[] { "FileChunkId", "Data", });
+        new java.lang.String[] { "Found", "FileChunkId", "Data", });
     internal_static_ChunkLocation_descriptor =
       getDescriptor().getMessageTypes().get(7);
     internal_static_ChunkLocation_fieldAccessorTable = new
