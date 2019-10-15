@@ -141,6 +141,7 @@ public class BloomFilter {
         return results;
     }
 
+
     public boolean mergeBloomFilters(BloomFilter newBloomFliter){
         if(this.bloom.size() == newBloomFliter.bloom.size()) {
             for (int i=0;i<newBloomFliter.bloom.size();i++){
