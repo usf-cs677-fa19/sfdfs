@@ -38,7 +38,7 @@ public class StorageStorageMessagesHelper {
 
         StorageMessages.StorageMessageWrapper msgWrapper =
                 StorageMessages.StorageMessageWrapper.newBuilder()
-                        .setHeartBeat(heartBeat)
+                        .setHeartBeatMsg(heartBeat)
                         .build();
 
         return msgWrapper;
@@ -77,7 +77,7 @@ public class StorageStorageMessagesHelper {
 
         StorageMessages.StorageMessageWrapper msgWrapper =
                 StorageMessages.StorageMessageWrapper.newBuilder()
-                        .setStorageChunkMeta(chunkMetaInfo)
+                        .setStorageChunkMetaMsg(chunkMetaInfo)
                         .build();
 
         return msgWrapper;
@@ -109,7 +109,7 @@ public class StorageStorageMessagesHelper {
 
         StorageMessages.StorageMessageWrapper msgWrapper =
                 StorageMessages.StorageMessageWrapper.newBuilder()
-                        .setNewPrimaryAlert(newPrimaryAlertMsg)
+                        .setNewPrimaryAlertMsg(newPrimaryAlertMsg)
                         .build();
 
         return msgWrapper;

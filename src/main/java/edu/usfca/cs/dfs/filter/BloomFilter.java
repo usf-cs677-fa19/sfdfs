@@ -2,9 +2,6 @@ package edu.usfca.cs.dfs.filter;
 
 
 import com.sangupta.murmur.Murmur3;
-import com.sun.deploy.util.ArrayUtil;
-import com.sun.tools.javac.util.ArrayUtils;
-
 
 import java.util.ArrayList;
 import java.util.BitSet;

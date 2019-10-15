@@ -38,7 +38,7 @@ public class ControllerStorageMessagesHelper {
 
             StorageMessages.StorageMessageWrapper msgWrapper =
                     StorageMessages.StorageMessageWrapper.newBuilder()
-                            .setRetrieveChunkMeta(retrieveChunkMeta)
+                            .setRetrieveChunkMetaMsg(retrieveChunkMeta)
                             .build();
 
             return msgWrapper;
@@ -59,7 +59,7 @@ public class ControllerStorageMessagesHelper {
 
         StorageMessages.StorageMessageWrapper msgWrapper =
                 StorageMessages.StorageMessageWrapper.newBuilder()
-                        .setMappingChunkIdToStorageNodes(mappingMsg)
+                        .setMappingChunkIdToStorageNodesMsg(mappingMsg)
                         .build();
 
         return msgWrapper;
@@ -76,7 +76,7 @@ public class ControllerStorageMessagesHelper {
 
         StorageMessages.StorageMessageWrapper msgWrapper =
                 StorageMessages.StorageMessageWrapper.newBuilder()
-                        .setBecomePrimary(becomePrimaryMsg)
+                        .setBecomePrimaryMsg(becomePrimaryMsg)
                         .build();
 
         return msgWrapper;

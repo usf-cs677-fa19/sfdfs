@@ -41,13 +41,13 @@ public class  ClientInboundHandler extends InboundHandler {
 
 
         }
-        else if(msg.hasMappingChunkIdToStorageNodes()) { // client receieved cunk to sn mapping for all chunks for a file
+        else if(msg.hasMappingChunkIdToStorageNodesMsg()) { // client receieved cunk to sn mapping for all chunks for a file
 
-            if(!msg.getMappingChunkIdToStorageNodes().getMappingMap().isEmpty()) {
+            if(!msg.getMappingChunkIdToStorageNodesMsg().getMappingMap().isEmpty()) {
                 System.out.println("\n Recieved mapping from controller : todo send the request for filechunks to all nodes!!");
                 // key = chunkId, value = StorageNodeList
                 Map<String, StorageMessages.StorageNodesHavingChunk> mapChunkIdToStorageNodes =
-                        msg.getMappingChunkIdToStorageNodes().getMappingMap();
+                        msg.getMappingChunkIdToStorageNodesMsg().getMappingMap();
                 // key = storageNodeId, value = messageWrapperToBeSent
                 ArrayList<Map<String, StorageMessages.StorageMessageWrapper>> retrieveChunkMapArray =
                         ClientStorageMessagesHelper.prepareRetrieveChunkMapArray(mapChunkIdToStorageNodes);
