@@ -423,11 +423,21 @@ public class ControllerDS {
         System.out.println("Bloomfilter updated successfully : "+result);
         //choose a new node for replicas and
 
-        String storageNodeToReplicate = getSNWithMaxSpaceExcludingTheSNs(new String[]{newPrimaryNode});
+        List<String> storageNodeToExclude = new ArrayList<> ();
+        storageNodeToExclude.add(newPrimaryNode);
+        storageNodeToExclude.addAll(storageNodesToReplicate);
+        storageNodeToExclude.addAll(getListOfReplicasForTheNodes(storageNodesToReplicate));
 
+        String storageNodeToReplicate = getSNWithMaxSpaceExcludingTheSNs(convertArrayListOfStringToArrayOfString(storageNodeToExclude));
 
+    }
 
-
+    public List<String> getListOfReplicasForTheNodes(List<String> nodes){
+        List<String> listOfReplicas = new ArrayList<>();
+        for (String node : nodes){
+           listOfReplicas.addAll(storageNodeGroupRegister.get(node));
+        }
+        return listOfReplicas;
     }
 
     public boolean updateBloomFilter(String newPrimary,StorageNodeDetail storageNodeDetail){
@@ -437,8 +447,13 @@ public class ControllerDS {
         return filteNew.mergeBloomFilters(filterOld);
     }
 
+    public String[] convertArrayListOfStringToArrayOfString(List<String> nodes){
+        Object[] objects = nodes.toArray();
+        String[] arrayOfString = Arrays
+                .copyOf(objects, objects
+                                .length,
+                        String[].class);
 
-//    public List<String> getPrimariesForTheReplicas(){
-//
-//    }
+        return arrayOfString;
+    }
 }
