@@ -147,7 +147,7 @@ public class BloomFilter {
                 if(!this.bloom.get(i) && newBloomFliter.bloom.get(i)) {
                     this.bloom.set(i);
                 }
-                this.counter[i] += newBloomFliter.counter[i];
+                this.counter[i] += newBloomFliter.counter[i] ;
             }
             return true;
         }
