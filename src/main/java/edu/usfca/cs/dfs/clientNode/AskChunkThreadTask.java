@@ -32,6 +32,7 @@ public class AskChunkThreadTask implements Callable {
 
             f.get(200, TimeUnit.MILLISECONDS);
             if(!f.isCancelled()) {
+//                System.out.println("AskChunkThreadTask : !f.isCancelled() : ");
                 return f;
             }
         }

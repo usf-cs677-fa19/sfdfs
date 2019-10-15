@@ -3,7 +3,10 @@ package edu.usfca.cs.dfs.filter;
 
 import edu.usfca.cs.dfs.init.Init;
 
+import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -42,9 +45,19 @@ public class StarterA {
             }
         }
 
-
-
     }
+//        public static void main(String[] args) {
+//            System.out.println("Hello world!");
+//            File file = new File(System.getProperty("user.home"));
+//            String[] directories = file.list(new FilenameFilter() {
+//                @Override
+//                public boolean accept(File current, String name) {
+//                    return new File(current, name).isDirectory();
+//                }
+//            });
+//            System.out.println(Arrays.toString(directories));
+//        }
+
 
 
 

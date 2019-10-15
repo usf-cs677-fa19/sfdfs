@@ -14,6 +14,7 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.List;
 
 public class Fileify {
@@ -187,6 +188,17 @@ public class Fileify {
     //public static void todo : anurag
 
 
+    public static String[] getListOFDirs(String basePath) {
+        File file = new File(basePath);
+        String[] directories = file.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File current, String name) {
+                return new File(current, name).isDirectory();
+            }
+        });
+        System.out.println(Arrays.toString(directories));
+        return directories;
+    }
 
     //create file
     //open filechannel for a file

@@ -239,6 +239,7 @@ public class ControllerDS {
                    // System.out.println("present in the bloomfilter!!!");
                     String storageNodeKey = (String) storageNode.getKey();
                     storageNodes.add(storageNodeKey);
+                    storageNodes.addAll(storageNodeGroupRegister.get(storageNodeKey));
                 }else{
                     //System.out.println("Not in this bloomfilter!!!");
                 }
@@ -277,8 +278,8 @@ public class ControllerDS {
             if(storageNodeIdsForAChunk.size() == 0){
                 System.out.println("No Storage Nodes found !!! File cannot be found because one chunk is missing from the bloom filters of the storage nodes!!");
                 return chunkIdToStorageNodeIds;
-            } else if (storageNodeIdsForAChunk.size() == 1){
-                System.out.println("Chunk present in only one Storage Node!!");
+            } else if (storageNodeIdsForAChunk.size() > 0){
+                System.out.println("Chunk present in "+storageNodeIdsForAChunk.size()+" Storage Node!!");
             }
             chunkIdToStorageNodeIds.put(chunkId,storageNodeIdsForAChunk);
         }
