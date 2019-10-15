@@ -129,34 +129,64 @@ public class StorageInboundHandler extends InboundHandler {
            // ctx.close();
         }
         else if(msg.hasRetrieveChunkMsg()) {  //storage node should send chunkMsg
+
             System.out.println("Client asking for a file chunk");
             ByteBuffer buff;
 
             String fileChunkId = msg.getRetrieveChunkMsg().getFileChunkId();
-            String pathForFileChunkId = StorageNodeDS.getInstance().getBasePath()+ StorageNodeDS.getInstance().getNodeId()+ "/chunkFiles/"+ fileChunkId;
-            if(Fileify.doesFileExist(pathForFileChunkId)) {
-                try {
-                    buff = Fileify.readToBuffer(pathForFileChunkId);
-                    //todo : create checksum of the buff
-                    byte[] arr = new byte[buff.remaining()];
-                    buff.get(arr);
-                    long checksumNew = Arrays.hashCode(arr);
-                    long checksumExisting = StorageNodeDS.getInstance().getChunkMetaInfo(fileChunkId).getChecksum();
-                    //todo : match it with checksum in the mata data
-                    if(checksumNew == checksumExisting) {
-                        System.out.println("Checksum matches....... :) :) ");
-                        StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareChunkMsg(fileChunkId, buff);
+            String[] dirs = Fileify.getListOFDirs(StorageNodeDS.getInstance().getBasePath());
+            for(String dir : dirs) {
+                String pathForFileChunkId = StorageNodeDS.getInstance().getBasePath()+ dir + "/chunkFiles/"+ fileChunkId;
+                if(Fileify.doesFileExist(pathForFileChunkId)) {
+                    try {
+                        buff = Fileify.readToBuffer(pathForFileChunkId);
+                        //create checksum of the buff
+                        byte[] arr = new byte[buff.remaining()];
+                        buff.get(arr);
+                        long checksumNew = Arrays.hashCode(arr);
+                        long checksumExisting = StorageNodeDS.getInstance().getChunkMetaInfo(fileChunkId).getChecksum();
+                        // match it with checksum in the mata data
+                        if(checksumNew == checksumExisting) {
+                            System.out.println("Checksum matches....... :) :) ");
+                            StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareChunkMsg(fileChunkId, buff);
 
-                        Channel chan = ctx.channel();
-                        ChannelFuture future = chan.write(msgWrapper);
-                        chan.flush();  // sending data back to client
-                    }else{
-                        System.out.println("Checksum does not match :( :(");
+                            Channel chan = ctx.channel();
+                            ChannelFuture future = chan.write(msgWrapper);
+                            chan.flush();  // sending data back to client
+                        }else{
+                            System.out.println("Checksum does not match :( :(");
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
+
             }
+
+//            String pathForFileChunkId = StorageNodeDS.getInstance().getBasePath()+ StorageNodeDS.getInstance().getNodeId()+ "/chunkFiles/"+ fileChunkId;
+//            if(Fileify.doesFileExist(pathForFileChunkId)) {
+//                try {
+//                    buff = Fileify.readToBuffer(pathForFileChunkId);
+//                    //todo : create checksum of the buff
+//                    byte[] arr = new byte[buff.remaining()];
+//                    buff.get(arr);
+//                    long checksumNew = Arrays.hashCode(arr);
+//                    long checksumExisting = StorageNodeDS.getInstance().getChunkMetaInfo(fileChunkId).getChecksum();
+//                    //todo : match it with checksum in the mata data
+//                    if(checksumNew == checksumExisting) {
+//                        System.out.println("Checksum matches....... :) :) ");
+//                        StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareChunkMsg(fileChunkId, buff);
+//
+//                        Channel chan = ctx.channel();
+//                        ChannelFuture future = chan.write(msgWrapper);
+//                        chan.flush();  // sending data back to client
+//                    }else{
+//                        System.out.println("Checksum does not match :( :(");
+//                    }
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
 
             //
 //            else { // todo : handle condition when file not found in the first folder
@@ -165,7 +195,7 @@ public class StorageInboundHandler extends InboundHandler {
 //                chan.flush();  // sending data back to client
 //            }
 
-        }
+        } // closing hasRetrieveChunkMsg
         else if(msg.hasBecomePrimaryMsg()){
 
             System.out.println("Become Primary!!!");
@@ -204,6 +234,9 @@ public class StorageInboundHandler extends InboundHandler {
                 //todo: if the storage node is not the replica of the node to be deleted, Should send the list of replicas of the node to be deleted to contact
             }
             //respond to the controller
+        }
+        else if(msg.hasCreateNewReplicaMsg()) {
+
         }
     }
 
