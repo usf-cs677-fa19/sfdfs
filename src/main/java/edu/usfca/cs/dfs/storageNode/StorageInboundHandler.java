@@ -158,9 +158,8 @@ public class StorageInboundHandler extends InboundHandler {
                     }
                 }
             } // end for loop
-
 //
-//            else { // todo : handle condition when file not found
+//            else { // todo : handle condition when file not found in the first folder
 //                Channel chan = ctx.channel();
 //                ChannelFuture future = chan.write("");
 //                chan.flush();  // sending data back to client

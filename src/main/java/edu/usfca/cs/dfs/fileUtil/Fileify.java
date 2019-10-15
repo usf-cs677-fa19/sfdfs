@@ -323,7 +323,10 @@ public class Fileify {
     }
 
 
+
     public static void copyDirectory(File sourceLocation , File targetLocation){
+
+        System.out.println("Start of Fileify.copyDiectory: ");
 
        // File sourceLocation = new File(sourceLocationString);
        // File targetLocation = new File(targetLocationString);
