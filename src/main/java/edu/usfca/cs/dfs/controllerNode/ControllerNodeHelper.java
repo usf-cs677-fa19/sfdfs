@@ -28,6 +28,9 @@ public class ControllerNodeHelper{
 
     public static void recvHeartBeat(StorageMessages.StorageMessageWrapper msg) {
         System.out.println("heartbeat from: "+msg.getHeartBeat().getIpAddress()+":"+msg.getHeartBeat().getPort());
+        System.out.println("SpaceRem: "+msg.getHeartBeat().getSpaceRemaining()+", "
+                + "ReqProcessed: "+msg.getHeartBeat().getRequestProcessed()+", "
+                + "RetrievalProcessed: "+msg.getHeartBeat().getRetrievalProcessed());
 
         ControllerDS.getInstance().updateStorageNodeRegister(new StorageNodeDetail(
                 msg.getHeartBeat().getIpAddress(),
