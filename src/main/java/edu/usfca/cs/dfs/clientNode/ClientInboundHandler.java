@@ -23,6 +23,7 @@ public class  ClientInboundHandler extends InboundHandler {
             StorageMessages.StorageMessageWrapper msg) {
 
         System.out.println("IN CLIENT INBOUND HANDLER");
+        ctx.close();
 
         if(msg.hasChunkMetaMsg()) { // msg returned from controller with storage nodes list // while client want to store chunks
             System.out.println("\nChunkMetaMsg received in CLIENT INBOUND HANDLER");
@@ -42,7 +43,6 @@ public class  ClientInboundHandler extends InboundHandler {
 
         }
         else if(msg.hasMappingChunkIdToStorageNodesMsg()) { // client receieved cunk to sn mapping for all chunks for a file
-
             if(!msg.getMappingChunkIdToStorageNodesMsg().getMappingMap().isEmpty()) {
                 System.out.println("\n Recieved mapping from controller : todo send the request for filechunks to all nodes!!");
                 // key = chunkId, value = StorageNodeList
@@ -82,7 +82,7 @@ public class  ClientInboundHandler extends InboundHandler {
         }
 
 
-        ctx.close();  //todo from here to up
+//        ctx.close();  //todo from here to up
     }
 
     private void recvChunkMetaMsg( StorageMessages.StorageMessageWrapper msg){

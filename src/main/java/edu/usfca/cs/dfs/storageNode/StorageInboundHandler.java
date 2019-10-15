@@ -148,7 +148,7 @@ public class StorageInboundHandler extends InboundHandler {
                         // match it with checksum in the mata data
                         if(checksumNew == checksumExisting) {
                             System.out.println("Checksum matches....... :) :) ");
-                            StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareChunkMsg(fileChunkId, buff);
+                            StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareChunkMsg(fileChunkId, ByteBuffer.wrap(arr));
 
                             Channel chan = ctx.channel();
                             ChannelFuture future = chan.write(msgWrapper);
