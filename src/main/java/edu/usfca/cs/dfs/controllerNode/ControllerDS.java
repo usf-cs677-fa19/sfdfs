@@ -423,6 +423,11 @@ public class ControllerDS {
         System.out.println("Bloomfilter updated successfully : "+result);
         //choose a new node for replicas and
 
+        String storageNodeToReplicate = getSNWithMaxSpaceExcludingTheSNs(new String[]{newPrimaryNode});
+
+
+
+
     }
 
     public boolean updateBloomFilter(String newPrimary,StorageNodeDetail storageNodeDetail){
@@ -432,4 +437,8 @@ public class ControllerDS {
         return filteNew.mergeBloomFilters(filterOld);
     }
 
+
+//    public List<String> getPrimariesForTheReplicas(){
+//
+//    }
 }
