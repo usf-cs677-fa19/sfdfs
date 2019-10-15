@@ -28,6 +28,15 @@ public class StarterA {
 
             BloomFilter bf = new BloomFilter(filterSize, hashes);
 
+            BloomFilter bfNew = new BloomFilter(filterSize, hashes);
+            bfNew.put("saish");
+            bfNew.put("arsenal");
+            bfNew.put("Anurag");
+            bfNew.put("manali");
+
+            bf.mergeBloomFilters(bfNew);
+
+
             for (; ; ) {
                 Scanner scanner = new Scanner(System.in);
                 if (scanner.hasNextLine()) {

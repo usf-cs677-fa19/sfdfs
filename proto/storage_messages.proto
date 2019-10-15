@@ -9,7 +9,6 @@ message StoreChunk {
      repeated string storageNodeIds = 5;
 
      bytes data = 6;
-
      string toStorageNodeId = 7;
  }
 
@@ -84,6 +83,10 @@ message MappingChunkIdToStorageNodes{
     map<string,StorageNodesHavingChunk> mapping = 1;
 }
 
+message NewPrimaryReply{
+    bool replicated = 1;
+}
+
 message StorageMessageWrapper {
     oneof msg {
         StoreChunk storeChunkMsg = 1;
@@ -98,6 +101,7 @@ message StorageMessageWrapper {
         StorageNodesHavingChunk storageNodesHavingChunk = 10;
         MappingChunkIdToStorageNodes mappingChunkIdToStorageNodes = 11;
         Chunk chunkMsg = 12;
+        NewPrimaryReply reply = 13;
     }
 }
 
