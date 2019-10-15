@@ -105,7 +105,7 @@ public class ControllerDS {
         }
     }
 
-    public String getSNWithMaxSpaceExcludingTheSNs(String[] storageNodes){
+    public String getSNWithMaxSpaceExcludingTheSNs(ArrayList<String> storageNodes){
         String node = "";
         long size = 0;
 
@@ -114,8 +114,9 @@ public class ControllerDS {
             Map.Entry storageNode = (Map.Entry) storageNodeIterator.next();
 
             String key = (String) storageNode.getKey();
-            if(storageNodes.length == 2) {
-                if(key != storageNodes[1] && key != storageNodes[2]) {
+
+            if(storageNodes.size() > 0){
+                if(!storageNodes.contains(key)){
                     StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
 
                     if (size < details.getSpaceRemaining()) {
@@ -123,17 +124,28 @@ public class ControllerDS {
                         node = (String) storageNode.getKey();
                     }
                 }
-            }else if(storageNodes.length ==1){
-                if(key != storageNodes[1] ) {
-                    StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
-
-                    if (size < details.getSpaceRemaining()) {
-                        size = details.getSpaceRemaining();
-                        node = (String) storageNode.getKey();
-                    }
-                }
-
             }
+
+//            if(storageNodes.length == 2) {
+//                if(key != storageNodes[1] && key != storageNodes[2]) {
+//                    StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
+//
+//                    if (size < details.getSpaceRemaining()) {
+//                        size = details.getSpaceRemaining();
+//                        node = (String) storageNode.getKey();
+//                    }
+//                }
+//            }else if(storageNodes.length ==1){
+//                if(key != storageNodes[1] ) {
+//                    StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
+//
+//                    if (size < details.getSpaceRemaining()) {
+//                        size = details.getSpaceRemaining();
+//                        node = (String) storageNode.getKey();
+//                    }
+//                }
+//
+//            }
         }
         if(size > 0) {
             return node;
@@ -402,7 +414,11 @@ public class ControllerDS {
             //Get one more replica and add in this list
             String storageNodesToExclude = newReplicas.get(0);
 
-            String replica = getSNWithMaxSpaceExcludingTheSNs(new String[]{newPrimaryNode,storageNodesToExclude});
+            ArrayList<String> nodesToExclude = new ArrayList<>();
+            nodesToExclude.add(newPrimaryNode);
+            nodesToExclude.add(storageNodesToExclude);
+
+            String replica = getSNWithMaxSpaceExcludingTheSNs(nodesToExclude);
             List<String> oldReplicas = storageNodeGroupRegister.get(newPrimaryNode);
             oldReplicas.add(replica);
             storageNodeGroupRegister.put(newPrimaryNode,oldReplicas);
@@ -423,12 +439,12 @@ public class ControllerDS {
         System.out.println("Bloomfilter updated successfully : "+result);
         //choose a new node for replicas and
 
-        List<String> storageNodeToExclude = new ArrayList<> ();
+        ArrayList<String> storageNodeToExclude = new ArrayList<> ();
         storageNodeToExclude.add(newPrimaryNode);
         storageNodeToExclude.addAll(storageNodesToReplicate);
         storageNodeToExclude.addAll(getListOfReplicasForTheNodes(storageNodesToReplicate));
 
-        String storageNodeToReplicate = getSNWithMaxSpaceExcludingTheSNs(convertArrayListOfStringToArrayOfString(storageNodeToExclude));
+        String storageNodeToReplicate = getSNWithMaxSpaceExcludingTheSNs(storageNodeToExclude);
 
     }
 
