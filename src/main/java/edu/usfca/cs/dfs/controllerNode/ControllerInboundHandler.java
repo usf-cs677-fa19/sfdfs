@@ -23,7 +23,7 @@ public class ControllerInboundHandler extends InboundHandler {
             ChannelHandlerContext ctx,
             StorageMessages.StorageMessageWrapper msg) {
 
-        if(msg.hasHeartBeat()) {  // if message is a heartbeat
+        if(msg.hasHeartBeatMsg()) {  // if message is a heartbeat
             this.recvHeartBeat(msg);
 
         }
@@ -109,12 +109,12 @@ public class ControllerInboundHandler extends InboundHandler {
 
             //ctx.close();
         }
-        else if(msg.hasStorageChunkMeta()){
+        else if(msg.hasStorageChunkMetaMsg()){
             System.out.println("\n Controller recieved the meta for first chunk from Storage Node!!!!!");
 
-            ControllerDS.getInstance().setFileMetaData(new FileMetaData(msg.getStorageChunkMeta().getFileName(),
-                    msg.getStorageChunkMeta().getChunkId(),
-                    msg.getStorageChunkMeta().getTotalChunks()));
+            ControllerDS.getInstance().setFileMetaData(new FileMetaData(msg.getStorageChunkMetaMsg().getFileName(),
+                    msg.getStorageChunkMetaMsg().getChunkId(),
+                    msg.getStorageChunkMetaMsg().getTotalChunks()));
 
             ctx.close();
 //            String fileName = msg.getStorageChunkMeta().getFileName();

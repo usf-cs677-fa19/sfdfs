@@ -113,10 +113,10 @@ public class StorageInboundHandler extends InboundHandler {
 
             }
         }  // store chunk and send to replica if needed
-        else if(msg.hasRetrieveChunkMeta()) {
+        else if(msg.hasRetrieveChunkMetaMsg()) {
             System.out.println("RetrieveChunkMeta received from controller");
 
-            String fileChunkId = msg.getRetrieveChunkMeta().getFileChunkId();
+            String fileChunkId = msg.getRetrieveChunkMetaMsg().getFileChunkId();
             ChunkFileMeta chunkFileMeta = StorageNodeDS.getInstance().getChunkMetaInfo(fileChunkId);
 
             StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareChunkMetaInfo(chunkFileMeta);
@@ -128,11 +128,11 @@ public class StorageInboundHandler extends InboundHandler {
             System.out.println("Sent chunkMetaInfo Back to the controller");
            // ctx.close();
         }
-        else if(msg.hasRetrieveChunk()) {  //storage node should send chunkMsg
+        else if(msg.hasRetrieveChunkMsg()) {  //storage node should send chunkMsg
             System.out.println("Client asking for a file chunk");
             ByteBuffer buff;
 
-            String fileChunkId = msg.getRetrieveChunk().getFileChunkId();
+            String fileChunkId = msg.getRetrieveChunkMsg().getFileChunkId();
             String pathForFileChunkId = StorageNodeDS.getInstance().getBasePath()+ StorageNodeDS.getInstance().getNodeId()+ "/chunkFiles/"+ fileChunkId;
             if(Fileify.doesFileExist(pathForFileChunkId)) {
                 try {
@@ -166,12 +166,12 @@ public class StorageInboundHandler extends InboundHandler {
 //            }
 
         }
-        else if(msg.hasBecomePrimary()){
+        else if(msg.hasBecomePrimaryMsg()){
 
             System.out.println("Become Primary!!!");
-            String fromIP = msg.getBecomePrimary().getForApAddress();
-            String fromPort = msg.getBecomePrimary().getForPort();
-            List<String> selfReplicas = msg.getBecomePrimary().getAskIdsList();
+            String fromIP = msg.getBecomePrimaryMsg().getForApAddress();
+            String fromPort = msg.getBecomePrimaryMsg().getForPort();
+            List<String> selfReplicas = msg.getBecomePrimaryMsg().getAskIdsList();
 
             String fromNodeId = NodeId.getId(fromIP,fromPort);
 
@@ -193,7 +193,7 @@ public class StorageInboundHandler extends InboundHandler {
                                                     .build();
 
             StorageMessages.StorageMessageWrapper msgWrapper = StorageMessages.StorageMessageWrapper.newBuilder()
-                    .setReply(reply)
+                    .setReplyMsg(reply)
                     .build();
 
                 Channel chan = ctx.channel();

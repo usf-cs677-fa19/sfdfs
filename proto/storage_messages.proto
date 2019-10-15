@@ -75,6 +75,11 @@ message NewPrimaryAlert{
     string newPort = 4;
 }
 
+message CreateNewReplica {
+    string lostReplicaId = 1;
+    string newReplicaId = 2;
+}
+
 message StorageNodesHavingChunk {
     repeated string storageNode = 1;
 }
@@ -91,17 +96,18 @@ message StorageMessageWrapper {
     oneof msg {
         StoreChunk storeChunkMsg = 1;
         RetrieveFile retrieveFileMsg = 2;
-        RetrieveChunk retrieveChunk = 3;
-        HeartBeat heartBeat = 4;
+        RetrieveChunk retrieveChunkMsg = 3;
+        HeartBeat heartBeatMsg = 4;
         ChunkMeta chunkMetaMsg = 5;
-        RetrieveChunkMeta retrieveChunkMeta = 6;
-        StorageChunkMeta storageChunkMeta = 7;
-        BecomePrimary becomePrimary = 8;
-        NewPrimaryAlert newPrimaryAlert = 9;
-        StorageNodesHavingChunk storageNodesHavingChunk = 10;
-        MappingChunkIdToStorageNodes mappingChunkIdToStorageNodes = 11;
+        RetrieveChunkMeta retrieveChunkMetaMsg = 6;
+        StorageChunkMeta storageChunkMetaMsg = 7;
+        BecomePrimary becomePrimaryMsg = 8;
+        NewPrimaryAlert newPrimaryAlertMsg = 9;
+        StorageNodesHavingChunk storageNodesHavingChunkMsg = 10;
+        MappingChunkIdToStorageNodes mappingChunkIdToStorageNodesMsg = 11;
         Chunk chunkMsg = 12;
-        NewPrimaryReply reply = 13;
+        NewPrimaryReply replyMsg = 13;
+        CreateNewReplica createNewReplicaMsg = 14;
     }
 }
 

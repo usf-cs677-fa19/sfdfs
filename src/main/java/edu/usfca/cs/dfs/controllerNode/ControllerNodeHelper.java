@@ -27,17 +27,17 @@ public class ControllerNodeHelper{
 
 
     public static void recvHeartBeat(StorageMessages.StorageMessageWrapper msg) {
-        System.out.println("heartbeat from: "+msg.getHeartBeat().getIpAddress()+":"+msg.getHeartBeat().getPort());
-        System.out.println("SpaceRem: "+msg.getHeartBeat().getSpaceRemaining()+", "
-                + "ReqProcessed: "+msg.getHeartBeat().getRequestProcessed()+", "
-                + "RetrievalProcessed: "+msg.getHeartBeat().getRetrievalProcessed());
+        System.out.println("heartbeat from: "+msg.getHeartBeatMsg().getIpAddress()+":"+msg.getHeartBeatMsg().getPort());
+        System.out.println("SpaceRem: "+msg.getHeartBeatMsg().getSpaceRemaining()+", "
+                + "ReqProcessed: "+msg.getHeartBeatMsg().getRequestProcessed()+", "
+                + "RetrievalProcessed: "+msg.getHeartBeatMsg().getRetrievalProcessed());
 
         ControllerDS.getInstance().updateStorageNodeRegister(new StorageNodeDetail(
-                msg.getHeartBeat().getIpAddress(),
-                msg.getHeartBeat().getPort(),
-                msg.getHeartBeat().getSpaceRemaining(),
-                msg.getHeartBeat().getRequestProcessed(),
-                msg.getHeartBeat().getRetrievalProcessed(),
+                msg.getHeartBeatMsg().getIpAddress(),
+                msg.getHeartBeatMsg().getPort(),
+                msg.getHeartBeatMsg().getSpaceRemaining(),
+                msg.getHeartBeatMsg().getRequestProcessed(),
+                msg.getHeartBeatMsg().getRetrievalProcessed(),
                 Instant.now()
         ));
 

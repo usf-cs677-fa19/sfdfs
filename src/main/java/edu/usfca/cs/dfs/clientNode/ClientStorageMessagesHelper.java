@@ -90,7 +90,7 @@ public class ClientStorageMessagesHelper {
                 .build();
 
         StorageMessages.StorageMessageWrapper msgWrapper = StorageMessages.StorageMessageWrapper.newBuilder()
-                .setRetrieveChunk(retrieveChunk)
+                .setRetrieveChunkMsg(retrieveChunk)
                 .build();
 
         return msgWrapper;
