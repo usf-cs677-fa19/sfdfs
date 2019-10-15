@@ -157,7 +157,16 @@ public class StorageInboundHandler extends InboundHandler {
                     e.printStackTrace();
                 }
             }
-        }else if(msg.hasBecomePrimary()){
+
+            //
+//            else { // todo : handle condition when file not found in the first folder
+//                Channel chan = ctx.channel();
+//                ChannelFuture future = chan.write("");
+//                chan.flush();  // sending data back to client
+//            }
+
+        }
+        else if(msg.hasBecomePrimary()){
 
             System.out.println("Become Primary!!!");
             String fromIP = msg.getBecomePrimary().getForApAddress();
