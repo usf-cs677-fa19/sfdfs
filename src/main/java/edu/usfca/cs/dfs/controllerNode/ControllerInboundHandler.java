@@ -124,6 +124,11 @@ public class ControllerInboundHandler extends InboundHandler {
            // HashMap<String,ArrayList<String>> mapping = ControllerDS.getInstance().getMappingOfChunkIdToStorageNodes(fileName,totalChunks);
 
            // StorageMessages.StorageMessageWrapper msgWrapper = ControllerStorageMessagesHelper.buildMappingChunkIdToStorageNodes(mapping);
+        }else if(msg.hasReplyMsg()){
+
+            System.out.println("New Primary created successfully!!");
+            ctx.close();
+
         }
         else {
             StorageMessages.StoreChunk storeChunkMsg

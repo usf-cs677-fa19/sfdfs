@@ -105,7 +105,7 @@ public class ControllerDS {
         }
     }
 
-    public String getSNWithMaxSpaceExcludingTheSNs(String[] storageNodes){
+    public String getSNWithMaxSpaceExcludingTheSNs(ArrayList<String> storageNodes){
         String node = "";
         long size = 0;
 
@@ -114,8 +114,9 @@ public class ControllerDS {
             Map.Entry storageNode = (Map.Entry) storageNodeIterator.next();
 
             String key = (String) storageNode.getKey();
-            if(storageNodes.length == 2) {
-                if(key != storageNodes[1] && key != storageNodes[2]) {
+
+            if(storageNodes.size() > 0){
+                if(!storageNodes.contains(key)){
                     StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
 
                     if (size < details.getSpaceRemaining()) {
@@ -123,17 +124,28 @@ public class ControllerDS {
                         node = (String) storageNode.getKey();
                     }
                 }
-            }else if(storageNodes.length ==1){
-                if(key != storageNodes[1] ) {
-                    StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
-
-                    if (size < details.getSpaceRemaining()) {
-                        size = details.getSpaceRemaining();
-                        node = (String) storageNode.getKey();
-                    }
-                }
-
             }
+
+//            if(storageNodes.length == 2) {
+//                if(key != storageNodes[1] && key != storageNodes[2]) {
+//                    StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
+//
+//                    if (size < details.getSpaceRemaining()) {
+//                        size = details.getSpaceRemaining();
+//                        node = (String) storageNode.getKey();
+//                    }
+//                }
+//            }else if(storageNodes.length ==1){
+//                if(key != storageNodes[1] ) {
+//                    StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
+//
+//                    if (size < details.getSpaceRemaining()) {
+//                        size = details.getSpaceRemaining();
+//                        node = (String) storageNode.getKey();
+//                    }
+//                }
+//
+//            }
         }
         if(size > 0) {
             return node;
@@ -402,7 +414,11 @@ public class ControllerDS {
             //Get one more replica and add in this list
             String storageNodesToExclude = newReplicas.get(0);
 
-            String replica = getSNWithMaxSpaceExcludingTheSNs(new String[]{newPrimaryNode,storageNodesToExclude});
+            ArrayList<String> nodesToExclude = new ArrayList<>();
+            nodesToExclude.add(newPrimaryNode);
+            nodesToExclude.add(storageNodesToExclude);
+
+            String replica = getSNWithMaxSpaceExcludingTheSNs(nodesToExclude);
             List<String> oldReplicas = storageNodeGroupRegister.get(newPrimaryNode);
             oldReplicas.add(replica);
             storageNodeGroupRegister.put(newPrimaryNode,oldReplicas);
@@ -423,11 +439,21 @@ public class ControllerDS {
         System.out.println("Bloomfilter updated successfully : "+result);
         //choose a new node for replicas and
 
-        String storageNodeToReplicate = getSNWithMaxSpaceExcludingTheSNs(new String[]{newPrimaryNode});
+        ArrayList<String> storageNodeToExclude = new ArrayList<> ();
+        storageNodeToExclude.add(newPrimaryNode);
+        storageNodeToExclude.addAll(storageNodesToReplicate);
+        storageNodeToExclude.addAll(getListOfReplicasForTheNodes(storageNodesToReplicate));
 
+        String storageNodeToReplicate = getSNWithMaxSpaceExcludingTheSNs(storageNodeToExclude);
 
+    }
 
-
+    public List<String> getListOfReplicasForTheNodes(List<String> nodes){
+        List<String> listOfReplicas = new ArrayList<>();
+        for (String node : nodes){
+           listOfReplicas.addAll(storageNodeGroupRegister.get(node));
+        }
+        return listOfReplicas;
     }
 
     public boolean updateBloomFilter(String newPrimary,StorageNodeDetail storageNodeDetail){
@@ -437,8 +463,13 @@ public class ControllerDS {
         return filteNew.mergeBloomFilters(filterOld);
     }
 
+    public String[] convertArrayListOfStringToArrayOfString(List<String> nodes){
+        Object[] objects = nodes.toArray();
+        String[] arrayOfString = Arrays
+                .copyOf(objects, objects
+                                .length,
+                        String[].class);
 
-//    public List<String> getPrimariesForTheReplicas(){
-//
-//    }
+        return arrayOfString;
+    }
 }
