@@ -269,5 +269,11 @@ public class StorageInboundHandler extends InboundHandler {
                 }
             }
         }
+        try {
+            Fileify.deleteDirectory(StorageNodeDS.getInstance().getBasePath(),sourcePath);
+        } catch (IOException e) {
+            System.out.println("Error while deleting a directory!!");
+            e.printStackTrace();
+        }
     }
 }
