@@ -93,6 +93,38 @@ public class Fileify {
 
     }
 
+
+    public static void writeChunkToFile(StorageMessages.ChunkForBadChunk chunkMsgForBadChunk, String basePath) {
+        System.out.println("In writeChunkToFile for BadChunk");
+
+        //String[] filenameAndChunkId = FileChunkId.splitFileAndChunkId(chunkMsg.getFileChunkId());
+
+        String fileName = chunkMsgForBadChunk.getFileChunkId();
+        String filePath = basePath + chunkMsgForBadChunk.getPrimaryIdForChunk() + "/chunkFiles/"+ fileName;
+        System.out.println("In writeChunkToFile for BadChunk, writing to : "+ filePath);
+
+        long startingPosition = 0;
+
+        if(Fileify.doesFileExist(filePath)) {
+            Fileify.createFileIfDoesNotExist(filePath);
+        }
+
+
+        try (
+                RandomAccessFile reader = new RandomAccessFile(filePath, "rw");
+                FileChannel chan = reader.getChannel();
+        ) {
+            reader.seek(startingPosition);
+            reader.write(chunkMsgForBadChunk.getData().toByteArray());
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     private static void createFileIfDoesNotExist(String filePath) {
         Path path = Paths.get(filePath);
 

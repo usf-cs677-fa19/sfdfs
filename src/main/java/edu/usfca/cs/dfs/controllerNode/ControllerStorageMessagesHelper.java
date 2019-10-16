@@ -83,11 +83,12 @@ public class ControllerStorageMessagesHelper {
     }
 
 
-    public static StorageMessages.StorageMessageWrapper prepareHealBadChunkMsg(String selfId, String fileChunkId, List<String> nodeIds){
+    public static StorageMessages.StorageMessageWrapper prepareHealBadChunkMsg(String selfId, String fileChunkId, List<String> nodeIds, String primaryNode){
         StorageMessages.HealBadChunk  healBadChunk = StorageMessages.HealBadChunk.newBuilder()
                 .setSelfId(selfId)
                 .setBadFileChunkId(fileChunkId)
                 .addAllStorageNodes(nodeIds)
+                .setPrimaryIdForChunk(primaryNode)
                 .build();
 
         StorageMessages.StorageMessageWrapper msgWrapper = StorageMessages.StorageMessageWrapper.newBuilder()

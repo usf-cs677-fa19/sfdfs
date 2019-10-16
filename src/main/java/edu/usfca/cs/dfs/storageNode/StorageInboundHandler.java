@@ -1,6 +1,9 @@
 package edu.usfca.cs.dfs.storageNode;
 
+import edu.usfca.cs.dfs.StorageNode;
+import edu.usfca.cs.dfs.clientNode.AskChunkTask;
 import edu.usfca.cs.dfs.clientNode.ClientStorageMessagesHelper;
+import edu.usfca.cs.dfs.init.ClientParams;
 import edu.usfca.cs.dfs.init.ConfigSystemParam;
 import edu.usfca.cs.dfs.net.MessageSender;
 import edu.usfca.cs.dfs.StorageMessages;
@@ -175,7 +178,7 @@ public class StorageInboundHandler extends InboundHandler {
 
                             System.out.println("Preparing  and sending BadChunkFoundMsg  to controller");
                             StorageMessages.StorageMessageWrapper badChunkFoundMsgWrapper =
-                                    StorageStorageMessagesHelper.prepareBadChunkFoundMsg(StorageNodeDS.getInstance().getNodeId(), fileChunkId);
+                                    StorageStorageMessagesHelper.prepareBadChunkFoundMsg(StorageNodeDS.getInstance().getNodeId(), fileChunkId, dir) ;
                             try {
                                 new MessageSender().send(false,
                                         ConfigSystemParam.getNodeType(),
@@ -202,6 +205,85 @@ public class StorageInboundHandler extends InboundHandler {
             }
 
         } // closing hasRetrieveChunkMsg
+        else if(msg.hasRetrieveChunkForBadChunk()) {
+            ////// todo
+
+
+            System.out.println("Storgage asking for a file chunk to replace bad chunk");
+            boolean isChunkFound = false;
+            ByteBuffer buff;
+
+            String fileChunkId = msg.getRetrieveChunkForBadChunk().getFileChunkId();
+            String primaryNode = msg.getRetrieveChunkForBadChunk().getPrimaryNode();
+            String basePath = StorageNodeDS.getInstance().getBasePath();
+
+//            String[] dirs = Fileify.getListOfDirs(StorageNodeDS.getInstance().getBasePath());
+//            for(String dir : dirs) {
+                String pathForFileChunkId = StorageNodeDS.getInstance().getBasePath()+ primaryNode + "/chunkFiles/"+ fileChunkId;
+                if(Fileify.doesFileExist(pathForFileChunkId)) {
+                    try {
+                        buff = Fileify.readToBuffer(pathForFileChunkId);
+                        //create checksum of the buff
+                        byte[] arr = new byte[buff.remaining()];
+                        buff.get(arr);
+                        long checksumNew = Arrays.hashCode(arr);
+                        long checksumExisting = StorageNodeDS.getInstance().getChunkMetaInfo(fileChunkId).getChecksum();
+                        // match it with checksum in the mata data
+                        if(checksumNew == checksumExisting) {
+                            System.out.println("Checksum matches....... :) :) ");
+                            isChunkFound = true;
+//                            StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareChunkMsg(fileChunkId, ByteBuffer.wrap(arr));
+                            StorageMessages.StorageMessageWrapper msgWrapper =
+                                    StorageStorageMessagesHelper.prepareChunkForBadChunkMsg(fileChunkId, ByteBuffer.wrap(arr), primaryNode);
+
+                            System.out.println("Sending fileChunk to storage node with primaryId folder  : "
+                                    + msgWrapper.getChunkForBadChunkMsg().getPrimaryIdForChunk());
+
+                            Channel chan = ctx.channel();
+                            ChannelFuture future = chan.write(msgWrapper);
+                            chan.flush();  // sending data back to client
+
+                        }
+                        else{
+                            System.out.println("Checksum does not match :( :(");
+                            // handle corrupt chunkFile
+
+                            StorageMessages.StorageMessageWrapper msgWrapper = this.handleChunkNotFound(fileChunkId, msg);
+//                            Channel chan = ctx.channel();
+//                            ChannelFuture future = chan.write(msgWrapper);
+//                            chan.flush();  // sending data back to client
+//
+//
+//                            System.out.println("Preparing  and sending BadChunkFoundMsg  to controller");
+//                            StorageMessages.StorageMessageWrapper badChunkFoundMsgWrapper =
+//                                    StorageStorageMessagesHelper.prepareBadChunkFoundMsg(StorageNodeDS.getInstance().getNodeId(), fileChunkId, dir) ;
+//                            try {
+//                                new MessageSender().send(false,
+//                                        ConfigSystemParam.getNodeType(),
+//                                        ConfigSystemParam.getControllerAddress(),
+//                                        ConfigSystemParam.getControllerPort(),
+//                                        badChunkFoundMsgWrapper);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+//            }
+
+            if(isChunkFound == false) {
+                //fileChunk not found in any directory
+                StorageMessages.StorageMessageWrapper msgWrapper = this.handleChunkNotFound(fileChunkId, msg);
+                Channel chan = ctx.channel();
+                ChannelFuture future = chan.write(msgWrapper);
+                chan.flush();  // sending data back to client
+            }
+
+            //// todo
+        }
         else if(msg.hasBecomePrimaryMsg()){
 
             System.out.println("Become Primary!!!");
@@ -272,8 +354,12 @@ public class StorageInboundHandler extends InboundHandler {
         else if(msg.hasHealBadChunkMsg()) {
             // 1. creates retrieve chunkmessage
             System.out.println("Heal bad chunk received from controller");
-            StorageMessages.StorageMessageWrapper retrieveChunkMsgWrapper =
-                    ClientStorageMessagesHelper.prepareRetrieveChunk(msg.getHealBadChunkMsg().getBadFileChunkId(), msg.getHealBadChunkMsg().getStorageNodesList());
+            StorageMessages.StorageMessageWrapper retrieveChunkForBadChunkMsgWrapper =
+                    StorageStorageMessagesHelper.prepareRetrieveChunkForBadChunk(
+                            msg.getHealBadChunkMsg().getBadFileChunkId(),
+                            msg.getHealBadChunkMsg().getStorageNodesList(),
+                            msg.getHealBadChunkMsg().getPrimaryIdForChunk()
+                    );
             // and sends chunkmessage Wrapper to nodes in the list
             System.out.println("Connecting Info for hasHealBadChunkMsg : ");
             for(int i =0; i<msg.getHealBadChunkMsg().getStorageNodesCount(); i++) {
@@ -285,7 +371,7 @@ public class StorageInboundHandler extends InboundHandler {
                             ConfigSystemParam.getNodeType(),
                             connectInfo[0],
                             Integer.parseInt(connectInfo[1]),
-                            retrieveChunkMsgWrapper);
+                            retrieveChunkForBadChunkMsgWrapper);
                     f.get(200, TimeUnit.MILLISECONDS);
                     if(f.isSuccess()) {
                         break;
@@ -300,6 +386,22 @@ public class StorageInboundHandler extends InboundHandler {
 
             } // end of for
         } // end of msg.hasHealBadChunkMsg()
+        else if(msg.hasChunkForBadChunkMsg()) {
+            ctx.close();
+
+            System.out.println("\n Received chunkMsg from Storage Node");
+            if(msg.getChunkForBadChunkMsg().getFound() == true) {
+                Fileify.writeChunkToFile(msg.getChunkForBadChunkMsg(), StorageNodeDS.getInstance().getBasePath());
+            } else {
+                System.out.println("CHUNK NOT FOUND MSG : ");
+                System.out.println("Storage node Ids : ");
+                for(int i =0; i<msg.getChunkMsg().getStorageNodeIdsList().size();i++) {
+                    System.out.println(msg.getChunkMsg().getStorageNodeIds(i));
+                }
+                new AskChunkTask(ClientParams.getNodeType(), msg.getChunkMsg()).run();
+                System.out.println("Chunk not found message");
+            }
+        }
     }
 
     private boolean checkIfSourceExists(String sourcePath){

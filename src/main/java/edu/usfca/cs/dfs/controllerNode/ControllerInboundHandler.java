@@ -141,6 +141,7 @@ public class ControllerInboundHandler extends InboundHandler {
             StorageMessages.BadChunkFound badChunkFound = msg.getBadChunkFoundMsg();
             String recvSelfId = badChunkFound.getSelfId();
             String badChunkFoundId = badChunkFound.getFileChunkId();
+            String primaryIdForChunk = badChunkFound.getPrimaryIdForChunk();
             // checking in bloomfilter to find primary
             ArrayList<String> primaries = ControllerDS.getInstance().checkBloomFiltersForChunk(badChunkFoundId);
             // and adding replicas
@@ -153,7 +154,7 @@ public class ControllerInboundHandler extends InboundHandler {
             }
             // prepare HealBadChunkMsg
             StorageMessages.StorageMessageWrapper healBadChunkMsgWrapper =
-                    ControllerStorageMessagesHelper.prepareHealBadChunkMsg(recvSelfId, badChunkFoundId, primariesWithReplicas);
+                    ControllerStorageMessagesHelper.prepareHealBadChunkMsg(recvSelfId, badChunkFoundId, primariesWithReplicas, primaryIdForChunk);
             String[] connectingInfo = NodeId.getIPAndPort(recvSelfId);
             try {
                 new MessageSender().send(false,

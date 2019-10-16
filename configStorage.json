@@ -1,2 +1,2 @@
-{"nodeType": "storage", "address" : "localhost", "port" : 9061,
+{"nodeType": "storage", "address" : "localhost", "port" : 9069,
   "controllerAddress" :  "localhost", "controllerPort" : 7777}
