@@ -37,12 +37,14 @@ message RetrieveChunkMeta{
 
 message RetrieveChunk{
     string fileChunkId = 1;
+    repeated string storageNodeIds = 2;
 }
 
 message Chunk {
     bool found = 1;
     string fileChunkId = 2;
     bytes data = 3;
+    repeated string storageNodeIds = 4;
 }
 
 message ChunkLocation{

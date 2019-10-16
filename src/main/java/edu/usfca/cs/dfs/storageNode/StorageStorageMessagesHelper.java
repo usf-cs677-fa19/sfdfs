@@ -98,9 +98,17 @@ public class StorageStorageMessagesHelper {
         return msgWrapper;
     }
 
-    public static StorageMessages.StorageMessageWrapper prepareChunkNotFoundMsg(){
+    public static StorageMessages.StorageMessageWrapper prepareChunkNotFoundMsg(String fileChunkId, List<String> storageIds){
+        System.out.println("Sending updated storage node ids in prepareChunkNotFoundMsg : - > ");
+        for(int i = 0; i < storageIds.size(); i++) {
+            System.out.println(storageIds.get(i));
+        }
+
+
         StorageMessages.Chunk chunk = StorageMessages.Chunk.newBuilder()
                 .setFound(false)
+                .setFileChunkId(fileChunkId)
+                .addAllStorageNodeIds(storageIds)
                 .build();
 
         StorageMessages.StorageMessageWrapper msgWrapper =

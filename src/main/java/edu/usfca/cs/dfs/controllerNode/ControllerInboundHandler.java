@@ -35,6 +35,8 @@ public class ControllerInboundHandler extends InboundHandler {
             String filename = msg.getRetrieveFileMsg().getFileName();
             //get list of storage nodes from bloomFilter, for chunk 1
             ArrayList<String> storageNodes = ControllerNodeHelper.getStorageNodeFromBloomFiltersForChunk(filename,1);
+
+            System.out.println("Storage node id list for 1st chuck!!");
             // for First node in the list Send RetrieveChunkMeta To Storage
             if(storageNodes.size() == 0){
                 System.out.println("No Storage Nodes have the file!!!");

@@ -1,6 +1,5 @@
 package edu.usfca.cs.dfs.storageNode;
 
-import edu.usfca.cs.dfs.StorageNode;
 import edu.usfca.cs.dfs.clientNode.ClientStorageMessagesHelper;
 import edu.usfca.cs.dfs.init.ConfigSystemParam;
 import edu.usfca.cs.dfs.net.MessageSender;
@@ -158,7 +157,7 @@ public class StorageInboundHandler extends InboundHandler {
                             isChunkFound = true;
                             StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareChunkMsg(fileChunkId, ByteBuffer.wrap(arr));
 
-                            System.out.println("Sending fileChunk to client");
+                            System.out.println("Sending fileChunk to client : "+ msgWrapper.getChunkMsg().getFileChunkId());
                             Channel chan = ctx.channel();
                             ChannelFuture future = chan.write(msgWrapper);
                             chan.flush();  // sending data back to client
@@ -167,11 +166,30 @@ public class StorageInboundHandler extends InboundHandler {
                         }else{
                             System.out.println("Checksum does not match :( :(");
                             // handle corrupt chunkFile
-                            System.out.println("Not found : "+fileChunkId+" in any directory, sending not found message");
-                            StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareChunkNotFoundMsg();
+//                            System.out.println("Not found : "+fileChunkId+" in any directory, sending not found message");
+//
+//                            String selfId = NodeId.getId(ConfigSystemParam.getAddress(), ConfigSystemParam.getPort());
+//                            for(int i = 0; i< msg.getRetrieveChunkMsg().getStorageNodeIdsCount(); i++) {
+//                                if(msg.getRetrieveChunkMsg().getStorageNodeIds(i).equalsIgnoreCase(selfId)) {
+//                                    msg.getRetrieveChunkMsg().getStorageNodeIdsList().remove(i);
+//                                }
+//                            }
+//
+//                            StorageMessages.StorageMessageWrapper msgWrapper =
+//                                    StorageStorageMessagesHelper.prepareChunkNotFoundMsg(
+//                                            msg.getRetrieveChunkMsg().getFileChunkId(),
+//                                            msg.getRetrieveChunkMsg().getStorageNodeIdsList()
+//                                    );
+//                            Channel chan = ctx.channel();
+//                            ChannelFuture future = chan.write(msgWrapper);
+//                            chan.flush();  // sending data back to client
+//
+
+                            StorageMessages.StorageMessageWrapper msgWrapper = this.handleChunkNotFound(fileChunkId, msg);
                             Channel chan = ctx.channel();
                             ChannelFuture future = chan.write(msgWrapper);
                             chan.flush();  // sending data back to client
+
 
                             System.out.println("Preparing  and sending BadChunkFoundMsg  to controller");
                             StorageMessages.StorageMessageWrapper badChunkFoundMsgWrapper =
@@ -196,8 +214,26 @@ public class StorageInboundHandler extends InboundHandler {
 
             if(isChunkFound == false) {
                 //fileChunk not found in any directory
-                System.out.println("Not found : "+fileChunkId+" in any directory, sending not found message");
-                StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareChunkNotFoundMsg();
+//                System.out.println("Not found : "+fileChunkId+" in any directory, sending not found message");
+//                String selfId = NodeId.getId(ConfigSystemParam.getAddress(), ConfigSystemParam.getPort());
+//
+//                List<String> updatedStorageNodeList = new ArrayList<>();
+//                for(int i = 0; i< msg.getRetrieveChunkMsg().getStorageNodeIdsCount(); i++) {
+//                    System.out.println("checking from list : "+ msg.getRetrieveChunkMsg().getStorageNodeIds(i));
+//                    if(msg.getRetrieveChunkMsg().getStorageNodeIds(i).equalsIgnoreCase(selfId)) {
+//                        System.out.println(" - - Removing self from list : "+ selfId);
+//                    } else {
+//                        updatedStorageNodeList.add(msg.getRetrieveChunkMsg().getStorageNodeIds(i));
+//                    }
+//                }
+//
+//                StorageMessages.StorageMessageWrapper msgWrapper =
+//                        StorageStorageMessagesHelper.prepareChunkNotFoundMsg(
+//                                msg.getRetrieveChunkMsg().getFileChunkId(),
+//                                updatedStorageNodeList
+//                        );
+
+                StorageMessages.StorageMessageWrapper msgWrapper = this.handleChunkNotFound(fileChunkId, msg);
                 Channel chan = ctx.channel();
                 ChannelFuture future = chan.write(msgWrapper);
                 chan.flush();  // sending data back to client
@@ -274,7 +310,7 @@ public class StorageInboundHandler extends InboundHandler {
         else if(msg.hasHealBadChunkMsg()) {
             // 1. creates retrieve chunkmessage
             StorageMessages.StorageMessageWrapper retrieveChunkMsgWrapper =
-                    ClientStorageMessagesHelper.prepareRetrieveChunk(msg.getHealBadChunkMsg().getBadFileChunkId());
+                    ClientStorageMessagesHelper.prepareRetrieveChunk(msg.getHealBadChunkMsg().getBadFileChunkId(), msg.getHealBadChunkMsg().getStorageNodesList());
             // and sends chunkmessage Wrapper to nodes in the list
             for(int i =0; i<msg.getHealBadChunkMsg().getStorageNodesCount(); i++) {
                 String[] connectInfo = NodeId.getIPAndPort(msg.getHealBadChunkMsg().getStorageNodes(i));
@@ -286,7 +322,9 @@ public class StorageInboundHandler extends InboundHandler {
                             Integer.parseInt(connectInfo[1]),
                             retrieveChunkMsgWrapper);
                     f.get(200, TimeUnit.MILLISECONDS);
-                    break;
+                    if(f.isSuccess()) {
+                        break;
+                    }
                 } catch (TimeoutException e) {
                     System.out.println("TIMEOUT, continuing to next if any");
                     continue;
@@ -335,4 +373,30 @@ public class StorageInboundHandler extends InboundHandler {
 //            e.printStackTrace();
 //        }
     }
+
+
+    private StorageMessages.StorageMessageWrapper handleChunkNotFound(String fileChunkId, StorageMessages.StorageMessageWrapper msg){
+        System.out.println("Not found : "+fileChunkId+" in any directory, sending not found message");
+        String selfId = NodeId.getId(ConfigSystemParam.getAddress(), ConfigSystemParam.getPort());
+
+        List<String> updatedStorageNodeList = new ArrayList<>();
+        for(int i = 0; i< msg.getRetrieveChunkMsg().getStorageNodeIdsCount(); i++) {
+            System.out.println("checking from list : "+ msg.getRetrieveChunkMsg().getStorageNodeIds(i));
+            if(msg.getRetrieveChunkMsg().getStorageNodeIds(i).equalsIgnoreCase(selfId)) {
+                System.out.println(" - - Removing self from list : "+ selfId);
+            } else {
+                updatedStorageNodeList.add(msg.getRetrieveChunkMsg().getStorageNodeIds(i));
+            }
+        }
+
+        StorageMessages.StorageMessageWrapper msgWrapper =
+                StorageStorageMessagesHelper.prepareChunkNotFoundMsg(
+                        msg.getRetrieveChunkMsg().getFileChunkId(),
+                        updatedStorageNodeList
+                );
+        return msgWrapper;
+    }
+
+
+
 }

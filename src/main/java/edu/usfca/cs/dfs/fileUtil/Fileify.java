@@ -24,7 +24,6 @@ public class Fileify {
     public static ByteBuffer readToBuffer(StorageMessages.ChunkMeta cmMsg, long generalChunkSize) throws IOException {
 
         ByteBuffer directBuf = ByteBuffer.allocateDirect(cmMsg.getChunkSize());
-        //int generalChunkSize = //ConfigSystemParams.params[0].getGeneralChunkSize();//1000000; // todo : read from confiig
 
         try (
             RandomAccessFile reader = new RandomAccessFile(cmMsg.getFileName(), "r");
