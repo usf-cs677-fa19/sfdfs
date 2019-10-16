@@ -166,24 +166,6 @@ public class StorageInboundHandler extends InboundHandler {
                         }else{
                             System.out.println("Checksum does not match :( :(");
                             // handle corrupt chunkFile
-//                            System.out.println("Not found : "+fileChunkId+" in any directory, sending not found message");
-//
-//                            String selfId = NodeId.getId(ConfigSystemParam.getAddress(), ConfigSystemParam.getPort());
-//                            for(int i = 0; i< msg.getRetrieveChunkMsg().getStorageNodeIdsCount(); i++) {
-//                                if(msg.getRetrieveChunkMsg().getStorageNodeIds(i).equalsIgnoreCase(selfId)) {
-//                                    msg.getRetrieveChunkMsg().getStorageNodeIdsList().remove(i);
-//                                }
-//                            }
-//
-//                            StorageMessages.StorageMessageWrapper msgWrapper =
-//                                    StorageStorageMessagesHelper.prepareChunkNotFoundMsg(
-//                                            msg.getRetrieveChunkMsg().getFileChunkId(),
-//                                            msg.getRetrieveChunkMsg().getStorageNodeIdsList()
-//                                    );
-//                            Channel chan = ctx.channel();
-//                            ChannelFuture future = chan.write(msgWrapper);
-//                            chan.flush();  // sending data back to client
-//
 
                             StorageMessages.StorageMessageWrapper msgWrapper = this.handleChunkNotFound(fileChunkId, msg);
                             Channel chan = ctx.channel();
@@ -213,25 +195,6 @@ public class StorageInboundHandler extends InboundHandler {
 
             if(isChunkFound == false) {
                 //fileChunk not found in any directory
-//                System.out.println("Not found : "+fileChunkId+" in any directory, sending not found message");
-//                String selfId = NodeId.getId(ConfigSystemParam.getAddress(), ConfigSystemParam.getPort());
-//
-//                List<String> updatedStorageNodeList = new ArrayList<>();
-//                for(int i = 0; i< msg.getRetrieveChunkMsg().getStorageNodeIdsCount(); i++) {
-//                    System.out.println("checking from list : "+ msg.getRetrieveChunkMsg().getStorageNodeIds(i));
-//                    if(msg.getRetrieveChunkMsg().getStorageNodeIds(i).equalsIgnoreCase(selfId)) {
-//                        System.out.println(" - - Removing self from list : "+ selfId);
-//                    } else {
-//                        updatedStorageNodeList.add(msg.getRetrieveChunkMsg().getStorageNodeIds(i));
-//                    }
-//                }
-//
-//                StorageMessages.StorageMessageWrapper msgWrapper =
-//                        StorageStorageMessagesHelper.prepareChunkNotFoundMsg(
-//                                msg.getRetrieveChunkMsg().getFileChunkId(),
-//                                updatedStorageNodeList
-//                        );
-
                 StorageMessages.StorageMessageWrapper msgWrapper = this.handleChunkNotFound(fileChunkId, msg);
                 Channel chan = ctx.channel();
                 ChannelFuture future = chan.write(msgWrapper);
@@ -308,14 +271,17 @@ public class StorageInboundHandler extends InboundHandler {
         } // end of msg.hasCreateNewReplicaMsg()
         else if(msg.hasHealBadChunkMsg()) {
             // 1. creates retrieve chunkmessage
+            System.out.println("Heal bad chunk received from controller");
             StorageMessages.StorageMessageWrapper retrieveChunkMsgWrapper =
                     ClientStorageMessagesHelper.prepareRetrieveChunk(msg.getHealBadChunkMsg().getBadFileChunkId(), msg.getHealBadChunkMsg().getStorageNodesList());
             // and sends chunkmessage Wrapper to nodes in the list
+            System.out.println("Connecting Info for hasHealBadChunkMsg : ");
             for(int i =0; i<msg.getHealBadChunkMsg().getStorageNodesCount(); i++) {
                 String[] connectInfo = NodeId.getIPAndPort(msg.getHealBadChunkMsg().getStorageNodes(i));
+                System.out.println(connectInfo[0]+":"+connectInfo[1]);
                 try {
                     ChannelFuture f = new MessageSender().send(
-                            false,
+                            true,
                             ConfigSystemParam.getNodeType(),
                             connectInfo[0],
                             Integer.parseInt(connectInfo[1]),

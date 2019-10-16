@@ -29,8 +29,7 @@ public class ControllerInboundHandler extends InboundHandler {
             this.recvHeartBeat(msg);
 
         }
-        else if(msg.hasRetrieveFileMsg()){ // controller receieving a:  RetrieveFile message from client
-            // should return file containing mapping of each chunk to storage node //Map<ChunkName,StorageNode>
+        else if(msg.hasRetrieveFileMsg()){ // controller receieving a:  RetrieveFile message from client should return file containing mapping of each chunk to storage node //Map<ChunkName,StorageNode>
             System.out.println("Request from client to retrieve file!!!");
             String filename = msg.getRetrieveFileMsg().getFileName();
             //get list of storage nodes from bloomFilter, for chunk 1
@@ -137,6 +136,8 @@ public class ControllerInboundHandler extends InboundHandler {
         }
         else if(msg.hasBadChunkFoundMsg()) {
             // getting bad chunk found message
+
+            System.out.println("Recv Bad chunk message from storage node");
             StorageMessages.BadChunkFound badChunkFound = msg.getBadChunkFoundMsg();
             String recvSelfId = badChunkFound.getSelfId();
             String badChunkFoundId = badChunkFound.getFileChunkId();
@@ -163,10 +164,11 @@ public class ControllerInboundHandler extends InboundHandler {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
+            ctx.close();
         }
         else {
             System.out.println("Donno what message was received");
+            ctx.close();
         }
     }
 

@@ -34,14 +34,14 @@ public class AskChunkThreadTask implements Callable {
                         Integer.parseInt(connectingInfo[1]),
                         entry.getValue());
 
-//                f.get(200, TimeUnit.MILLISECONDS);
-//                if(f.isSuccess()) {
-//                    break;
-//                }
-//            }  catch (TimeoutException e) {
-//                System.out.println("TIMEOUT, continuing to next if any");
-//                continue;
-            }catch (InterruptedException e) {
+                f.get(200, TimeUnit.MILLISECONDS);
+                if(f.isSuccess()) {
+                    break;
+                }
+            }  catch (TimeoutException e) {
+                System.out.println("TIMEOUT, continuing to next if any");
+                continue;
+            }catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
             }
 
