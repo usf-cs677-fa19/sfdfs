@@ -1,5 +1,6 @@
 package edu.usfca.cs.dfs.controllerNode;
 
+import edu.usfca.cs.dfs.init.ConfigSystemParam;
 import edu.usfca.cs.dfs.net.MessageSender;
 import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.controllerNode.data.FileMetaData;
@@ -7,6 +8,7 @@ import edu.usfca.cs.dfs.data.ChunkMetaPOJO;
 import edu.usfca.cs.dfs.data.FileChunkId;
 import edu.usfca.cs.dfs.data.NodeId;
 import edu.usfca.cs.dfs.net.InboundHandler;
+import edu.usfca.cs.dfs.storageNode.StorageNodeDS;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
@@ -124,17 +126,45 @@ public class ControllerInboundHandler extends InboundHandler {
            // HashMap<String,ArrayList<String>> mapping = ControllerDS.getInstance().getMappingOfChunkIdToStorageNodes(fileName,totalChunks);
 
            // StorageMessages.StorageMessageWrapper msgWrapper = ControllerStorageMessagesHelper.buildMappingChunkIdToStorageNodes(mapping);
-        }else if(msg.hasReplyMsg()){
+        }
+        else if(msg.hasReplyMsg()){
 
             System.out.println("New Primary created successfully!!");
             ctx.close();
 
         }
+        else if(msg.hasBadChunkFoundMsg()) {
+            // getting bad chunk found message
+            StorageMessages.BadChunkFound badChunkFound = msg.getBadChunkFoundMsg();
+            String recvSelfId = badChunkFound.getSelfId();
+            String badChunkFoundId = badChunkFound.getFileChunkId();
+            // checking in bloomfilter to find primary
+            ArrayList<String> primaries = ControllerDS.getInstance().checkBloomFiltersForChunk(badChunkFoundId);
+            // and adding replicas
+            List<String> primariesWithReplicas =  ControllerDS.getInstance().getListOfReplicasForTheNodes(primaries);
+            // removing receieved selfId from list
+            for(String id : primariesWithReplicas) {
+                if(id.equalsIgnoreCase(recvSelfId)) {
+                    primariesWithReplicas.remove(id);
+                }
+            }
+            // prepare HealBadChunkMsg
+            StorageMessages.StorageMessageWrapper healBadChunkMsgWrapper =
+                    ControllerStorageMessagesHelper.prepareHealBadChunkMsg(recvSelfId, badChunkFoundId, primariesWithReplicas);
+            String[] connectingInfo = NodeId.getIPAndPort(recvSelfId);
+            try {
+                new MessageSender().send(false,
+                        ConfigSystemParam.getNodeType(),
+                        connectingInfo[0],
+                        Integer.parseInt(connectingInfo[1]),
+                        healBadChunkMsgWrapper);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+        }
         else {
-            StorageMessages.StoreChunk storeChunkMsg
-                    = msg.getStoreChunkMsg();
-            System.out.println("Storing file name: "
-                    + storeChunkMsg.getFileName());
+            System.out.println("Donno what message was received");
         }
     }
 

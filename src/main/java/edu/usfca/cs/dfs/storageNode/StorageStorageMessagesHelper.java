@@ -85,8 +85,22 @@ public class StorageStorageMessagesHelper {
 
     public static StorageMessages.StorageMessageWrapper prepareChunkMsg(String fileChunkId, ByteBuffer buff){
         StorageMessages.Chunk chunk = StorageMessages.Chunk.newBuilder()
+                .setFound(true)
                 .setFileChunkId(fileChunkId)
                 .setData(ByteString.copyFrom(buff))
+                .build();
+
+        StorageMessages.StorageMessageWrapper msgWrapper =
+                StorageMessages.StorageMessageWrapper.newBuilder()
+                        .setChunkMsg(chunk)
+                        .build();
+
+        return msgWrapper;
+    }
+
+    public static StorageMessages.StorageMessageWrapper prepareChunkNotFoundMsg(){
+        StorageMessages.Chunk chunk = StorageMessages.Chunk.newBuilder()
+                .setFound(false)
                 .build();
 
         StorageMessages.StorageMessageWrapper msgWrapper =
@@ -116,18 +130,25 @@ public class StorageStorageMessagesHelper {
     }
 
 
-    public static StorageMessages.StorageMessageWrapper prepareStoreChunkMsg(StorageMessages.ChunkMeta cmMsg, ByteBuffer buffer) {
+    public static StorageMessages.StorageMessageWrapper prepareStoreChunkMsg(ChunkFileMeta cmMsg, ByteBuffer buffer, String newReplicaId) {
+    //todo
 
-        System.out.println("Size of StorageNodeIds : "+ cmMsg.getStorageNodeIdsList().size());
+
+        List<String> storageNodeIds = new ArrayList<>();
+        storageNodeIds.add(cmMsg.getStorageNodeIds().get(0));
+        storageNodeIds.add(newReplicaId);
+        System.out.println("Size of StorageNodeIds : "+ storageNodeIds.size());
+
+
         StorageMessages.StoreChunk storeChunkMsg
                 = StorageMessages.StoreChunk.newBuilder()
                 .setFileName(cmMsg.getFileName())
                 .setChunkId(cmMsg.getChunkId())
                 .setChunkSize(cmMsg.getChunkSize())
                 .setTotalChunks(cmMsg.getTotalChunks())
-                .addAllStorageNodeIds(cmMsg.getStorageNodeIdsList()) // new storage id at 0
+                .addAllStorageNodeIds(storageNodeIds) // new storage id at 0
                 .setData(ByteString.copyFrom(buffer))
-                .setToStorageNodeId(cmMsg.getStorageNodeIdsList().get(1))
+                .setToStorageNodeId(cmMsg.getStorageNodeIds().get(1))
                 .build();
 
         StorageMessages.StorageMessageWrapper msgWrapper =
@@ -138,15 +159,14 @@ public class StorageStorageMessagesHelper {
         return msgWrapper;
     }
 
-    public static StorageMessages.StorageMessageWrapper prepareStoreChunk(String nodeId, List<String> storageNodes,ChunkFileMeta chunkFileMeta){
-
-
+    public static StorageMessages.StorageMessageWrapper prepareStoreChunkMsg(String nodeId, List<String> storageNodes,ChunkFileMeta chunkFileMeta, ByteBuffer buff){
         StorageMessages.StoreChunk  storeChunk = StorageMessages.StoreChunk.newBuilder()
+                .setFileName(chunkFileMeta.getFileName())
                 .setChunkId(chunkFileMeta.getChunkId())
                 .setChunkSize(chunkFileMeta.getChunkSize())
-                .setFileName(chunkFileMeta.getFileName())
                 .setTotalChunks(chunkFileMeta.getTotalChunks())
                 .addAllStorageNodeIds(storageNodes)
+                .setData(ByteString.copyFrom(buff))
                 .setToStorageNodeId(nodeId)
                 .build();
 
@@ -156,5 +176,19 @@ public class StorageStorageMessagesHelper {
 
         return msgWrapper;
     }
+
+    public static StorageMessages.StorageMessageWrapper prepareBadChunkFoundMsg(String nodeId, String fileChunkId){
+        StorageMessages.BadChunkFound  badChunkFound = StorageMessages.BadChunkFound.newBuilder()
+                .setSelfId(nodeId)
+                .setFileChunkId(fileChunkId)
+                .build();
+
+        StorageMessages.StorageMessageWrapper msgWrapper = StorageMessages.StorageMessageWrapper.newBuilder()
+                .setBadChunkFoundMsg(badChunkFound)
+                .build();
+
+        return msgWrapper;
+    }
+
 
 }

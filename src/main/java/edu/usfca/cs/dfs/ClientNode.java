@@ -74,6 +74,8 @@ public class ClientNode {
                     }
                 }
             }
+        } else {
+            System.out.println("give config json as param");
         }
     }
 }

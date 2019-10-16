@@ -4619,6 +4619,12 @@ public final class StorageMessages {
       com.google.protobuf.MessageOrBuilder {
 
     /**
+     * <code>bool found = 1;</code>
+     * @return The found.
+     */
+    boolean getFound();
+
+    /**
      * <code>string fileChunkId = 2;</code>
      * @return The fileChunkId.
      */
@@ -4683,6 +4689,11 @@ public final class StorageMessages {
             case 0:
               done = true;
               break;
+            case 8: {
+
+              found_ = input.readBool();
+              break;
+            }
             case 18: {
               java.lang.String s = input.readStringRequireUtf8();
 
@@ -4724,6 +4735,16 @@ public final class StorageMessages {
       return edu.usfca.cs.dfs.StorageMessages.internal_static_Chunk_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               edu.usfca.cs.dfs.StorageMessages.Chunk.class, edu.usfca.cs.dfs.StorageMessages.Chunk.Builder.class);
+    }
+
+    public static final int FOUND_FIELD_NUMBER = 1;
+    private boolean found_;
+    /**
+     * <code>bool found = 1;</code>
+     * @return The found.
+     */
+    public boolean getFound() {
+      return found_;
     }
 
     public static final int FILECHUNKID_FIELD_NUMBER = 2;
@@ -4786,6 +4807,9 @@ public final class StorageMessages {
     @java.lang.Override
     public void writeTo(com.google.protobuf.CodedOutputStream output)
                         throws java.io.IOException {
+      if (found_ != false) {
+        output.writeBool(1, found_);
+      }
       if (!getFileChunkIdBytes().isEmpty()) {
         com.google.protobuf.GeneratedMessageV3.writeString(output, 2, fileChunkId_);
       }
@@ -4801,6 +4825,10 @@ public final class StorageMessages {
       if (size != -1) return size;
 
       size = 0;
+      if (found_ != false) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(1, found_);
+      }
       if (!getFileChunkIdBytes().isEmpty()) {
         size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, fileChunkId_);
       }
@@ -4823,6 +4851,8 @@ public final class StorageMessages {
       }
       edu.usfca.cs.dfs.StorageMessages.Chunk other = (edu.usfca.cs.dfs.StorageMessages.Chunk) obj;
 
+      if (getFound()
+          != other.getFound()) return false;
       if (!getFileChunkId()
           .equals(other.getFileChunkId())) return false;
       if (!getData()
@@ -4838,6 +4868,9 @@ public final class StorageMessages {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + FOUND_FIELD_NUMBER;
+      hash = (53 * hash) + com.google.protobuf.Internal.hashBoolean(
+          getFound());
       hash = (37 * hash) + FILECHUNKID_FIELD_NUMBER;
       hash = (53 * hash) + getFileChunkId().hashCode();
       hash = (37 * hash) + DATA_FIELD_NUMBER;
@@ -4975,6 +5008,8 @@ public final class StorageMessages {
       @java.lang.Override
       public Builder clear() {
         super.clear();
+        found_ = false;
+
         fileChunkId_ = "";
 
         data_ = com.google.protobuf.ByteString.EMPTY;
@@ -5005,6 +5040,7 @@ public final class StorageMessages {
       @java.lang.Override
       public edu.usfca.cs.dfs.StorageMessages.Chunk buildPartial() {
         edu.usfca.cs.dfs.StorageMessages.Chunk result = new edu.usfca.cs.dfs.StorageMessages.Chunk(this);
+        result.found_ = found_;
         result.fileChunkId_ = fileChunkId_;
         result.data_ = data_;
         onBuilt();
@@ -5055,6 +5091,9 @@ public final class StorageMessages {
 
       public Builder mergeFrom(edu.usfca.cs.dfs.StorageMessages.Chunk other) {
         if (other == edu.usfca.cs.dfs.StorageMessages.Chunk.getDefaultInstance()) return this;
+        if (other.getFound() != false) {
+          setFound(other.getFound());
+        }
         if (!other.getFileChunkId().isEmpty()) {
           fileChunkId_ = other.fileChunkId_;
           onChanged();
@@ -5088,6 +5127,36 @@ public final class StorageMessages {
             mergeFrom(parsedMessage);
           }
         }
+        return this;
+      }
+
+      private boolean found_ ;
+      /**
+       * <code>bool found = 1;</code>
+       * @return The found.
+       */
+      public boolean getFound() {
+        return found_;
+      }
+      /**
+       * <code>bool found = 1;</code>
+       * @param value The found to set.
+       * @return This builder for chaining.
+       */
+      public Builder setFound(boolean value) {
+        
+        found_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>bool found = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearFound() {
+        
+        found_ = false;
+        onChanged();
         return this;
       }
 
@@ -12149,6 +12218,1654 @@ public final class StorageMessages {
 
   }
 
+  public interface BadChunkFoundOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:BadChunkFound)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>string selfId = 1;</code>
+     * @return The selfId.
+     */
+    java.lang.String getSelfId();
+    /**
+     * <code>string selfId = 1;</code>
+     * @return The bytes for selfId.
+     */
+    com.google.protobuf.ByteString
+        getSelfIdBytes();
+
+    /**
+     * <code>string fileChunkId = 2;</code>
+     * @return The fileChunkId.
+     */
+    java.lang.String getFileChunkId();
+    /**
+     * <code>string fileChunkId = 2;</code>
+     * @return The bytes for fileChunkId.
+     */
+    com.google.protobuf.ByteString
+        getFileChunkIdBytes();
+  }
+  /**
+   * Protobuf type {@code BadChunkFound}
+   */
+  public  static final class BadChunkFound extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:BadChunkFound)
+      BadChunkFoundOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use BadChunkFound.newBuilder() to construct.
+    private BadChunkFound(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private BadChunkFound() {
+      selfId_ = "";
+      fileChunkId_ = "";
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new BadChunkFound();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private BadChunkFound(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              selfId_ = s;
+              break;
+            }
+            case 18: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              fileChunkId_ = s;
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return edu.usfca.cs.dfs.StorageMessages.internal_static_BadChunkFound_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return edu.usfca.cs.dfs.StorageMessages.internal_static_BadChunkFound_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              edu.usfca.cs.dfs.StorageMessages.BadChunkFound.class, edu.usfca.cs.dfs.StorageMessages.BadChunkFound.Builder.class);
+    }
+
+    public static final int SELFID_FIELD_NUMBER = 1;
+    private volatile java.lang.Object selfId_;
+    /**
+     * <code>string selfId = 1;</code>
+     * @return The selfId.
+     */
+    public java.lang.String getSelfId() {
+      java.lang.Object ref = selfId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        selfId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string selfId = 1;</code>
+     * @return The bytes for selfId.
+     */
+    public com.google.protobuf.ByteString
+        getSelfIdBytes() {
+      java.lang.Object ref = selfId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        selfId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int FILECHUNKID_FIELD_NUMBER = 2;
+    private volatile java.lang.Object fileChunkId_;
+    /**
+     * <code>string fileChunkId = 2;</code>
+     * @return The fileChunkId.
+     */
+    public java.lang.String getFileChunkId() {
+      java.lang.Object ref = fileChunkId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        fileChunkId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string fileChunkId = 2;</code>
+     * @return The bytes for fileChunkId.
+     */
+    public com.google.protobuf.ByteString
+        getFileChunkIdBytes() {
+      java.lang.Object ref = fileChunkId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        fileChunkId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!getSelfIdBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, selfId_);
+      }
+      if (!getFileChunkIdBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, fileChunkId_);
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getSelfIdBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, selfId_);
+      }
+      if (!getFileChunkIdBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, fileChunkId_);
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof edu.usfca.cs.dfs.StorageMessages.BadChunkFound)) {
+        return super.equals(obj);
+      }
+      edu.usfca.cs.dfs.StorageMessages.BadChunkFound other = (edu.usfca.cs.dfs.StorageMessages.BadChunkFound) obj;
+
+      if (!getSelfId()
+          .equals(other.getSelfId())) return false;
+      if (!getFileChunkId()
+          .equals(other.getFileChunkId())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + SELFID_FIELD_NUMBER;
+      hash = (53 * hash) + getSelfId().hashCode();
+      hash = (37 * hash) + FILECHUNKID_FIELD_NUMBER;
+      hash = (53 * hash) + getFileChunkId().hashCode();
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static edu.usfca.cs.dfs.StorageMessages.BadChunkFound parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.BadChunkFound parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.BadChunkFound parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.BadChunkFound parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.BadChunkFound parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.BadChunkFound parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.BadChunkFound parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.BadChunkFound parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.BadChunkFound parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.BadChunkFound parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.BadChunkFound parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.BadChunkFound parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(edu.usfca.cs.dfs.StorageMessages.BadChunkFound prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code BadChunkFound}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:BadChunkFound)
+        edu.usfca.cs.dfs.StorageMessages.BadChunkFoundOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return edu.usfca.cs.dfs.StorageMessages.internal_static_BadChunkFound_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return edu.usfca.cs.dfs.StorageMessages.internal_static_BadChunkFound_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                edu.usfca.cs.dfs.StorageMessages.BadChunkFound.class, edu.usfca.cs.dfs.StorageMessages.BadChunkFound.Builder.class);
+      }
+
+      // Construct using edu.usfca.cs.dfs.StorageMessages.BadChunkFound.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        selfId_ = "";
+
+        fileChunkId_ = "";
+
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return edu.usfca.cs.dfs.StorageMessages.internal_static_BadChunkFound_descriptor;
+      }
+
+      @java.lang.Override
+      public edu.usfca.cs.dfs.StorageMessages.BadChunkFound getDefaultInstanceForType() {
+        return edu.usfca.cs.dfs.StorageMessages.BadChunkFound.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public edu.usfca.cs.dfs.StorageMessages.BadChunkFound build() {
+        edu.usfca.cs.dfs.StorageMessages.BadChunkFound result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public edu.usfca.cs.dfs.StorageMessages.BadChunkFound buildPartial() {
+        edu.usfca.cs.dfs.StorageMessages.BadChunkFound result = new edu.usfca.cs.dfs.StorageMessages.BadChunkFound(this);
+        result.selfId_ = selfId_;
+        result.fileChunkId_ = fileChunkId_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof edu.usfca.cs.dfs.StorageMessages.BadChunkFound) {
+          return mergeFrom((edu.usfca.cs.dfs.StorageMessages.BadChunkFound)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(edu.usfca.cs.dfs.StorageMessages.BadChunkFound other) {
+        if (other == edu.usfca.cs.dfs.StorageMessages.BadChunkFound.getDefaultInstance()) return this;
+        if (!other.getSelfId().isEmpty()) {
+          selfId_ = other.selfId_;
+          onChanged();
+        }
+        if (!other.getFileChunkId().isEmpty()) {
+          fileChunkId_ = other.fileChunkId_;
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        edu.usfca.cs.dfs.StorageMessages.BadChunkFound parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (edu.usfca.cs.dfs.StorageMessages.BadChunkFound) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+
+      private java.lang.Object selfId_ = "";
+      /**
+       * <code>string selfId = 1;</code>
+       * @return The selfId.
+       */
+      public java.lang.String getSelfId() {
+        java.lang.Object ref = selfId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          selfId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string selfId = 1;</code>
+       * @return The bytes for selfId.
+       */
+      public com.google.protobuf.ByteString
+          getSelfIdBytes() {
+        java.lang.Object ref = selfId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          selfId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string selfId = 1;</code>
+       * @param value The selfId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setSelfId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        selfId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string selfId = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearSelfId() {
+        
+        selfId_ = getDefaultInstance().getSelfId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string selfId = 1;</code>
+       * @param value The bytes for selfId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setSelfIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        selfId_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object fileChunkId_ = "";
+      /**
+       * <code>string fileChunkId = 2;</code>
+       * @return The fileChunkId.
+       */
+      public java.lang.String getFileChunkId() {
+        java.lang.Object ref = fileChunkId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          fileChunkId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string fileChunkId = 2;</code>
+       * @return The bytes for fileChunkId.
+       */
+      public com.google.protobuf.ByteString
+          getFileChunkIdBytes() {
+        java.lang.Object ref = fileChunkId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          fileChunkId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string fileChunkId = 2;</code>
+       * @param value The fileChunkId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setFileChunkId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        fileChunkId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string fileChunkId = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearFileChunkId() {
+        
+        fileChunkId_ = getDefaultInstance().getFileChunkId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string fileChunkId = 2;</code>
+       * @param value The bytes for fileChunkId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setFileChunkIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        fileChunkId_ = value;
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:BadChunkFound)
+    }
+
+    // @@protoc_insertion_point(class_scope:BadChunkFound)
+    private static final edu.usfca.cs.dfs.StorageMessages.BadChunkFound DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new edu.usfca.cs.dfs.StorageMessages.BadChunkFound();
+    }
+
+    public static edu.usfca.cs.dfs.StorageMessages.BadChunkFound getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<BadChunkFound>
+        PARSER = new com.google.protobuf.AbstractParser<BadChunkFound>() {
+      @java.lang.Override
+      public BadChunkFound parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new BadChunkFound(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<BadChunkFound> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<BadChunkFound> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public edu.usfca.cs.dfs.StorageMessages.BadChunkFound getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
+  public interface HealBadChunkOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:HealBadChunk)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <code>string selfId = 1;</code>
+     * @return The selfId.
+     */
+    java.lang.String getSelfId();
+    /**
+     * <code>string selfId = 1;</code>
+     * @return The bytes for selfId.
+     */
+    com.google.protobuf.ByteString
+        getSelfIdBytes();
+
+    /**
+     * <code>string badFileChunkId = 2;</code>
+     * @return The badFileChunkId.
+     */
+    java.lang.String getBadFileChunkId();
+    /**
+     * <code>string badFileChunkId = 2;</code>
+     * @return The bytes for badFileChunkId.
+     */
+    com.google.protobuf.ByteString
+        getBadFileChunkIdBytes();
+
+    /**
+     * <code>repeated string storageNodes = 3;</code>
+     * @return A list containing the storageNodes.
+     */
+    java.util.List<java.lang.String>
+        getStorageNodesList();
+    /**
+     * <code>repeated string storageNodes = 3;</code>
+     * @return The count of storageNodes.
+     */
+    int getStorageNodesCount();
+    /**
+     * <code>repeated string storageNodes = 3;</code>
+     * @param index The index of the element to return.
+     * @return The storageNodes at the given index.
+     */
+    java.lang.String getStorageNodes(int index);
+    /**
+     * <code>repeated string storageNodes = 3;</code>
+     * @param index The index of the value to return.
+     * @return The bytes of the storageNodes at the given index.
+     */
+    com.google.protobuf.ByteString
+        getStorageNodesBytes(int index);
+  }
+  /**
+   * Protobuf type {@code HealBadChunk}
+   */
+  public  static final class HealBadChunk extends
+      com.google.protobuf.GeneratedMessageV3 implements
+      // @@protoc_insertion_point(message_implements:HealBadChunk)
+      HealBadChunkOrBuilder {
+  private static final long serialVersionUID = 0L;
+    // Use HealBadChunk.newBuilder() to construct.
+    private HealBadChunk(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
+      super(builder);
+    }
+    private HealBadChunk() {
+      selfId_ = "";
+      badFileChunkId_ = "";
+      storageNodes_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    }
+
+    @java.lang.Override
+    @SuppressWarnings({"unused"})
+    protected java.lang.Object newInstance(
+        UnusedPrivateParameter unused) {
+      return new HealBadChunk();
+    }
+
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+    getUnknownFields() {
+      return this.unknownFields;
+    }
+    private HealBadChunk(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      this();
+      if (extensionRegistry == null) {
+        throw new java.lang.NullPointerException();
+      }
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            case 10: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              selfId_ = s;
+              break;
+            }
+            case 18: {
+              java.lang.String s = input.readStringRequireUtf8();
+
+              badFileChunkId_ = s;
+              break;
+            }
+            case 26: {
+              java.lang.String s = input.readStringRequireUtf8();
+              if (!((mutable_bitField0_ & 0x00000001) != 0)) {
+                storageNodes_ = new com.google.protobuf.LazyStringArrayList();
+                mutable_bitField0_ |= 0x00000001;
+              }
+              storageNodes_.add(s);
+              break;
+            }
+            default: {
+              if (!parseUnknownField(
+                  input, unknownFields, extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000001) != 0)) {
+          storageNodes_ = storageNodes_.getUnmodifiableView();
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return edu.usfca.cs.dfs.StorageMessages.internal_static_HealBadChunk_descriptor;
+    }
+
+    @java.lang.Override
+    protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return edu.usfca.cs.dfs.StorageMessages.internal_static_HealBadChunk_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              edu.usfca.cs.dfs.StorageMessages.HealBadChunk.class, edu.usfca.cs.dfs.StorageMessages.HealBadChunk.Builder.class);
+    }
+
+    public static final int SELFID_FIELD_NUMBER = 1;
+    private volatile java.lang.Object selfId_;
+    /**
+     * <code>string selfId = 1;</code>
+     * @return The selfId.
+     */
+    public java.lang.String getSelfId() {
+      java.lang.Object ref = selfId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        selfId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string selfId = 1;</code>
+     * @return The bytes for selfId.
+     */
+    public com.google.protobuf.ByteString
+        getSelfIdBytes() {
+      java.lang.Object ref = selfId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        selfId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int BADFILECHUNKID_FIELD_NUMBER = 2;
+    private volatile java.lang.Object badFileChunkId_;
+    /**
+     * <code>string badFileChunkId = 2;</code>
+     * @return The badFileChunkId.
+     */
+    public java.lang.String getBadFileChunkId() {
+      java.lang.Object ref = badFileChunkId_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        badFileChunkId_ = s;
+        return s;
+      }
+    }
+    /**
+     * <code>string badFileChunkId = 2;</code>
+     * @return The bytes for badFileChunkId.
+     */
+    public com.google.protobuf.ByteString
+        getBadFileChunkIdBytes() {
+      java.lang.Object ref = badFileChunkId_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        badFileChunkId_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
+    public static final int STORAGENODES_FIELD_NUMBER = 3;
+    private com.google.protobuf.LazyStringList storageNodes_;
+    /**
+     * <code>repeated string storageNodes = 3;</code>
+     * @return A list containing the storageNodes.
+     */
+    public com.google.protobuf.ProtocolStringList
+        getStorageNodesList() {
+      return storageNodes_;
+    }
+    /**
+     * <code>repeated string storageNodes = 3;</code>
+     * @return The count of storageNodes.
+     */
+    public int getStorageNodesCount() {
+      return storageNodes_.size();
+    }
+    /**
+     * <code>repeated string storageNodes = 3;</code>
+     * @param index The index of the element to return.
+     * @return The storageNodes at the given index.
+     */
+    public java.lang.String getStorageNodes(int index) {
+      return storageNodes_.get(index);
+    }
+    /**
+     * <code>repeated string storageNodes = 3;</code>
+     * @param index The index of the value to return.
+     * @return The bytes of the storageNodes at the given index.
+     */
+    public com.google.protobuf.ByteString
+        getStorageNodesBytes(int index) {
+      return storageNodes_.getByteString(index);
+    }
+
+    private byte memoizedIsInitialized = -1;
+    @java.lang.Override
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized == 1) return true;
+      if (isInitialized == 0) return false;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    @java.lang.Override
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      if (!getSelfIdBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 1, selfId_);
+      }
+      if (!getBadFileChunkIdBytes().isEmpty()) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, badFileChunkId_);
+      }
+      for (int i = 0; i < storageNodes_.size(); i++) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 3, storageNodes_.getRaw(i));
+      }
+      unknownFields.writeTo(output);
+    }
+
+    @java.lang.Override
+    public int getSerializedSize() {
+      int size = memoizedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (!getSelfIdBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, selfId_);
+      }
+      if (!getBadFileChunkIdBytes().isEmpty()) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, badFileChunkId_);
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < storageNodes_.size(); i++) {
+          dataSize += computeStringSizeNoTag(storageNodes_.getRaw(i));
+        }
+        size += dataSize;
+        size += 1 * getStorageNodesList().size();
+      }
+      size += unknownFields.getSerializedSize();
+      memoizedSize = size;
+      return size;
+    }
+
+    @java.lang.Override
+    public boolean equals(final java.lang.Object obj) {
+      if (obj == this) {
+       return true;
+      }
+      if (!(obj instanceof edu.usfca.cs.dfs.StorageMessages.HealBadChunk)) {
+        return super.equals(obj);
+      }
+      edu.usfca.cs.dfs.StorageMessages.HealBadChunk other = (edu.usfca.cs.dfs.StorageMessages.HealBadChunk) obj;
+
+      if (!getSelfId()
+          .equals(other.getSelfId())) return false;
+      if (!getBadFileChunkId()
+          .equals(other.getBadFileChunkId())) return false;
+      if (!getStorageNodesList()
+          .equals(other.getStorageNodesList())) return false;
+      if (!unknownFields.equals(other.unknownFields)) return false;
+      return true;
+    }
+
+    @java.lang.Override
+    public int hashCode() {
+      if (memoizedHashCode != 0) {
+        return memoizedHashCode;
+      }
+      int hash = 41;
+      hash = (19 * hash) + getDescriptor().hashCode();
+      hash = (37 * hash) + SELFID_FIELD_NUMBER;
+      hash = (53 * hash) + getSelfId().hashCode();
+      hash = (37 * hash) + BADFILECHUNKID_FIELD_NUMBER;
+      hash = (53 * hash) + getBadFileChunkId().hashCode();
+      if (getStorageNodesCount() > 0) {
+        hash = (37 * hash) + STORAGENODES_FIELD_NUMBER;
+        hash = (53 * hash) + getStorageNodesList().hashCode();
+      }
+      hash = (29 * hash) + unknownFields.hashCode();
+      memoizedHashCode = hash;
+      return hash;
+    }
+
+    public static edu.usfca.cs.dfs.StorageMessages.HealBadChunk parseFrom(
+        java.nio.ByteBuffer data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.HealBadChunk parseFrom(
+        java.nio.ByteBuffer data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.HealBadChunk parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.HealBadChunk parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.HealBadChunk parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.HealBadChunk parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.HealBadChunk parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.HealBadChunk parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.HealBadChunk parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.HealBadChunk parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.HealBadChunk parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input);
+    }
+    public static edu.usfca.cs.dfs.StorageMessages.HealBadChunk parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageV3
+          .parseWithIOException(PARSER, input, extensionRegistry);
+    }
+
+    @java.lang.Override
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder() {
+      return DEFAULT_INSTANCE.toBuilder();
+    }
+    public static Builder newBuilder(edu.usfca.cs.dfs.StorageMessages.HealBadChunk prototype) {
+      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
+    }
+    @java.lang.Override
+    public Builder toBuilder() {
+      return this == DEFAULT_INSTANCE
+          ? new Builder() : new Builder().mergeFrom(this);
+    }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code HealBadChunk}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
+        // @@protoc_insertion_point(builder_implements:HealBadChunk)
+        edu.usfca.cs.dfs.StorageMessages.HealBadChunkOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return edu.usfca.cs.dfs.StorageMessages.internal_static_HealBadChunk_descriptor;
+      }
+
+      @java.lang.Override
+      protected com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return edu.usfca.cs.dfs.StorageMessages.internal_static_HealBadChunk_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                edu.usfca.cs.dfs.StorageMessages.HealBadChunk.class, edu.usfca.cs.dfs.StorageMessages.HealBadChunk.Builder.class);
+      }
+
+      // Construct using edu.usfca.cs.dfs.StorageMessages.HealBadChunk.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessageV3.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessageV3
+                .alwaysUseFieldBuilders) {
+        }
+      }
+      @java.lang.Override
+      public Builder clear() {
+        super.clear();
+        selfId_ = "";
+
+        badFileChunkId_ = "";
+
+        storageNodes_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        return this;
+      }
+
+      @java.lang.Override
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return edu.usfca.cs.dfs.StorageMessages.internal_static_HealBadChunk_descriptor;
+      }
+
+      @java.lang.Override
+      public edu.usfca.cs.dfs.StorageMessages.HealBadChunk getDefaultInstanceForType() {
+        return edu.usfca.cs.dfs.StorageMessages.HealBadChunk.getDefaultInstance();
+      }
+
+      @java.lang.Override
+      public edu.usfca.cs.dfs.StorageMessages.HealBadChunk build() {
+        edu.usfca.cs.dfs.StorageMessages.HealBadChunk result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      @java.lang.Override
+      public edu.usfca.cs.dfs.StorageMessages.HealBadChunk buildPartial() {
+        edu.usfca.cs.dfs.StorageMessages.HealBadChunk result = new edu.usfca.cs.dfs.StorageMessages.HealBadChunk(this);
+        int from_bitField0_ = bitField0_;
+        result.selfId_ = selfId_;
+        result.badFileChunkId_ = badFileChunkId_;
+        if (((bitField0_ & 0x00000001) != 0)) {
+          storageNodes_ = storageNodes_.getUnmodifiableView();
+          bitField0_ = (bitField0_ & ~0x00000001);
+        }
+        result.storageNodes_ = storageNodes_;
+        onBuilt();
+        return result;
+      }
+
+      @java.lang.Override
+      public Builder clone() {
+        return super.clone();
+      }
+      @java.lang.Override
+      public Builder setField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.setField(field, value);
+      }
+      @java.lang.Override
+      public Builder clearField(
+          com.google.protobuf.Descriptors.FieldDescriptor field) {
+        return super.clearField(field);
+      }
+      @java.lang.Override
+      public Builder clearOneof(
+          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
+        return super.clearOneof(oneof);
+      }
+      @java.lang.Override
+      public Builder setRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          int index, java.lang.Object value) {
+        return super.setRepeatedField(field, index, value);
+      }
+      @java.lang.Override
+      public Builder addRepeatedField(
+          com.google.protobuf.Descriptors.FieldDescriptor field,
+          java.lang.Object value) {
+        return super.addRepeatedField(field, value);
+      }
+      @java.lang.Override
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof edu.usfca.cs.dfs.StorageMessages.HealBadChunk) {
+          return mergeFrom((edu.usfca.cs.dfs.StorageMessages.HealBadChunk)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(edu.usfca.cs.dfs.StorageMessages.HealBadChunk other) {
+        if (other == edu.usfca.cs.dfs.StorageMessages.HealBadChunk.getDefaultInstance()) return this;
+        if (!other.getSelfId().isEmpty()) {
+          selfId_ = other.selfId_;
+          onChanged();
+        }
+        if (!other.getBadFileChunkId().isEmpty()) {
+          badFileChunkId_ = other.badFileChunkId_;
+          onChanged();
+        }
+        if (!other.storageNodes_.isEmpty()) {
+          if (storageNodes_.isEmpty()) {
+            storageNodes_ = other.storageNodes_;
+            bitField0_ = (bitField0_ & ~0x00000001);
+          } else {
+            ensureStorageNodesIsMutable();
+            storageNodes_.addAll(other.storageNodes_);
+          }
+          onChanged();
+        }
+        this.mergeUnknownFields(other.unknownFields);
+        onChanged();
+        return this;
+      }
+
+      @java.lang.Override
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      @java.lang.Override
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        edu.usfca.cs.dfs.StorageMessages.HealBadChunk parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (edu.usfca.cs.dfs.StorageMessages.HealBadChunk) e.getUnfinishedMessage();
+          throw e.unwrapIOException();
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      private java.lang.Object selfId_ = "";
+      /**
+       * <code>string selfId = 1;</code>
+       * @return The selfId.
+       */
+      public java.lang.String getSelfId() {
+        java.lang.Object ref = selfId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          selfId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string selfId = 1;</code>
+       * @return The bytes for selfId.
+       */
+      public com.google.protobuf.ByteString
+          getSelfIdBytes() {
+        java.lang.Object ref = selfId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          selfId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string selfId = 1;</code>
+       * @param value The selfId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setSelfId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        selfId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string selfId = 1;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearSelfId() {
+        
+        selfId_ = getDefaultInstance().getSelfId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string selfId = 1;</code>
+       * @param value The bytes for selfId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setSelfIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        selfId_ = value;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object badFileChunkId_ = "";
+      /**
+       * <code>string badFileChunkId = 2;</code>
+       * @return The badFileChunkId.
+       */
+      public java.lang.String getBadFileChunkId() {
+        java.lang.Object ref = badFileChunkId_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          badFileChunkId_ = s;
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>string badFileChunkId = 2;</code>
+       * @return The bytes for badFileChunkId.
+       */
+      public com.google.protobuf.ByteString
+          getBadFileChunkIdBytes() {
+        java.lang.Object ref = badFileChunkId_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          badFileChunkId_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>string badFileChunkId = 2;</code>
+       * @param value The badFileChunkId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setBadFileChunkId(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  
+        badFileChunkId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string badFileChunkId = 2;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearBadFileChunkId() {
+        
+        badFileChunkId_ = getDefaultInstance().getBadFileChunkId();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>string badFileChunkId = 2;</code>
+       * @param value The bytes for badFileChunkId to set.
+       * @return This builder for chaining.
+       */
+      public Builder setBadFileChunkIdBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        
+        badFileChunkId_ = value;
+        onChanged();
+        return this;
+      }
+
+      private com.google.protobuf.LazyStringList storageNodes_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+      private void ensureStorageNodesIsMutable() {
+        if (!((bitField0_ & 0x00000001) != 0)) {
+          storageNodes_ = new com.google.protobuf.LazyStringArrayList(storageNodes_);
+          bitField0_ |= 0x00000001;
+         }
+      }
+      /**
+       * <code>repeated string storageNodes = 3;</code>
+       * @return A list containing the storageNodes.
+       */
+      public com.google.protobuf.ProtocolStringList
+          getStorageNodesList() {
+        return storageNodes_.getUnmodifiableView();
+      }
+      /**
+       * <code>repeated string storageNodes = 3;</code>
+       * @return The count of storageNodes.
+       */
+      public int getStorageNodesCount() {
+        return storageNodes_.size();
+      }
+      /**
+       * <code>repeated string storageNodes = 3;</code>
+       * @param index The index of the element to return.
+       * @return The storageNodes at the given index.
+       */
+      public java.lang.String getStorageNodes(int index) {
+        return storageNodes_.get(index);
+      }
+      /**
+       * <code>repeated string storageNodes = 3;</code>
+       * @param index The index of the value to return.
+       * @return The bytes of the storageNodes at the given index.
+       */
+      public com.google.protobuf.ByteString
+          getStorageNodesBytes(int index) {
+        return storageNodes_.getByteString(index);
+      }
+      /**
+       * <code>repeated string storageNodes = 3;</code>
+       * @param index The index to set the value at.
+       * @param value The storageNodes to set.
+       * @return This builder for chaining.
+       */
+      public Builder setStorageNodes(
+          int index, java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureStorageNodesIsMutable();
+        storageNodes_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string storageNodes = 3;</code>
+       * @param value The storageNodes to add.
+       * @return This builder for chaining.
+       */
+      public Builder addStorageNodes(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  ensureStorageNodesIsMutable();
+        storageNodes_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string storageNodes = 3;</code>
+       * @param values The storageNodes to add.
+       * @return This builder for chaining.
+       */
+      public Builder addAllStorageNodes(
+          java.lang.Iterable<java.lang.String> values) {
+        ensureStorageNodesIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, storageNodes_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string storageNodes = 3;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearStorageNodes() {
+        storageNodes_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated string storageNodes = 3;</code>
+       * @param value The bytes of the storageNodes to add.
+       * @return This builder for chaining.
+       */
+      public Builder addStorageNodesBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  checkByteStringIsUtf8(value);
+        ensureStorageNodesIsMutable();
+        storageNodes_.add(value);
+        onChanged();
+        return this;
+      }
+      @java.lang.Override
+      public final Builder setUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.setUnknownFields(unknownFields);
+      }
+
+      @java.lang.Override
+      public final Builder mergeUnknownFields(
+          final com.google.protobuf.UnknownFieldSet unknownFields) {
+        return super.mergeUnknownFields(unknownFields);
+      }
+
+
+      // @@protoc_insertion_point(builder_scope:HealBadChunk)
+    }
+
+    // @@protoc_insertion_point(class_scope:HealBadChunk)
+    private static final edu.usfca.cs.dfs.StorageMessages.HealBadChunk DEFAULT_INSTANCE;
+    static {
+      DEFAULT_INSTANCE = new edu.usfca.cs.dfs.StorageMessages.HealBadChunk();
+    }
+
+    public static edu.usfca.cs.dfs.StorageMessages.HealBadChunk getDefaultInstance() {
+      return DEFAULT_INSTANCE;
+    }
+
+    private static final com.google.protobuf.Parser<HealBadChunk>
+        PARSER = new com.google.protobuf.AbstractParser<HealBadChunk>() {
+      @java.lang.Override
+      public HealBadChunk parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new HealBadChunk(input, extensionRegistry);
+      }
+    };
+
+    public static com.google.protobuf.Parser<HealBadChunk> parser() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<HealBadChunk> getParserForType() {
+      return PARSER;
+    }
+
+    @java.lang.Override
+    public edu.usfca.cs.dfs.StorageMessages.HealBadChunk getDefaultInstanceForType() {
+      return DEFAULT_INSTANCE;
+    }
+
+  }
+
   public interface StorageMessageWrapperOrBuilder extends
       // @@protoc_insertion_point(interface_extends:StorageMessageWrapper)
       com.google.protobuf.MessageOrBuilder {
@@ -12362,6 +14079,36 @@ public final class StorageMessages {
      * <code>.CreateNewReplica createNewReplicaMsg = 14;</code>
      */
     edu.usfca.cs.dfs.StorageMessages.CreateNewReplicaOrBuilder getCreateNewReplicaMsgOrBuilder();
+
+    /**
+     * <code>.BadChunkFound badChunkFoundMsg = 15;</code>
+     * @return Whether the badChunkFoundMsg field is set.
+     */
+    boolean hasBadChunkFoundMsg();
+    /**
+     * <code>.BadChunkFound badChunkFoundMsg = 15;</code>
+     * @return The badChunkFoundMsg.
+     */
+    edu.usfca.cs.dfs.StorageMessages.BadChunkFound getBadChunkFoundMsg();
+    /**
+     * <code>.BadChunkFound badChunkFoundMsg = 15;</code>
+     */
+    edu.usfca.cs.dfs.StorageMessages.BadChunkFoundOrBuilder getBadChunkFoundMsgOrBuilder();
+
+    /**
+     * <code>.HealBadChunk healBadChunkMsg = 16;</code>
+     * @return Whether the healBadChunkMsg field is set.
+     */
+    boolean hasHealBadChunkMsg();
+    /**
+     * <code>.HealBadChunk healBadChunkMsg = 16;</code>
+     * @return The healBadChunkMsg.
+     */
+    edu.usfca.cs.dfs.StorageMessages.HealBadChunk getHealBadChunkMsg();
+    /**
+     * <code>.HealBadChunk healBadChunkMsg = 16;</code>
+     */
+    edu.usfca.cs.dfs.StorageMessages.HealBadChunkOrBuilder getHealBadChunkMsgOrBuilder();
 
     public edu.usfca.cs.dfs.StorageMessages.StorageMessageWrapper.MsgCase getMsgCase();
   }
@@ -12606,6 +14353,34 @@ public final class StorageMessages {
               msgCase_ = 14;
               break;
             }
+            case 122: {
+              edu.usfca.cs.dfs.StorageMessages.BadChunkFound.Builder subBuilder = null;
+              if (msgCase_ == 15) {
+                subBuilder = ((edu.usfca.cs.dfs.StorageMessages.BadChunkFound) msg_).toBuilder();
+              }
+              msg_ =
+                  input.readMessage(edu.usfca.cs.dfs.StorageMessages.BadChunkFound.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom((edu.usfca.cs.dfs.StorageMessages.BadChunkFound) msg_);
+                msg_ = subBuilder.buildPartial();
+              }
+              msgCase_ = 15;
+              break;
+            }
+            case 130: {
+              edu.usfca.cs.dfs.StorageMessages.HealBadChunk.Builder subBuilder = null;
+              if (msgCase_ == 16) {
+                subBuilder = ((edu.usfca.cs.dfs.StorageMessages.HealBadChunk) msg_).toBuilder();
+              }
+              msg_ =
+                  input.readMessage(edu.usfca.cs.dfs.StorageMessages.HealBadChunk.parser(), extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom((edu.usfca.cs.dfs.StorageMessages.HealBadChunk) msg_);
+                msg_ = subBuilder.buildPartial();
+              }
+              msgCase_ = 16;
+              break;
+            }
             default: {
               if (!parseUnknownField(
                   input, unknownFields, extensionRegistry, tag)) {
@@ -12657,6 +14432,8 @@ public final class StorageMessages {
       CHUNKMSG(12),
       REPLYMSG(13),
       CREATENEWREPLICAMSG(14),
+      BADCHUNKFOUNDMSG(15),
+      HEALBADCHUNKMSG(16),
       MSG_NOT_SET(0);
       private final int value;
       private MsgCase(int value) {
@@ -12688,6 +14465,8 @@ public final class StorageMessages {
           case 12: return CHUNKMSG;
           case 13: return REPLYMSG;
           case 14: return CREATENEWREPLICAMSG;
+          case 15: return BADCHUNKFOUNDMSG;
+          case 16: return HEALBADCHUNKMSG;
           case 0: return MSG_NOT_SET;
           default: return null;
         }
@@ -13095,6 +14874,62 @@ public final class StorageMessages {
       return edu.usfca.cs.dfs.StorageMessages.CreateNewReplica.getDefaultInstance();
     }
 
+    public static final int BADCHUNKFOUNDMSG_FIELD_NUMBER = 15;
+    /**
+     * <code>.BadChunkFound badChunkFoundMsg = 15;</code>
+     * @return Whether the badChunkFoundMsg field is set.
+     */
+    public boolean hasBadChunkFoundMsg() {
+      return msgCase_ == 15;
+    }
+    /**
+     * <code>.BadChunkFound badChunkFoundMsg = 15;</code>
+     * @return The badChunkFoundMsg.
+     */
+    public edu.usfca.cs.dfs.StorageMessages.BadChunkFound getBadChunkFoundMsg() {
+      if (msgCase_ == 15) {
+         return (edu.usfca.cs.dfs.StorageMessages.BadChunkFound) msg_;
+      }
+      return edu.usfca.cs.dfs.StorageMessages.BadChunkFound.getDefaultInstance();
+    }
+    /**
+     * <code>.BadChunkFound badChunkFoundMsg = 15;</code>
+     */
+    public edu.usfca.cs.dfs.StorageMessages.BadChunkFoundOrBuilder getBadChunkFoundMsgOrBuilder() {
+      if (msgCase_ == 15) {
+         return (edu.usfca.cs.dfs.StorageMessages.BadChunkFound) msg_;
+      }
+      return edu.usfca.cs.dfs.StorageMessages.BadChunkFound.getDefaultInstance();
+    }
+
+    public static final int HEALBADCHUNKMSG_FIELD_NUMBER = 16;
+    /**
+     * <code>.HealBadChunk healBadChunkMsg = 16;</code>
+     * @return Whether the healBadChunkMsg field is set.
+     */
+    public boolean hasHealBadChunkMsg() {
+      return msgCase_ == 16;
+    }
+    /**
+     * <code>.HealBadChunk healBadChunkMsg = 16;</code>
+     * @return The healBadChunkMsg.
+     */
+    public edu.usfca.cs.dfs.StorageMessages.HealBadChunk getHealBadChunkMsg() {
+      if (msgCase_ == 16) {
+         return (edu.usfca.cs.dfs.StorageMessages.HealBadChunk) msg_;
+      }
+      return edu.usfca.cs.dfs.StorageMessages.HealBadChunk.getDefaultInstance();
+    }
+    /**
+     * <code>.HealBadChunk healBadChunkMsg = 16;</code>
+     */
+    public edu.usfca.cs.dfs.StorageMessages.HealBadChunkOrBuilder getHealBadChunkMsgOrBuilder() {
+      if (msgCase_ == 16) {
+         return (edu.usfca.cs.dfs.StorageMessages.HealBadChunk) msg_;
+      }
+      return edu.usfca.cs.dfs.StorageMessages.HealBadChunk.getDefaultInstance();
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -13150,6 +14985,12 @@ public final class StorageMessages {
       }
       if (msgCase_ == 14) {
         output.writeMessage(14, (edu.usfca.cs.dfs.StorageMessages.CreateNewReplica) msg_);
+      }
+      if (msgCase_ == 15) {
+        output.writeMessage(15, (edu.usfca.cs.dfs.StorageMessages.BadChunkFound) msg_);
+      }
+      if (msgCase_ == 16) {
+        output.writeMessage(16, (edu.usfca.cs.dfs.StorageMessages.HealBadChunk) msg_);
       }
       unknownFields.writeTo(output);
     }
@@ -13215,6 +15056,14 @@ public final class StorageMessages {
       if (msgCase_ == 14) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(14, (edu.usfca.cs.dfs.StorageMessages.CreateNewReplica) msg_);
+      }
+      if (msgCase_ == 15) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(15, (edu.usfca.cs.dfs.StorageMessages.BadChunkFound) msg_);
+      }
+      if (msgCase_ == 16) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(16, (edu.usfca.cs.dfs.StorageMessages.HealBadChunk) msg_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -13289,6 +15138,14 @@ public final class StorageMessages {
           if (!getCreateNewReplicaMsg()
               .equals(other.getCreateNewReplicaMsg())) return false;
           break;
+        case 15:
+          if (!getBadChunkFoundMsg()
+              .equals(other.getBadChunkFoundMsg())) return false;
+          break;
+        case 16:
+          if (!getHealBadChunkMsg()
+              .equals(other.getHealBadChunkMsg())) return false;
+          break;
         case 0:
         default:
       }
@@ -13359,6 +15216,14 @@ public final class StorageMessages {
         case 14:
           hash = (37 * hash) + CREATENEWREPLICAMSG_FIELD_NUMBER;
           hash = (53 * hash) + getCreateNewReplicaMsg().hashCode();
+          break;
+        case 15:
+          hash = (37 * hash) + BADCHUNKFOUNDMSG_FIELD_NUMBER;
+          hash = (53 * hash) + getBadChunkFoundMsg().hashCode();
+          break;
+        case 16:
+          hash = (37 * hash) + HEALBADCHUNKMSG_FIELD_NUMBER;
+          hash = (53 * hash) + getHealBadChunkMsg().hashCode();
           break;
         case 0:
         default:
@@ -13622,6 +15487,20 @@ public final class StorageMessages {
             result.msg_ = createNewReplicaMsgBuilder_.build();
           }
         }
+        if (msgCase_ == 15) {
+          if (badChunkFoundMsgBuilder_ == null) {
+            result.msg_ = msg_;
+          } else {
+            result.msg_ = badChunkFoundMsgBuilder_.build();
+          }
+        }
+        if (msgCase_ == 16) {
+          if (healBadChunkMsgBuilder_ == null) {
+            result.msg_ = msg_;
+          } else {
+            result.msg_ = healBadChunkMsgBuilder_.build();
+          }
+        }
         result.msgCase_ = msgCase_;
         onBuilt();
         return result;
@@ -13726,6 +15605,14 @@ public final class StorageMessages {
           }
           case CREATENEWREPLICAMSG: {
             mergeCreateNewReplicaMsg(other.getCreateNewReplicaMsg());
+            break;
+          }
+          case BADCHUNKFOUNDMSG: {
+            mergeBadChunkFoundMsg(other.getBadChunkFoundMsg());
+            break;
+          }
+          case HEALBADCHUNKMSG: {
+            mergeHealBadChunkMsg(other.getHealBadChunkMsg());
             break;
           }
           case MSG_NOT_SET: {
@@ -15707,6 +17594,282 @@ public final class StorageMessages {
         onChanged();;
         return createNewReplicaMsgBuilder_;
       }
+
+      private com.google.protobuf.SingleFieldBuilderV3<
+          edu.usfca.cs.dfs.StorageMessages.BadChunkFound, edu.usfca.cs.dfs.StorageMessages.BadChunkFound.Builder, edu.usfca.cs.dfs.StorageMessages.BadChunkFoundOrBuilder> badChunkFoundMsgBuilder_;
+      /**
+       * <code>.BadChunkFound badChunkFoundMsg = 15;</code>
+       * @return Whether the badChunkFoundMsg field is set.
+       */
+      public boolean hasBadChunkFoundMsg() {
+        return msgCase_ == 15;
+      }
+      /**
+       * <code>.BadChunkFound badChunkFoundMsg = 15;</code>
+       * @return The badChunkFoundMsg.
+       */
+      public edu.usfca.cs.dfs.StorageMessages.BadChunkFound getBadChunkFoundMsg() {
+        if (badChunkFoundMsgBuilder_ == null) {
+          if (msgCase_ == 15) {
+            return (edu.usfca.cs.dfs.StorageMessages.BadChunkFound) msg_;
+          }
+          return edu.usfca.cs.dfs.StorageMessages.BadChunkFound.getDefaultInstance();
+        } else {
+          if (msgCase_ == 15) {
+            return badChunkFoundMsgBuilder_.getMessage();
+          }
+          return edu.usfca.cs.dfs.StorageMessages.BadChunkFound.getDefaultInstance();
+        }
+      }
+      /**
+       * <code>.BadChunkFound badChunkFoundMsg = 15;</code>
+       */
+      public Builder setBadChunkFoundMsg(edu.usfca.cs.dfs.StorageMessages.BadChunkFound value) {
+        if (badChunkFoundMsgBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          msg_ = value;
+          onChanged();
+        } else {
+          badChunkFoundMsgBuilder_.setMessage(value);
+        }
+        msgCase_ = 15;
+        return this;
+      }
+      /**
+       * <code>.BadChunkFound badChunkFoundMsg = 15;</code>
+       */
+      public Builder setBadChunkFoundMsg(
+          edu.usfca.cs.dfs.StorageMessages.BadChunkFound.Builder builderForValue) {
+        if (badChunkFoundMsgBuilder_ == null) {
+          msg_ = builderForValue.build();
+          onChanged();
+        } else {
+          badChunkFoundMsgBuilder_.setMessage(builderForValue.build());
+        }
+        msgCase_ = 15;
+        return this;
+      }
+      /**
+       * <code>.BadChunkFound badChunkFoundMsg = 15;</code>
+       */
+      public Builder mergeBadChunkFoundMsg(edu.usfca.cs.dfs.StorageMessages.BadChunkFound value) {
+        if (badChunkFoundMsgBuilder_ == null) {
+          if (msgCase_ == 15 &&
+              msg_ != edu.usfca.cs.dfs.StorageMessages.BadChunkFound.getDefaultInstance()) {
+            msg_ = edu.usfca.cs.dfs.StorageMessages.BadChunkFound.newBuilder((edu.usfca.cs.dfs.StorageMessages.BadChunkFound) msg_)
+                .mergeFrom(value).buildPartial();
+          } else {
+            msg_ = value;
+          }
+          onChanged();
+        } else {
+          if (msgCase_ == 15) {
+            badChunkFoundMsgBuilder_.mergeFrom(value);
+          }
+          badChunkFoundMsgBuilder_.setMessage(value);
+        }
+        msgCase_ = 15;
+        return this;
+      }
+      /**
+       * <code>.BadChunkFound badChunkFoundMsg = 15;</code>
+       */
+      public Builder clearBadChunkFoundMsg() {
+        if (badChunkFoundMsgBuilder_ == null) {
+          if (msgCase_ == 15) {
+            msgCase_ = 0;
+            msg_ = null;
+            onChanged();
+          }
+        } else {
+          if (msgCase_ == 15) {
+            msgCase_ = 0;
+            msg_ = null;
+          }
+          badChunkFoundMsgBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>.BadChunkFound badChunkFoundMsg = 15;</code>
+       */
+      public edu.usfca.cs.dfs.StorageMessages.BadChunkFound.Builder getBadChunkFoundMsgBuilder() {
+        return getBadChunkFoundMsgFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>.BadChunkFound badChunkFoundMsg = 15;</code>
+       */
+      public edu.usfca.cs.dfs.StorageMessages.BadChunkFoundOrBuilder getBadChunkFoundMsgOrBuilder() {
+        if ((msgCase_ == 15) && (badChunkFoundMsgBuilder_ != null)) {
+          return badChunkFoundMsgBuilder_.getMessageOrBuilder();
+        } else {
+          if (msgCase_ == 15) {
+            return (edu.usfca.cs.dfs.StorageMessages.BadChunkFound) msg_;
+          }
+          return edu.usfca.cs.dfs.StorageMessages.BadChunkFound.getDefaultInstance();
+        }
+      }
+      /**
+       * <code>.BadChunkFound badChunkFoundMsg = 15;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          edu.usfca.cs.dfs.StorageMessages.BadChunkFound, edu.usfca.cs.dfs.StorageMessages.BadChunkFound.Builder, edu.usfca.cs.dfs.StorageMessages.BadChunkFoundOrBuilder> 
+          getBadChunkFoundMsgFieldBuilder() {
+        if (badChunkFoundMsgBuilder_ == null) {
+          if (!(msgCase_ == 15)) {
+            msg_ = edu.usfca.cs.dfs.StorageMessages.BadChunkFound.getDefaultInstance();
+          }
+          badChunkFoundMsgBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              edu.usfca.cs.dfs.StorageMessages.BadChunkFound, edu.usfca.cs.dfs.StorageMessages.BadChunkFound.Builder, edu.usfca.cs.dfs.StorageMessages.BadChunkFoundOrBuilder>(
+                  (edu.usfca.cs.dfs.StorageMessages.BadChunkFound) msg_,
+                  getParentForChildren(),
+                  isClean());
+          msg_ = null;
+        }
+        msgCase_ = 15;
+        onChanged();;
+        return badChunkFoundMsgBuilder_;
+      }
+
+      private com.google.protobuf.SingleFieldBuilderV3<
+          edu.usfca.cs.dfs.StorageMessages.HealBadChunk, edu.usfca.cs.dfs.StorageMessages.HealBadChunk.Builder, edu.usfca.cs.dfs.StorageMessages.HealBadChunkOrBuilder> healBadChunkMsgBuilder_;
+      /**
+       * <code>.HealBadChunk healBadChunkMsg = 16;</code>
+       * @return Whether the healBadChunkMsg field is set.
+       */
+      public boolean hasHealBadChunkMsg() {
+        return msgCase_ == 16;
+      }
+      /**
+       * <code>.HealBadChunk healBadChunkMsg = 16;</code>
+       * @return The healBadChunkMsg.
+       */
+      public edu.usfca.cs.dfs.StorageMessages.HealBadChunk getHealBadChunkMsg() {
+        if (healBadChunkMsgBuilder_ == null) {
+          if (msgCase_ == 16) {
+            return (edu.usfca.cs.dfs.StorageMessages.HealBadChunk) msg_;
+          }
+          return edu.usfca.cs.dfs.StorageMessages.HealBadChunk.getDefaultInstance();
+        } else {
+          if (msgCase_ == 16) {
+            return healBadChunkMsgBuilder_.getMessage();
+          }
+          return edu.usfca.cs.dfs.StorageMessages.HealBadChunk.getDefaultInstance();
+        }
+      }
+      /**
+       * <code>.HealBadChunk healBadChunkMsg = 16;</code>
+       */
+      public Builder setHealBadChunkMsg(edu.usfca.cs.dfs.StorageMessages.HealBadChunk value) {
+        if (healBadChunkMsgBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          msg_ = value;
+          onChanged();
+        } else {
+          healBadChunkMsgBuilder_.setMessage(value);
+        }
+        msgCase_ = 16;
+        return this;
+      }
+      /**
+       * <code>.HealBadChunk healBadChunkMsg = 16;</code>
+       */
+      public Builder setHealBadChunkMsg(
+          edu.usfca.cs.dfs.StorageMessages.HealBadChunk.Builder builderForValue) {
+        if (healBadChunkMsgBuilder_ == null) {
+          msg_ = builderForValue.build();
+          onChanged();
+        } else {
+          healBadChunkMsgBuilder_.setMessage(builderForValue.build());
+        }
+        msgCase_ = 16;
+        return this;
+      }
+      /**
+       * <code>.HealBadChunk healBadChunkMsg = 16;</code>
+       */
+      public Builder mergeHealBadChunkMsg(edu.usfca.cs.dfs.StorageMessages.HealBadChunk value) {
+        if (healBadChunkMsgBuilder_ == null) {
+          if (msgCase_ == 16 &&
+              msg_ != edu.usfca.cs.dfs.StorageMessages.HealBadChunk.getDefaultInstance()) {
+            msg_ = edu.usfca.cs.dfs.StorageMessages.HealBadChunk.newBuilder((edu.usfca.cs.dfs.StorageMessages.HealBadChunk) msg_)
+                .mergeFrom(value).buildPartial();
+          } else {
+            msg_ = value;
+          }
+          onChanged();
+        } else {
+          if (msgCase_ == 16) {
+            healBadChunkMsgBuilder_.mergeFrom(value);
+          }
+          healBadChunkMsgBuilder_.setMessage(value);
+        }
+        msgCase_ = 16;
+        return this;
+      }
+      /**
+       * <code>.HealBadChunk healBadChunkMsg = 16;</code>
+       */
+      public Builder clearHealBadChunkMsg() {
+        if (healBadChunkMsgBuilder_ == null) {
+          if (msgCase_ == 16) {
+            msgCase_ = 0;
+            msg_ = null;
+            onChanged();
+          }
+        } else {
+          if (msgCase_ == 16) {
+            msgCase_ = 0;
+            msg_ = null;
+          }
+          healBadChunkMsgBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>.HealBadChunk healBadChunkMsg = 16;</code>
+       */
+      public edu.usfca.cs.dfs.StorageMessages.HealBadChunk.Builder getHealBadChunkMsgBuilder() {
+        return getHealBadChunkMsgFieldBuilder().getBuilder();
+      }
+      /**
+       * <code>.HealBadChunk healBadChunkMsg = 16;</code>
+       */
+      public edu.usfca.cs.dfs.StorageMessages.HealBadChunkOrBuilder getHealBadChunkMsgOrBuilder() {
+        if ((msgCase_ == 16) && (healBadChunkMsgBuilder_ != null)) {
+          return healBadChunkMsgBuilder_.getMessageOrBuilder();
+        } else {
+          if (msgCase_ == 16) {
+            return (edu.usfca.cs.dfs.StorageMessages.HealBadChunk) msg_;
+          }
+          return edu.usfca.cs.dfs.StorageMessages.HealBadChunk.getDefaultInstance();
+        }
+      }
+      /**
+       * <code>.HealBadChunk healBadChunkMsg = 16;</code>
+       */
+      private com.google.protobuf.SingleFieldBuilderV3<
+          edu.usfca.cs.dfs.StorageMessages.HealBadChunk, edu.usfca.cs.dfs.StorageMessages.HealBadChunk.Builder, edu.usfca.cs.dfs.StorageMessages.HealBadChunkOrBuilder> 
+          getHealBadChunkMsgFieldBuilder() {
+        if (healBadChunkMsgBuilder_ == null) {
+          if (!(msgCase_ == 16)) {
+            msg_ = edu.usfca.cs.dfs.StorageMessages.HealBadChunk.getDefaultInstance();
+          }
+          healBadChunkMsgBuilder_ = new com.google.protobuf.SingleFieldBuilderV3<
+              edu.usfca.cs.dfs.StorageMessages.HealBadChunk, edu.usfca.cs.dfs.StorageMessages.HealBadChunk.Builder, edu.usfca.cs.dfs.StorageMessages.HealBadChunkOrBuilder>(
+                  (edu.usfca.cs.dfs.StorageMessages.HealBadChunk) msg_,
+                  getParentForChildren(),
+                  isClean());
+          msg_ = null;
+        }
+        msgCase_ = 16;
+        onChanged();;
+        return healBadChunkMsgBuilder_;
+      }
       @java.lang.Override
       public final Builder setUnknownFields(
           final com.google.protobuf.UnknownFieldSet unknownFields) {
@@ -15846,6 +18009,16 @@ public final class StorageMessages {
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
       internal_static_NewPrimaryReply_fieldAccessorTable;
   private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_BadChunkFound_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_BadChunkFound_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+    internal_static_HealBadChunk_descriptor;
+  private static final 
+    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_HealBadChunk_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
     internal_static_StorageMessageWrapper_descriptor;
   private static final 
     com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
@@ -15871,43 +18044,49 @@ public final class StorageMessages {
       "\004 \001(\005\" \n\014RetrieveFile\022\020\n\010fileName\030\001 \001(\t\"" +
       "(\n\021RetrieveChunkMeta\022\023\n\013fileChunkId\030\001 \001(" +
       "\t\"$\n\rRetrieveChunk\022\023\n\013fileChunkId\030\001 \001(\t\"" +
-      "*\n\005Chunk\022\023\n\013fileChunkId\030\002 \001(\t\022\014\n\004data\030\003 " +
-      "\001(\014\"2\n\rChunkLocation\022\020\n\010fileName\030\001 \001(\t\022\017" +
-      "\n\007chunkId\030\002 \001(\005\"6\n\025ListChunksAndFileName" +
-      "\022\r\n\005files\030\001 \003(\t\022\016\n\006chunks\030\002 \003(\005\"z\n\tHeart" +
-      "Beat\022\021\n\tipAddress\030\001 \001(\t\022\014\n\004port\030\002 \001(\t\022\026\n" +
-      "\016spaceRemaining\030\003 \001(\003\022\030\n\020requestProcesse" +
-      "d\030\004 \001(\003\022\032\n\022retrievalProcessed\030\005 \001(\003\"F\n\rB" +
-      "ecomePrimary\022\024\n\014forApAddress\030\001 \001(\t\022\017\n\007fo" +
-      "rPort\030\002 \001(\t\022\016\n\006askIds\030\003 \003(\t\"_\n\017NewPrimar" +
-      "yAlert\022\024\n\014forIpAddress\030\001 \001(\t\022\017\n\007forPort\030" +
-      "\002 \001(\t\022\024\n\014newIpAddress\030\003 \001(\t\022\017\n\007newPort\030\004" +
-      " \001(\t\"?\n\020CreateNewReplica\022\025\n\rlostReplicaI" +
-      "d\030\001 \001(\t\022\024\n\014newReplicaId\030\002 \001(\t\".\n\027Storage" +
-      "NodesHavingChunk\022\023\n\013storageNode\030\001 \003(\t\"\245\001" +
-      "\n\034MappingChunkIdToStorageNodes\022;\n\007mappin" +
-      "g\030\001 \003(\0132*.MappingChunkIdToStorageNodes.M" +
-      "appingEntry\032H\n\014MappingEntry\022\013\n\003key\030\001 \001(\t" +
-      "\022\'\n\005value\030\002 \001(\0132\030.StorageNodesHavingChun" +
-      "k:\0028\001\"%\n\017NewPrimaryReply\022\022\n\nreplicated\030\001" +
-      " \001(\010\"\242\005\n\025StorageMessageWrapper\022$\n\rstoreC" +
-      "hunkMsg\030\001 \001(\0132\013.StoreChunkH\000\022(\n\017retrieve" +
-      "FileMsg\030\002 \001(\0132\r.RetrieveFileH\000\022*\n\020retrie" +
-      "veChunkMsg\030\003 \001(\0132\016.RetrieveChunkH\000\022\"\n\014he" +
-      "artBeatMsg\030\004 \001(\0132\n.HeartBeatH\000\022\"\n\014chunkM" +
-      "etaMsg\030\005 \001(\0132\n.ChunkMetaH\000\0222\n\024retrieveCh" +
-      "unkMetaMsg\030\006 \001(\0132\022.RetrieveChunkMetaH\000\0220" +
-      "\n\023storageChunkMetaMsg\030\007 \001(\0132\021.StorageChu" +
-      "nkMetaH\000\022*\n\020becomePrimaryMsg\030\010 \001(\0132\016.Bec" +
-      "omePrimaryH\000\022.\n\022newPrimaryAlertMsg\030\t \001(\013" +
-      "2\020.NewPrimaryAlertH\000\022>\n\032storageNodesHavi" +
-      "ngChunkMsg\030\n \001(\0132\030.StorageNodesHavingChu" +
-      "nkH\000\022H\n\037mappingChunkIdToStorageNodesMsg\030" +
-      "\013 \001(\0132\035.MappingChunkIdToStorageNodesH\000\022\032" +
-      "\n\010chunkMsg\030\014 \001(\0132\006.ChunkH\000\022$\n\010replyMsg\030\r" +
-      " \001(\0132\020.NewPrimaryReplyH\000\0220\n\023createNewRep" +
-      "licaMsg\030\016 \001(\0132\021.CreateNewReplicaH\000B\005\n\003ms" +
-      "gB\022\n\020edu.usfca.cs.dfsb\006proto3"
+      "9\n\005Chunk\022\r\n\005found\030\001 \001(\010\022\023\n\013fileChunkId\030\002" +
+      " \001(\t\022\014\n\004data\030\003 \001(\014\"2\n\rChunkLocation\022\020\n\010f" +
+      "ileName\030\001 \001(\t\022\017\n\007chunkId\030\002 \001(\005\"6\n\025ListCh" +
+      "unksAndFileName\022\r\n\005files\030\001 \003(\t\022\016\n\006chunks" +
+      "\030\002 \003(\005\"z\n\tHeartBeat\022\021\n\tipAddress\030\001 \001(\t\022\014" +
+      "\n\004port\030\002 \001(\t\022\026\n\016spaceRemaining\030\003 \001(\003\022\030\n\020" +
+      "requestProcessed\030\004 \001(\003\022\032\n\022retrievalProce" +
+      "ssed\030\005 \001(\003\"F\n\rBecomePrimary\022\024\n\014forApAddr" +
+      "ess\030\001 \001(\t\022\017\n\007forPort\030\002 \001(\t\022\016\n\006askIds\030\003 \003" +
+      "(\t\"_\n\017NewPrimaryAlert\022\024\n\014forIpAddress\030\001 " +
+      "\001(\t\022\017\n\007forPort\030\002 \001(\t\022\024\n\014newIpAddress\030\003 \001" +
+      "(\t\022\017\n\007newPort\030\004 \001(\t\"?\n\020CreateNewReplica\022" +
+      "\025\n\rlostReplicaId\030\001 \001(\t\022\024\n\014newReplicaId\030\002" +
+      " \001(\t\".\n\027StorageNodesHavingChunk\022\023\n\013stora" +
+      "geNode\030\001 \003(\t\"\245\001\n\034MappingChunkIdToStorage" +
+      "Nodes\022;\n\007mapping\030\001 \003(\0132*.MappingChunkIdT" +
+      "oStorageNodes.MappingEntry\032H\n\014MappingEnt" +
+      "ry\022\013\n\003key\030\001 \001(\t\022\'\n\005value\030\002 \001(\0132\030.Storage" +
+      "NodesHavingChunk:\0028\001\"%\n\017NewPrimaryReply\022" +
+      "\022\n\nreplicated\030\001 \001(\010\"4\n\rBadChunkFound\022\016\n\006" +
+      "selfId\030\001 \001(\t\022\023\n\013fileChunkId\030\002 \001(\t\"L\n\014Hea" +
+      "lBadChunk\022\016\n\006selfId\030\001 \001(\t\022\026\n\016badFileChun" +
+      "kId\030\002 \001(\t\022\024\n\014storageNodes\030\003 \003(\t\"\370\005\n\025Stor" +
+      "ageMessageWrapper\022$\n\rstoreChunkMsg\030\001 \001(\013" +
+      "2\013.StoreChunkH\000\022(\n\017retrieveFileMsg\030\002 \001(\013" +
+      "2\r.RetrieveFileH\000\022*\n\020retrieveChunkMsg\030\003 " +
+      "\001(\0132\016.RetrieveChunkH\000\022\"\n\014heartBeatMsg\030\004 " +
+      "\001(\0132\n.HeartBeatH\000\022\"\n\014chunkMetaMsg\030\005 \001(\0132" +
+      "\n.ChunkMetaH\000\0222\n\024retrieveChunkMetaMsg\030\006 " +
+      "\001(\0132\022.RetrieveChunkMetaH\000\0220\n\023storageChun" +
+      "kMetaMsg\030\007 \001(\0132\021.StorageChunkMetaH\000\022*\n\020b" +
+      "ecomePrimaryMsg\030\010 \001(\0132\016.BecomePrimaryH\000\022" +
+      ".\n\022newPrimaryAlertMsg\030\t \001(\0132\020.NewPrimary" +
+      "AlertH\000\022>\n\032storageNodesHavingChunkMsg\030\n " +
+      "\001(\0132\030.StorageNodesHavingChunkH\000\022H\n\037mappi" +
+      "ngChunkIdToStorageNodesMsg\030\013 \001(\0132\035.Mappi" +
+      "ngChunkIdToStorageNodesH\000\022\032\n\010chunkMsg\030\014 " +
+      "\001(\0132\006.ChunkH\000\022$\n\010replyMsg\030\r \001(\0132\020.NewPri" +
+      "maryReplyH\000\0220\n\023createNewReplicaMsg\030\016 \001(\013" +
+      "2\021.CreateNewReplicaH\000\022*\n\020badChunkFoundMs" +
+      "g\030\017 \001(\0132\016.BadChunkFoundH\000\022(\n\017healBadChun" +
+      "kMsg\030\020 \001(\0132\r.HealBadChunkH\000B\005\n\003msgB\022\n\020ed" +
+      "u.usfca.cs.dfsb\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -15954,7 +18133,7 @@ public final class StorageMessages {
     internal_static_Chunk_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_Chunk_descriptor,
-        new java.lang.String[] { "FileChunkId", "Data", });
+        new java.lang.String[] { "Found", "FileChunkId", "Data", });
     internal_static_ChunkLocation_descriptor =
       getDescriptor().getMessageTypes().get(7);
     internal_static_ChunkLocation_fieldAccessorTable = new
@@ -16015,12 +18194,24 @@ public final class StorageMessages {
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_NewPrimaryReply_descriptor,
         new java.lang.String[] { "Replicated", });
-    internal_static_StorageMessageWrapper_descriptor =
+    internal_static_BadChunkFound_descriptor =
       getDescriptor().getMessageTypes().get(16);
+    internal_static_BadChunkFound_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_BadChunkFound_descriptor,
+        new java.lang.String[] { "SelfId", "FileChunkId", });
+    internal_static_HealBadChunk_descriptor =
+      getDescriptor().getMessageTypes().get(17);
+    internal_static_HealBadChunk_fieldAccessorTable = new
+      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
+        internal_static_HealBadChunk_descriptor,
+        new java.lang.String[] { "SelfId", "BadFileChunkId", "StorageNodes", });
+    internal_static_StorageMessageWrapper_descriptor =
+      getDescriptor().getMessageTypes().get(18);
     internal_static_StorageMessageWrapper_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_StorageMessageWrapper_descriptor,
-        new java.lang.String[] { "StoreChunkMsg", "RetrieveFileMsg", "RetrieveChunkMsg", "HeartBeatMsg", "ChunkMetaMsg", "RetrieveChunkMetaMsg", "StorageChunkMetaMsg", "BecomePrimaryMsg", "NewPrimaryAlertMsg", "StorageNodesHavingChunkMsg", "MappingChunkIdToStorageNodesMsg", "ChunkMsg", "ReplyMsg", "CreateNewReplicaMsg", "Msg", });
+        new java.lang.String[] { "StoreChunkMsg", "RetrieveFileMsg", "RetrieveChunkMsg", "HeartBeatMsg", "ChunkMetaMsg", "RetrieveChunkMetaMsg", "StorageChunkMetaMsg", "BecomePrimaryMsg", "NewPrimaryAlertMsg", "StorageNodesHavingChunkMsg", "MappingChunkIdToStorageNodesMsg", "ChunkMsg", "ReplyMsg", "CreateNewReplicaMsg", "BadChunkFoundMsg", "HealBadChunkMsg", "Msg", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

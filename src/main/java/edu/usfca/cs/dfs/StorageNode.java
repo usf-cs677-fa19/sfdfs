@@ -11,18 +11,12 @@ public class StorageNode {
 
     public static void main(String[] args) throws IOException {
         if(Init.isCorrectArgs(args)) { //if configSystem.json specified
-
-            //read readConfigFile to ConfigSystemParams
-//            ConfigSystemParam configParams = new ConfigSystemParam(args[0]);
-//            System.out.println(configParams.toString());
             new ConfigSystemParam(args[0]);
             System.out.println(ConfigSystemParam.getString());
 
-            //  ConfigSystemParams :
-//            for(ConfigSystemParam nodeParams :configParams.getParams()) { // for each Node Params
             new NodeServer().run();
-//            }
-
+        } else {
+            System.out.println("give config json as param");
         }
     }
 

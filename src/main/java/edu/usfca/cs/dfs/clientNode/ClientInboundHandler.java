@@ -75,7 +75,12 @@ public class  ClientInboundHandler extends InboundHandler {
         }
         else if(msg.hasChunkMsg()) {
             System.out.println("\n Received chunkMsg from Storage Node");
-            Fileify.writeChunkToFile(msg.getChunkMsg());
+            if(msg.getChunkMsg().getFound() == true) {
+                Fileify.writeChunkToFile(msg.getChunkMsg());
+            } else {
+                System.out.println("Chunk not found message");
+            }
+
         }
         else {
             System.out.println("\n Donno what message receieved");
