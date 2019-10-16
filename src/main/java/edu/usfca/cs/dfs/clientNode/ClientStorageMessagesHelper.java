@@ -83,7 +83,7 @@ public class ClientStorageMessagesHelper {
         return chunkAskMap;
     }
 
-    private static StorageMessages.StorageMessageWrapper prepareRetrieveChunk(String fileChunkId){
+    public static StorageMessages.StorageMessageWrapper prepareRetrieveChunk(String fileChunkId){
 
         StorageMessages.RetrieveChunk retrieveChunk = StorageMessages.RetrieveChunk.newBuilder()
                 .setFileChunkId(fileChunkId)

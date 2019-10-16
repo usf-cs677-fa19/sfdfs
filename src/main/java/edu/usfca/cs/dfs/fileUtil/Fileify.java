@@ -15,7 +15,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Fileify {
 
@@ -125,9 +127,15 @@ public class Fileify {
 
     //delete directory
     public static void deleteDirectory(String basePath, String dirName) throws IOException {
-        Path path = Paths.get(basePath, dirName);
+//        Path path = Paths.get(basePath, dirName);
+//
+//        Files.deleteIfExists(path);
 
-        Files.deleteIfExists(path);
+        Path rootPath = Paths.get(basePath, dirName);
+        final List<Path> pathsToDelete = Files.walk(rootPath).sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+        for(Path path : pathsToDelete) {
+            Files.deleteIfExists(path);
+        }
     }
 
     public static String[] getListOfDirs(String basePath) {

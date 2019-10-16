@@ -82,6 +82,21 @@ public class ControllerStorageMessagesHelper {
         return msgWrapper;
     }
 
+
+    public static StorageMessages.StorageMessageWrapper prepareHealBadChunkMsg(String selfId, String fileChunkId, List<String> nodeIds){
+        StorageMessages.HealBadChunk  healBadChunk = StorageMessages.HealBadChunk.newBuilder()
+                .setSelfId(selfId)
+                .setBadFileChunkId(fileChunkId)
+                .addAllStorageNodes(nodeIds)
+                .build();
+
+        StorageMessages.StorageMessageWrapper msgWrapper = StorageMessages.StorageMessageWrapper.newBuilder()
+                .setHealBadChunkMsg(healBadChunk)
+                .build();
+
+        return msgWrapper;
+    }
+
 //    public static StorageMessages.StorageMessageWrapper StorageNodesHavingChunk(){
 //
 //    }

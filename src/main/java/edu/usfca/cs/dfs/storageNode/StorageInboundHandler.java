@@ -1,6 +1,8 @@
 package edu.usfca.cs.dfs.storageNode;
 
 import edu.usfca.cs.dfs.StorageNode;
+import edu.usfca.cs.dfs.clientNode.ClientStorageMessagesHelper;
+import edu.usfca.cs.dfs.init.ConfigSystemParam;
 import edu.usfca.cs.dfs.net.MessageSender;
 import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.data.FileChunkId;
@@ -23,6 +25,9 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 
 public class StorageInboundHandler extends InboundHandler {
@@ -161,6 +166,26 @@ public class StorageInboundHandler extends InboundHandler {
                             break;
                         }else{
                             System.out.println("Checksum does not match :( :(");
+                            // handle corrupt chunkFile
+                            System.out.println("Not found : "+fileChunkId+" in any directory, sending not found message");
+                            StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareChunkNotFoundMsg();
+                            Channel chan = ctx.channel();
+                            ChannelFuture future = chan.write(msgWrapper);
+                            chan.flush();  // sending data back to client
+
+                            System.out.println("Preparing  and sending BadChunkFoundMsg  to controller");
+                            StorageMessages.StorageMessageWrapper badChunkFoundMsgWrapper =
+                                    StorageStorageMessagesHelper.prepareBadChunkFoundMsg(StorageNodeDS.getInstance().getNodeId(), fileChunkId);
+                            try {
+                                new MessageSender().send(false,
+                                        ConfigSystemParam.getNodeType(),
+                                        ConfigSystemParam.getControllerAddress(),
+                                        ConfigSystemParam.getControllerPort(),
+                                        badChunkFoundMsgWrapper);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+
                         }
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -177,9 +202,6 @@ public class StorageInboundHandler extends InboundHandler {
                 ChannelFuture future = chan.write(msgWrapper);
                 chan.flush();  // sending data back to client
             }
-
-
-
 
         } // closing hasRetrieveChunkMsg
         else if(msg.hasBecomePrimaryMsg()){
@@ -246,14 +268,35 @@ public class StorageInboundHandler extends InboundHandler {
                 } catch (IOException | InterruptedException e) {
                     e.printStackTrace();
                 }
+            } // end of for
+
+        } // end of msg.hasCreateNewReplicaMsg()
+        else if(msg.hasHealBadChunkMsg()) {
+            // 1. creates retrieve chunkmessage
+            StorageMessages.StorageMessageWrapper retrieveChunkMsgWrapper =
+                    ClientStorageMessagesHelper.prepareRetrieveChunk(msg.getHealBadChunkMsg().getBadFileChunkId());
+            // and sends chunkmessage Wrapper to nodes in the list
+            for(int i =0; i<msg.getHealBadChunkMsg().getStorageNodesCount(); i++) {
+                String[] connectInfo = NodeId.getIPAndPort(msg.getHealBadChunkMsg().getStorageNodes(i));
+                try {
+                    ChannelFuture f = new MessageSender().send(
+                            false,
+                            ConfigSystemParam.getNodeType(),
+                            connectInfo[0],
+                            Integer.parseInt(connectInfo[1]),
+                            retrieveChunkMsgWrapper);
+                    f.get(200, TimeUnit.MILLISECONDS);
+                    break;
+                } catch (TimeoutException e) {
+                    System.out.println("TIMEOUT, continuing to next if any");
+                    continue;
+                }catch (InterruptedException | ExecutionException e) {
+                    e.printStackTrace();
+                }
 
 
             } // end of for
-
-
-
-
-        } // end of msg.hasCreateNewReplicaMsg()
+        } // end of msg.hasHealBadChunkMsg()
     }
 
     private boolean checkIfSourceExists(String sourcePath){

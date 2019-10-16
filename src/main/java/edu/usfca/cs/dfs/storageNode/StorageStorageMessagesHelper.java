@@ -177,4 +177,18 @@ public class StorageStorageMessagesHelper {
         return msgWrapper;
     }
 
+    public static StorageMessages.StorageMessageWrapper prepareBadChunkFoundMsg(String nodeId, String fileChunkId){
+        StorageMessages.BadChunkFound  badChunkFound = StorageMessages.BadChunkFound.newBuilder()
+                .setSelfId(nodeId)
+                .setFileChunkId(fileChunkId)
+                .build();
+
+        StorageMessages.StorageMessageWrapper msgWrapper = StorageMessages.StorageMessageWrapper.newBuilder()
+                .setBadChunkFoundMsg(badChunkFound)
+                .build();
+
+        return msgWrapper;
+    }
+
+
 }

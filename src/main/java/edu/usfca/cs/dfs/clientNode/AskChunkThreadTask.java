@@ -8,7 +8,9 @@ import io.netty.channel.ChannelFuture;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class AskChunkThreadTask implements Callable {
 
@@ -19,18 +21,28 @@ public class AskChunkThreadTask implements Callable {
     }
 
     @Override
-    public ChannelFuture call() throws Exception {
+    public ChannelFuture call() {
 
         for(Map.Entry<String, StorageMessages.StorageMessageWrapper> entry : this.retrieveChunkMap.entrySet()) {
             String[] connectingInfo = NodeId.getIPAndPort(entry.getKey());
-            ChannelFuture f = new MessageSender().send(
-                    true,
-                    ClientParams.getNodeType(),
-                    connectingInfo[0],
-                    Integer.parseInt(connectingInfo[1]),
-                    entry.getValue());
+            ChannelFuture f = null;
+            try {
+                f = new MessageSender().send(
+                        true,
+                        ClientParams.getNodeType(),
+                        connectingInfo[0],
+                        Integer.parseInt(connectingInfo[1]),
+                        entry.getValue());
 
-//            f.get(200, TimeUnit.MILLISECONDS);
+                f.get(200, TimeUnit.MILLISECONDS);
+                break;
+            }  catch (TimeoutException e) {
+                System.out.println("TIMEOUT, continuing to next if any");
+                continue;
+            }catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+
 //            if(!f.isCancelled()) {
 ////                System.out.println("AskChunkThreadTask : !f.isCancelled() : ");
 //                return f;
