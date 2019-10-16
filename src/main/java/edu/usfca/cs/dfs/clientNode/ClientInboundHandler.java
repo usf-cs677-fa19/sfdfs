@@ -1,5 +1,6 @@
 package edu.usfca.cs.dfs.clientNode;
 
+import edu.usfca.cs.dfs.ClientNode;
 import edu.usfca.cs.dfs.net.MessageSender;
 import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.data.FileChunkId;
@@ -74,10 +75,18 @@ public class  ClientInboundHandler extends InboundHandler {
 
         }
         else if(msg.hasChunkMsg()) {
+            ctx.close();
+
             System.out.println("\n Received chunkMsg from Storage Node");
             if(msg.getChunkMsg().getFound() == true) {
                 Fileify.writeChunkToFile(msg.getChunkMsg());
             } else {
+                System.out.println("CHUNK NOT FOUND MSG : ");
+                System.out.println("Storage node Ids : ");
+                for(int i =0; i<msg.getChunkMsg().getStorageNodeIdsList().size();i++) {
+                    System.out.println(msg.getChunkMsg().getStorageNodeIds(i));
+                }
+                new AskChunkTask(ClientParams.getNodeType(), msg.getChunkMsg()).run();
                 System.out.println("Chunk not found message");
             }
 

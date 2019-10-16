@@ -98,9 +98,34 @@ public class StorageStorageMessagesHelper {
         return msgWrapper;
     }
 
-    public static StorageMessages.StorageMessageWrapper prepareChunkNotFoundMsg(){
+
+    public static StorageMessages.StorageMessageWrapper prepareChunkForBadChunkMsg(String fileChunkId, ByteBuffer buff, String primaryId){
+        StorageMessages.ChunkForBadChunk chunkForBadChunk = StorageMessages.ChunkForBadChunk.newBuilder()
+                .setFound(true)
+                .setFileChunkId(fileChunkId)
+                .setData(ByteString.copyFrom(buff))
+                .setPrimaryIdForChunk(primaryId)
+                .build();
+
+        StorageMessages.StorageMessageWrapper msgWrapper =
+                StorageMessages.StorageMessageWrapper.newBuilder()
+                        .setChunkForBadChunkMsg(chunkForBadChunk)
+                        .build();
+
+        return msgWrapper;
+    }
+
+    public static StorageMessages.StorageMessageWrapper prepareChunkNotFoundMsg(String fileChunkId, List<String> storageIds){
+        System.out.println("Sending updated storage node ids in prepareChunkNotFoundMsg : - > ");
+        for(int i = 0; i < storageIds.size(); i++) {
+            System.out.println(storageIds.get(i));
+        }
+
+
         StorageMessages.Chunk chunk = StorageMessages.Chunk.newBuilder()
                 .setFound(false)
+                .setFileChunkId(fileChunkId)
+                .addAllStorageNodeIds(storageIds)
                 .build();
 
         StorageMessages.StorageMessageWrapper msgWrapper =
@@ -177,14 +202,31 @@ public class StorageStorageMessagesHelper {
         return msgWrapper;
     }
 
-    public static StorageMessages.StorageMessageWrapper prepareBadChunkFoundMsg(String nodeId, String fileChunkId){
+    public static StorageMessages.StorageMessageWrapper prepareBadChunkFoundMsg(String nodeId, String fileChunkId, String primaryNode){
         StorageMessages.BadChunkFound  badChunkFound = StorageMessages.BadChunkFound.newBuilder()
                 .setSelfId(nodeId)
                 .setFileChunkId(fileChunkId)
+                .setPrimaryIdForChunk(primaryNode)
                 .build();
 
         StorageMessages.StorageMessageWrapper msgWrapper = StorageMessages.StorageMessageWrapper.newBuilder()
                 .setBadChunkFoundMsg(badChunkFound)
+                .build();
+
+        return msgWrapper;
+    }
+
+
+    public static StorageMessages.StorageMessageWrapper prepareRetrieveChunkForBadChunk(String fileChunkId, List<String> storageIds, String primaryId){
+
+        StorageMessages.RetrieveChunkForBadChunk retrieveChunkForBadChunk = StorageMessages.RetrieveChunkForBadChunk.newBuilder()
+                .setFileChunkId(fileChunkId)
+                .addAllStorageNodeIds(storageIds)
+                .setPrimaryNode(primaryId)
+                .build();
+
+        StorageMessages.StorageMessageWrapper msgWrapper = StorageMessages.StorageMessageWrapper.newBuilder()
+                .setRetrieveChunkForBadChunk(retrieveChunkForBadChunk)
                 .build();
 
         return msgWrapper;

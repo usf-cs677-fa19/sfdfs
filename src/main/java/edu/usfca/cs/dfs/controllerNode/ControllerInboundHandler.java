@@ -29,12 +29,13 @@ public class ControllerInboundHandler extends InboundHandler {
             this.recvHeartBeat(msg);
 
         }
-        else if(msg.hasRetrieveFileMsg()){ // controller receieving a:  RetrieveFile message from client
-            // should return file containing mapping of each chunk to storage node //Map<ChunkName,StorageNode>
+        else if(msg.hasRetrieveFileMsg()){ // controller receieving a:  RetrieveFile message from client should return file containing mapping of each chunk to storage node //Map<ChunkName,StorageNode>
             System.out.println("Request from client to retrieve file!!!");
             String filename = msg.getRetrieveFileMsg().getFileName();
             //get list of storage nodes from bloomFilter, for chunk 1
             ArrayList<String> storageNodes = ControllerNodeHelper.getStorageNodeFromBloomFiltersForChunk(filename,1);
+
+            System.out.println("Storage node id list for 1st chuck!!");
             // for First node in the list Send RetrieveChunkMeta To Storage
             if(storageNodes.size() == 0){
                 System.out.println("No Storage Nodes have the file!!!");
@@ -135,9 +136,12 @@ public class ControllerInboundHandler extends InboundHandler {
         }
         else if(msg.hasBadChunkFoundMsg()) {
             // getting bad chunk found message
+
+            System.out.println("Recv Bad chunk message from storage node");
             StorageMessages.BadChunkFound badChunkFound = msg.getBadChunkFoundMsg();
             String recvSelfId = badChunkFound.getSelfId();
             String badChunkFoundId = badChunkFound.getFileChunkId();
+            String primaryIdForChunk = badChunkFound.getPrimaryIdForChunk();
             // checking in bloomfilter to find primary
             ArrayList<String> primaries = ControllerDS.getInstance().checkBloomFiltersForChunk(badChunkFoundId);
             // and adding replicas
@@ -150,7 +154,7 @@ public class ControllerInboundHandler extends InboundHandler {
             }
             // prepare HealBadChunkMsg
             StorageMessages.StorageMessageWrapper healBadChunkMsgWrapper =
-                    ControllerStorageMessagesHelper.prepareHealBadChunkMsg(recvSelfId, badChunkFoundId, primariesWithReplicas);
+                    ControllerStorageMessagesHelper.prepareHealBadChunkMsg(recvSelfId, badChunkFoundId, primariesWithReplicas, primaryIdForChunk);
             String[] connectingInfo = NodeId.getIPAndPort(recvSelfId);
             try {
                 new MessageSender().send(false,
@@ -161,10 +165,11 @@ public class ControllerInboundHandler extends InboundHandler {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
+            ctx.close();
         }
         else {
             System.out.println("Donno what message was received");
+            ctx.close();
         }
     }
 

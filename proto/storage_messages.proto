@@ -37,12 +37,28 @@ message RetrieveChunkMeta{
 
 message RetrieveChunk{
     string fileChunkId = 1;
+    repeated string storageNodeIds = 2;
+}
+
+message RetrieveChunkForBadChunk{
+    string fileChunkId = 1;
+    repeated string storageNodeIds = 2;
+    string primaryNode = 3;
 }
 
 message Chunk {
     bool found = 1;
     string fileChunkId = 2;
     bytes data = 3;
+    repeated string storageNodeIds = 4;
+}
+
+message ChunkForBadChunk {
+    bool found = 1;
+    string fileChunkId = 2;
+    bytes data = 3;
+    repeated string storageNodeIds = 4;
+    string primaryIdForChunk = 5;
 }
 
 message ChunkLocation{
@@ -96,12 +112,14 @@ message NewPrimaryReply{
 message BadChunkFound{
     string selfId = 1;
     string fileChunkId = 2;
+    string primaryIdForChunk = 3;
 }
 
 message HealBadChunk{
     string selfId = 1;
     string badFileChunkId = 2;
     repeated string storageNodes = 3;
+    string primaryIdForChunk = 4;
 }
 
 message StorageMessageWrapper {
@@ -122,6 +140,8 @@ message StorageMessageWrapper {
         CreateNewReplica createNewReplicaMsg = 14;
         BadChunkFound badChunkFoundMsg = 15;
         HealBadChunk healBadChunkMsg = 16;
+        RetrieveChunkForBadChunk retrieveChunkForBadChunk = 17;
+        ChunkForBadChunk chunkForBadChunkMsg = 18;
     }
 }
 

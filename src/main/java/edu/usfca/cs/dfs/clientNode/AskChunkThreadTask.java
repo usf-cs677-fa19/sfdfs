@@ -35,7 +35,9 @@ public class AskChunkThreadTask implements Callable {
                         entry.getValue());
 
                 f.get(200, TimeUnit.MILLISECONDS);
-                break;
+                if(f.isSuccess()) {
+                    break;
+                }
             }  catch (TimeoutException e) {
                 System.out.println("TIMEOUT, continuing to next if any");
                 continue;

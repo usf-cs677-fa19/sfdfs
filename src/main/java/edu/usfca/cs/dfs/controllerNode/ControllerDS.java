@@ -450,8 +450,13 @@ public class ControllerDS {
 
     public List<String> getListOfReplicasForTheNodes(List<String> nodes){
         List<String> listOfReplicas = new ArrayList<>();
-        for (String node : nodes){
-           listOfReplicas.addAll(storageNodeGroupRegister.get(node));
+        if (nodes.size() >0) {
+            for (String node : nodes){
+                if(storageNodeGroupRegister.containsKey(node)){
+                    System.out.println("Checking for node : "+ node);
+                    listOfReplicas.addAll(storageNodeGroupRegister.get(node));
+                }
+            }
         }
         return listOfReplicas;
     }

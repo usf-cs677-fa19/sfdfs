@@ -61,18 +61,29 @@ public class ClientStorageMessagesHelper {
 
     public static ArrayList<Map<String, StorageMessages.StorageMessageWrapper>> prepareRetrieveChunkMapArray(Map<String, StorageMessages.StorageNodesHavingChunk> mapping) {
         ArrayList<Map<String, StorageMessages.StorageMessageWrapper>> retrieveChunkMapArray = new ArrayList<>();
+        List<String> storageIds = new ArrayList<>();
+        for(Map.Entry<String, StorageMessages.StorageNodesHavingChunk> eachChunkId : mapping.entrySet()) {
+
+            for(int i = 0 ; i < eachChunkId.getValue().getStorageNodeList().size(); i++) {
+                System.out.println("Root Cause : "+ eachChunkId.getValue().getStorageNode(i));
+                storageIds.add(eachChunkId.getValue().getStorageNode(i));
+            }
+
+
+        }
 
         for (Map.Entry<String, StorageMessages.StorageNodesHavingChunk> eachMapping : mapping.entrySet()) {
-            retrieveChunkMapArray.add(ClientStorageMessagesHelper.prepareRetrieveChunkMap(eachMapping));
+            retrieveChunkMapArray.add(ClientStorageMessagesHelper.prepareRetrieveChunkMap(eachMapping, storageIds));
         }
         return retrieveChunkMapArray;
     }
 
-    private static Map<String, StorageMessages.StorageMessageWrapper> prepareRetrieveChunkMap(Map.Entry<String, StorageMessages.StorageNodesHavingChunk> mapping) {
+    private static Map<String, StorageMessages.StorageMessageWrapper> prepareRetrieveChunkMap
+            (Map.Entry<String, StorageMessages.StorageNodesHavingChunk> mapping, List<String> storageIds) {
 
         Map<String,  StorageMessages.StorageMessageWrapper> chunkAskMap = new HashMap<>();
         //value
-        StorageMessages.StorageMessageWrapper retrieveChunkMsg = ClientStorageMessagesHelper.prepareRetrieveChunk(mapping.getKey());
+        StorageMessages.StorageMessageWrapper retrieveChunkMsg = ClientStorageMessagesHelper.prepareRetrieveChunk(mapping.getKey(), storageIds);
         //key(s) - storage node ids
         if(mapping.getValue().getStorageNodeCount() > 0) {
             for(int i = 0; i < mapping.getValue().getStorageNodeCount(); i++ ) {
@@ -83,10 +94,11 @@ public class ClientStorageMessagesHelper {
         return chunkAskMap;
     }
 
-    public static StorageMessages.StorageMessageWrapper prepareRetrieveChunk(String fileChunkId){
+    public static StorageMessages.StorageMessageWrapper prepareRetrieveChunk(String fileChunkId, List<String> storageIds){
 
         StorageMessages.RetrieveChunk retrieveChunk = StorageMessages.RetrieveChunk.newBuilder()
                 .setFileChunkId(fileChunkId)
+                .addAllStorageNodeIds(storageIds)
                 .build();
 
         StorageMessages.StorageMessageWrapper msgWrapper = StorageMessages.StorageMessageWrapper.newBuilder()
