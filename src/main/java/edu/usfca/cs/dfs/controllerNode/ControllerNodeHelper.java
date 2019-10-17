@@ -9,11 +9,13 @@ import edu.usfca.cs.dfs.data.NodeId;
 
 import edu.usfca.cs.dfs.net.MessageSender;
 import edu.usfca.cs.dfs.storageNode.StorageStorageMessagesHelper;
+import javafx.scene.shape.CircleBuilder;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
+import java.util.logging.Level;
 
 public class ControllerNodeHelper{
 
@@ -27,8 +29,9 @@ public class ControllerNodeHelper{
 
 
     public static void recvHeartBeat(StorageMessages.StorageMessageWrapper msg) {
-        System.out.println("heartbeat from: "+msg.getHeartBeatMsg().getIpAddress()+":"+msg.getHeartBeatMsg().getPort());
-        System.out.println("SpaceRem: "+msg.getHeartBeatMsg().getSpaceRemaining()+", "
+
+        ControllerDS.getInstance().logger.log(Level.INFO,"heartbeat from: "+msg.getHeartBeatMsg().getIpAddress()+":"+msg.getHeartBeatMsg().getPort());
+        ControllerDS.getInstance().logger.log(Level.INFO,"SpaceRem: "+msg.getHeartBeatMsg().getSpaceRemaining()+", "
                 + "ReqProcessed: "+msg.getHeartBeatMsg().getRequestProcessed()+", "
                 + "RetrievalProcessed: "+msg.getHeartBeatMsg().getRetrievalProcessed());
 
@@ -41,7 +44,7 @@ public class ControllerNodeHelper{
                 Instant.now()
         ));
 
-        System.out.println("StorageNodeDetailList size: "+ControllerDS.getInstance().getStorageNodeRegister().size());
+        ControllerDS.getInstance().logger.log(Level.INFO,"StorageNodeDetailList size: "+ControllerDS.getInstance().getStorageNodeRegister().size());
     }
     //for a chunk return 3 storage node
 
@@ -50,7 +53,7 @@ public class ControllerNodeHelper{
 
         String primaryNode = ControllerDS.getInstance().findTheStorageNodeToSaveChunk(chunkMetaPOJO.getChunkSize());  //get the storage node to
 
-        System.out.println("Primary node : \n\n"+primaryNode);
+        ControllerDS.getInstance().logger.log(Level.INFO,"Primary node : \n\n"+primaryNode);
         if(primaryNode != "") {                                                                                     //if there is atleast one storage node registered with the client
 
             ArrayList<String> replicaNodesArrayList = (ControllerDS.getInstance())
@@ -58,16 +61,16 @@ public class ControllerNodeHelper{
 
             if (replicaNodesArrayList.size() > 0) {                                                                 //if number of storage nodes registered > 0
                // threeStorageNodes.add(primaryNode);                                                                 // add primary node
-                System.out.println("The replicaNodesArrayList.size() : "+replicaNodesArrayList.size());
+                ControllerDS.getInstance().logger.log(Level.INFO,"The replicaNodesArrayList.size() : "+replicaNodesArrayList.size());
                 threeStorageNodes.addAll(replicaNodesArrayList);                                                    //add the replicas
             }else{
-                System.out.println("Only one Storage Node registered with the Controller!!");
+                ControllerDS.getInstance().logger.log(Level.INFO,"Only one Storage Node registered with the Controller!!");
                 threeStorageNodes.add(primaryNode);                                                                 // add the primary node
             }
         }else{
-            System.out.println("No Storage nodes registered with the Controller!!");                                //no storage nodes registered
+            ControllerDS.getInstance().logger.log(Level.INFO,"No Storage nodes registered with the Controller!!");
         }
-        System.out.println("The size of threeNodes : "+threeStorageNodes.size());
+        ControllerDS.getInstance().logger.log(Level.INFO,"The size of threeNodes : "+threeStorageNodes.size());
         return threeStorageNodes;
     }
 
@@ -96,10 +99,10 @@ public class ControllerNodeHelper{
         StorageMessages.StorageMessageWrapper msgWrapper = ControllerStorageMessagesHelper.buildBecomePrimary(forIP,forPort,newReplicas);
 
         try {
-            System.out.println("Sending the becomePrimaryToStorageNode!!");
+            ControllerDS.getInstance().logger.log(Level.INFO,"Sending the becomePrimaryToStorageNode!!");
             new MessageSender().send(true,"controller",newIP,newPort,msgWrapper);
         } catch (InterruptedException e) {
-            System.out.println("Exception in connecting to the Storage node!");
+            ControllerDS.getInstance().logger.log(Level.SEVERE,"Exception in connecting to the Storage node!");
             e.printStackTrace();
         }
     }

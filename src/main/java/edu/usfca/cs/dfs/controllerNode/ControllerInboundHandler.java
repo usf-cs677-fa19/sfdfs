@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class ControllerInboundHandler extends InboundHandler {
 
@@ -31,15 +32,15 @@ public class ControllerInboundHandler extends InboundHandler {
 
         }
         else if(msg.hasRetrieveFileMsg()){ // controller receieving a:  RetrieveFile message from client should return file containing mapping of each chunk to storage node //Map<ChunkName,StorageNode>
-            System.out.println("Request from client to retrieve file!!!");
+            ControllerDS.getInstance().logger.log(Level.INFO,"Request from client to retrieve file!!!");
             String filename = msg.getRetrieveFileMsg().getFileName();
             //get list of storage nodes from bloomFilter, for chunk 1
             ArrayList<String> storageNodes = ControllerNodeHelper.getStorageNodeFromBloomFiltersForChunk(filename,1);
 
-            System.out.println("Storage node id list for 1st chuck!!");
+            ControllerDS.getInstance().logger.log(Level.INFO,"Storage node id list for 1st chuck!!");
             // for First node in the list Send RetrieveChunkMeta To Storage
             if(storageNodes.size() == 0){
-                System.out.println("No Storage Nodes have the file!!!");
+                ControllerDS.getInstance().logger.log(Level.INFO,"No Storage Nodes have the file!!!");
                 // todo sed not found
                 StorageMessages.StorageMessageWrapper msgWrapper =
                         ControllerStorageMessagesHelper.prepareNoFile(filename);
@@ -57,7 +58,7 @@ public class ControllerInboundHandler extends InboundHandler {
 
                 if(fileMetaData != null) {
 
-                    System.out.println("FileMetaData : " + fileMetaData);
+                    ControllerDS.getInstance().logger.log(Level.INFO,"FileMetaData : " + fileMetaData);
                     HashMap<String, ArrayList<String>> mapping = ControllerDS.getInstance().getMappingOfChunkIdToStorageNodes(fileMetaData.getFileName(), fileMetaData.getTotalChunks());
                     //HashMap<String,ArrayList<String>> mapping = ControllerDS.getInstance().getTheMappingOfChunkIdToStorageNodesForClientRequest();
                     fileMetaData = null;
@@ -69,7 +70,7 @@ public class ControllerInboundHandler extends InboundHandler {
 //                        } // todo: anurag add replicas for primary
 
 
-                        System.out.println("The Mapping in the controller is not empty!!!!");
+                        ControllerDS.getInstance().logger.log(Level.INFO,"The Mapping in the controller is not empty!!!!");
                         //  StorageMessages.StorageMessageWrapper msgWrapper = ControllerStorageMessagesHelper.buildMappingChunkIdToStorageNodes(mapping);
                         StorageMessages.StorageMessageWrapper msgWrapper = ControllerStorageMessagesHelper.buildMappingChunkIdToStorageNodes(mapping);
 
@@ -81,7 +82,7 @@ public class ControllerInboundHandler extends InboundHandler {
             }
         }
         else if(msg.hasChunkMetaMsg()){
-            System.out.println("Received chunkMetaMsg from client");
+            ControllerDS.getInstance().logger.log(Level.INFO,"Received chunkMetaMsg from client");
 
             StorageMessages.ChunkMeta receivedChunkMetaMsg = msg.getChunkMetaMsg();
 
@@ -103,7 +104,7 @@ public class ControllerInboundHandler extends InboundHandler {
                     chunksStoredInBloomFilters.add(stored);
                 }
             if (chunksStoredInBloomFilters.size() == 1){
-                System.out.println("Bloomfilters filled successfully!!!");
+                ControllerDS.getInstance().logger.log(Level.INFO,"Bloomfilters filled successfully!!!");
             }
 
             cm.setStorageNodeIds(storageNodesAssigned);
@@ -117,12 +118,12 @@ public class ControllerInboundHandler extends InboundHandler {
 
             //todo here - handle context
 //
-                System.out.println("Sent chunkMetaMsg with list of storage nodes back to  client");
+            ControllerDS.getInstance().logger.log(Level.INFO,"Sent chunkMetaMsg with list of storage nodes back to  client");
 
             //ctx.close();
         }
         else if(msg.hasStorageChunkMetaMsg()){
-            System.out.println("\n Controller recieved the meta for first chunk from Storage Node!!!!!");
+            ControllerDS.getInstance().logger.log(Level.INFO,"\n Controller recieved the meta for first chunk from Storage Node!!!!!");
 
             ControllerDS.getInstance().setFileMetaData(new FileMetaData(msg.getStorageChunkMetaMsg().getFileName(),
                     msg.getStorageChunkMetaMsg().getChunkId(),
@@ -138,15 +139,13 @@ public class ControllerInboundHandler extends InboundHandler {
            // StorageMessages.StorageMessageWrapper msgWrapper = ControllerStorageMessagesHelper.buildMappingChunkIdToStorageNodes(mapping);
         }
         else if(msg.hasReplyMsg()){
-
-            System.out.println("New Primary created successfully!!");
+            ControllerDS.getInstance().logger.log(Level.INFO,"New Primary created successfully!!");
             ctx.close();
-
         }
         else if(msg.hasBadChunkFoundMsg()) {
             // getting bad chunk found message
 
-            System.out.println("Recv Bad chunk message from storage node");
+            ControllerDS.getInstance().logger.log(Level.INFO,"Recv Bad chunk message from storage node");
             StorageMessages.BadChunkFound badChunkFound = msg.getBadChunkFoundMsg();
             String recvSelfId = badChunkFound.getSelfId();
             String badChunkFoundId = badChunkFound.getFileChunkId();
@@ -182,7 +181,7 @@ public class ControllerInboundHandler extends InboundHandler {
             ctx.close();
         }
         else {
-            System.out.println("Donno what message was received");
+            ControllerDS.getInstance().logger.log(Level.INFO,"Donno what message was received");
             ctx.close();
         }
     }
@@ -202,14 +201,13 @@ public class ControllerInboundHandler extends InboundHandler {
 
     public ChannelFuture sendRetrieveChunkMetaToStorage(String storageNode,String fileChunkId ){
 
-        System.out.println("Trying to connect to the primary storage Node");
+        ControllerDS.getInstance().logger.log(Level.INFO,"Trying to connect to the primary storage Node");
         String[] connectingInfo = NodeId.getIPAndPort(storageNode);
         String connectingAddress = connectingInfo[0];
         int connectingPort = Integer.parseInt(connectingInfo[1]);
 
-        System.out.println("Connecting Address : "+connectingAddress);
-
-        System.out.println("Connecting Port : "+connectingPort);
+        ControllerDS.getInstance().logger.log(Level.INFO,"Connecting Address : "+connectingAddress);
+        ControllerDS.getInstance().logger.log(Level.INFO,"Connecting Port : "+connectingPort);
         // to be send to storage nodce and recev chunkMeta from storage
         StorageMessages.StorageMessageWrapper msgWrapper =
                 ControllerStorageMessagesHelper.buildretrieveChunkMeta(fileChunkId);

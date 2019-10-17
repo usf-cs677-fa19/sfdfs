@@ -5,8 +5,12 @@ import edu.usfca.cs.dfs.StorageMessages;
 
 import java.nio.ByteBuffer;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ClientStorageMessagesHelper {
+
+    public static Logger logger = Logger.getLogger(ClientStorageMessagesHelper.class.getName());
 
     public static StorageMessages.StorageMessageWrapper prepareChunkMeta(String fileName, int chunkId, int chunkSize, int totalChunks) {
         StorageMessages.ChunkMeta chunkMetaMsg
@@ -27,7 +31,7 @@ public class ClientStorageMessagesHelper {
 
     public static StorageMessages.StorageMessageWrapper prepareStoreChunkMsg(StorageMessages.ChunkMeta cmMsg, ByteBuffer buffer) {
 
-        System.out.println("Size of StorageNodeIds : "+ cmMsg.getStorageNodeIdsList().size());
+        logger.log(Level.INFO,"Size of StorageNodeIds : "+ cmMsg.getStorageNodeIdsList().size());
         StorageMessages.StoreChunk storeChunkMsg
                 = StorageMessages.StoreChunk.newBuilder()
                 .setFileName(cmMsg.getFileName())
@@ -65,11 +69,9 @@ public class ClientStorageMessagesHelper {
         for(Map.Entry<String, StorageMessages.StorageNodesHavingChunk> eachChunkId : mapping.entrySet()) {
 
             for(int i = 0 ; i < eachChunkId.getValue().getStorageNodeList().size(); i++) {
-                System.out.println("Root Cause : "+ eachChunkId.getValue().getStorageNode(i));
+                logger.log(Level.INFO,"Root Cause : "+ eachChunkId.getValue().getStorageNode(i));
                 storageIds.add(eachChunkId.getValue().getStorageNode(i));
             }
-
-
         }
 
         for (Map.Entry<String, StorageMessages.StorageNodesHavingChunk> eachMapping : mapping.entrySet()) {

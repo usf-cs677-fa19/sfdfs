@@ -12,6 +12,8 @@ import java.io.File;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ClientNode {
 
@@ -19,6 +21,8 @@ public class ClientNode {
 
     private ExecutorService executor;
     private String basePath;
+
+    static Logger logger = Logger.getLogger(ClientNode.class.getName());
 
     private ClientNode(){
     }
@@ -59,6 +63,7 @@ public class ClientNode {
 
 
     public static void main(String[] args) {
+
         if(Init.isCorrectArgs(args)) {
             ClientNode c = ClientNode.setInstance(args[0]);
             for (; ; ) {
@@ -77,7 +82,7 @@ public class ClientNode {
                 }
             }
         } else {
-            System.out.println("give config json as param");
+            logger.log(Level.INFO,"Give config json as param");
         }
     }
 }

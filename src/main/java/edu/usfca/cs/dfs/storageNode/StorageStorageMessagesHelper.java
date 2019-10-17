@@ -7,6 +7,7 @@ import edu.usfca.cs.dfs.storageNode.data.ChunkFileMeta;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 public class StorageStorageMessagesHelper {
 //
@@ -49,7 +50,7 @@ public class StorageStorageMessagesHelper {
 
         StorageMessages.StoreChunk recvStoreChunk = msg.getStoreChunkMsg();
 
-        System.out.println("Size of StorageNodeIds : "+ recvStoreChunk.getStorageNodeIdsList().size());
+        StorageNodeDS.getInstance().logger.log(Level.INFO,"Size of StorageNodeIds : "+ recvStoreChunk.getStorageNodeIdsList().size());
         StorageMessages.StoreChunk storeChunkMsg
                 = StorageMessages.StoreChunk.newBuilder()
                 .setFileName(recvStoreChunk.getFileName())
@@ -116,7 +117,7 @@ public class StorageStorageMessagesHelper {
     }
 
     public static StorageMessages.StorageMessageWrapper prepareChunkNotFoundMsg(String fileChunkId, List<String> storageIds){
-        System.out.println("Sending updated storage node ids in prepareChunkNotFoundMsg : - > ");
+        StorageNodeDS.getInstance().logger.log(Level.INFO,"Sending updated storage node ids in prepareChunkNotFoundMsg : - > ");
         for(int i = 0; i < storageIds.size(); i++) {
             System.out.println(storageIds.get(i));
         }
@@ -162,7 +163,7 @@ public class StorageStorageMessagesHelper {
         List<String> storageNodeIds = new ArrayList<>();
         storageNodeIds.add(cmMsg.getStorageNodeIds().get(0));
         storageNodeIds.add(newReplicaId);
-        System.out.println("Size of StorageNodeIds : "+ storageNodeIds.size());
+        StorageNodeDS.getInstance().logger.log(Level.INFO,"Size of StorageNodeIds : "+ storageNodeIds.size());
 
 
         StorageMessages.StoreChunk storeChunkMsg

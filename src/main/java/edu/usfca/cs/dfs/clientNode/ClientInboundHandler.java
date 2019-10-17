@@ -15,15 +15,18 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class  ClientInboundHandler extends InboundHandler {
 
+    public Logger logger = Logger.getLogger(ClientInboundHandler.class.getName());
     @Override
     public void channelRead0(
             ChannelHandlerContext ctx,
             StorageMessages.StorageMessageWrapper msg) {
 
-        System.out.println("IN CLIENT INBOUND HANDLER");
+        logger.log(Level.INFO,"IN CLIENT INBOUND HANDLER");
         ctx.close();
 
         if(msg.hasChunkMetaMsg()) { // msg returned from controller with storage nodes list // while client want to store chunks
@@ -92,10 +95,10 @@ public class  ClientInboundHandler extends InboundHandler {
 
         }
         else if(msg.hasNoFileMsg()) {
-            System.out.println("File is not present in System");
+            logger.log(Level.INFO,"File is not present in System");
         }
         else {
-            System.out.println("\n Donno what message receieved");
+            logger.log(Level.INFO,"\n Donno what message receieved");
         }
 
 
@@ -116,10 +119,12 @@ public class  ClientInboundHandler extends InboundHandler {
         String[] connectingInfo = NodeId.getIPAndPort(cmMsg.getStorageNodeIds(0));
         StorageMessages.StorageMessageWrapper storeChunkMsg =
                 ClientStorageMessagesHelper.prepareStoreChunkMsg(cmMsg, buffer);
-        System.out.println("storage nodes assigned to "
+
+        logger.log(Level.INFO,"storage nodes assigned to "
                 + FileChunkId.getFileChunkId(cmMsg.getFileName(), cmMsg.getChunkId())
                 +" are : "
                 + storeChunkMsg.getStoreChunkMsg().getStorageNodeIdsList());
+
         // b. send to primary storage node
         try {
             new MessageSender().send(false, ClientParams.getNodeType(), connectingInfo[0], Integer.parseInt(connectingInfo[1]), storeChunkMsg);

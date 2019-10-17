@@ -7,13 +7,14 @@ import java.time.temporal.ChronoUnit;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TimerTask;
+import java.util.logging.Level;
 
 
 public class CheckAliveStorageNodes extends TimerTask {
 
     @Override
     public void run(){
-        System.out.println("\nChecking if Storage Nodes are alive : "+Instant.now()+"\n");
+        ControllerDS.getInstance().logger.log(Level.INFO,"Checking if Storage Nodes are alive : "+Instant.now()+"\n");
         this.checkAliveStorageNodes();
     }
 
@@ -24,7 +25,7 @@ public class CheckAliveStorageNodes extends TimerTask {
             Instant instant = ((StorageNodeDetail)node.getValue()).getTimeStamp();
 
             if(instant.isBefore(Instant.now().minus(6, ChronoUnit.SECONDS))){
-                System.out.println("Removing the storage node : "+node.getKey()+"\n");
+                ControllerDS.getInstance().logger.log(Level.INFO,"Removing the storage node : "+node.getKey()+"\n");
                 String nodeToBeDeleted = (String) node.getKey();
                StorageNodeDetail storageNodeDetail = (ControllerDS.getInstance().getStorageNodeRegister()).get(nodeToBeDeleted);
                ControllerDS.getInstance().deleteFromStorageNodeRegister(nodeToBeDeleted);

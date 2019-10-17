@@ -6,11 +6,14 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
 import java.net.InetSocketAddress;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @ChannelHandler.Sharable
 public class InboundHandler
 extends SimpleChannelInboundHandler<StorageMessages.StorageMessageWrapper> {
 
+    public Logger logger =  Logger.getLogger(InboundHandler.class.getName());
     public InboundHandler() { }
 
     @Override
@@ -18,7 +21,7 @@ extends SimpleChannelInboundHandler<StorageMessages.StorageMessageWrapper> {
         /* A connection has been established */
         InetSocketAddress addr
             = (InetSocketAddress) ctx.channel().remoteAddress();
-        System.out.println("Connection established: " + addr);
+        logger.log(Level.INFO,"Connection established: " + addr);
     }
 
     @Override
@@ -26,7 +29,7 @@ extends SimpleChannelInboundHandler<StorageMessages.StorageMessageWrapper> {
         /* A channel has been disconnected */
         InetSocketAddress addr
             = (InetSocketAddress) ctx.channel().remoteAddress();
-        System.out.println("Connection lost: " + addr);
+        logger.log(Level.INFO,"Connection lost: " + addr);
     }
 
     @Override
@@ -43,13 +46,13 @@ extends SimpleChannelInboundHandler<StorageMessages.StorageMessageWrapper> {
 //        if(msg.hasHeartBeat() ) {
 //            System.out.println("heartbeat from");
 //        } else {
-        System.out.println("IN CLIENT INBOUND HANDLER");
+        logger.log(Level.INFO,"IN CLIENT INBOUND HANDLER");
         if(msg.hasRetrieveFileMsg()) {
-            System.out.println("ChunkMetaMsg receved in CLIENT INBOUND HANDLER");
+            logger.log(Level.INFO,"ChunkMetaMsg receved in CLIENT INBOUND HANDLER");
         } else {
             StorageMessages.StoreChunk storeChunkMsg
                     = msg.getStoreChunkMsg();
-            System.out.println("Storing file name: "
+            logger.log(Level.INFO,"Storing file name: "
                     + storeChunkMsg.getFileName());
         }
     }

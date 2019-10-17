@@ -1,6 +1,7 @@
 package edu.usfca.cs.dfs.storageNode;
 
 import edu.usfca.cs.dfs.StorageNode;
+import edu.usfca.cs.dfs.controllerNode.ControllerDS;
 import edu.usfca.cs.dfs.data.NodeId;
 import edu.usfca.cs.dfs.fileUtil.Fileify;
 import edu.usfca.cs.dfs.init.ConfigSystemParam;
@@ -14,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Logger;
 
 
 public class StorageNodeDS {
@@ -34,6 +36,8 @@ public class StorageNodeDS {
     //private int healed;
     private Map<String, ChunkFileMeta> chunksMetaInfo;// = new HashMap<>();
     private Map<String, Integer> healingMap;
+    public Logger logger = Logger.getLogger(StorageNodeDS.class.getName());
+
     private StorageNodeDS(){
     }
 
