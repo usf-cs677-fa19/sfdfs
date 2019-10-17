@@ -175,7 +175,7 @@ public class StorageInboundHandler extends InboundHandler {
                             Channel chan = ctx.channel();
                             ChannelFuture future = chan.write(msgWrapper);
                             chan.flush();  // sending data back to client
-
+                            ctx.close();
 
                             System.out.println("Preparing  and sending BadChunkFoundMsg  to controller");
                             StorageMessages.StorageMessageWrapper badChunkFoundMsgWrapper =
@@ -204,6 +204,7 @@ public class StorageInboundHandler extends InboundHandler {
                 ChannelFuture future = chan.write(msgWrapper);
                 chan.flush();  // sending data back to client
             }
+            //ctx.close();
 
         } // closing hasRetrieveChunkMsg
         else if(msg.hasRetrieveChunkForBadChunk()) {
@@ -243,7 +244,7 @@ public class StorageInboundHandler extends InboundHandler {
                             Channel chan = ctx.channel();
                             ChannelFuture future = chan.write(msgWrapper);
                             chan.flush();  // sending data back to client
-
+                          //  ctx.close();
                         }
                         else{
                             System.out.println("Checksum does not match :( :(");
@@ -251,23 +252,30 @@ public class StorageInboundHandler extends InboundHandler {
 
                             StorageMessages.StorageMessageWrapper msgWrapper = this.handleChunkNotFound(fileChunkId, msg);
                             isChunkFound = true;
+                           // Channel chan = ctx.channel();
+
+                            ctx.close();
+
+                            // todo : trigger a different request to heal the chunk
 //                            Channel chan = ctx.channel();
 //                            ChannelFuture future = chan.write(msgWrapper);
 //                            chan.flush();  // sending data back to client
-//
-//
-//                            System.out.println("Preparing  and sending BadChunkFoundMsg  to controller");
-//                            StorageMessages.StorageMessageWrapper badChunkFoundMsgWrapper =
-//                                    StorageStorageMessagesHelper.prepareBadChunkFoundMsg(StorageNodeDS.getInstance().getNodeId(), fileChunkId, dir) ;
-//                            try {
-//                                new MessageSender().send(false,
-//                                        ConfigSystemParam.getNodeType(),
-//                                        ConfigSystemParam.getControllerAddress(),
-//                                        ConfigSystemParam.getControllerPort(),
-//                                        badChunkFoundMsgWrapper);
-//                            } catch (InterruptedException e) {
-//                                e.printStackTrace();
-//                            }
+
+                            System.out.println("Preparing  and sending BadChunkFoundMsg  to controller");
+                            StorageMessages.StorageMessageWrapper badChunkFoundMsgWrapper =
+                                    StorageStorageMessagesHelper.prepareBadChunkFoundMsg(
+                                            StorageNodeDS.getInstance().getNodeId(),
+                                            fileChunkId,
+                                            primaryNode) ;
+                            try {
+                                new MessageSender().send(false,
+                                        ConfigSystemParam.getNodeType(),
+                                        ConfigSystemParam.getControllerAddress(),
+                                        ConfigSystemParam.getControllerPort(),
+                                        badChunkFoundMsgWrapper);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
 
                         }
                     } catch (IOException e) {
@@ -376,6 +384,8 @@ public class StorageInboundHandler extends InboundHandler {
                             retrieveChunkForBadChunkMsgWrapper);
                     f.get(200, TimeUnit.MILLISECONDS);
                     if(f.isSuccess()) {
+                        System.out.println("is Success in hasHealBadChunkMsg, fot i = "+i);
+                        ctx.close();
                         break;
                     }
                 } catch (TimeoutException e) {
@@ -394,6 +404,7 @@ public class StorageInboundHandler extends InboundHandler {
             System.out.println("\n Received chunkMsg from Storage Node");
             if(msg.getChunkForBadChunkMsg().getFound() == true) {
                 Fileify.writeChunkToFile(msg.getChunkForBadChunkMsg(), StorageNodeDS.getInstance().getBasePath());
+                //todo remove
             } else {
                 System.out.println("CHUNK NOT FOUND MSG : ");
                 System.out.println("Storage node Ids : ");

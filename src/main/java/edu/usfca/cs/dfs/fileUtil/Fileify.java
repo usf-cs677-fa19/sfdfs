@@ -73,9 +73,9 @@ public class Fileify {
         int chunkId = Integer.parseInt(filenameAndChunkId[1]);
         long startingPosition = (long)ClientParams.getGeneralChunkSize() * (chunkId - 1);
 
-        if(Fileify.doesFileExist(filePath)) {
+        //if(Fileify.doesFileExist(filePath)) {
             Fileify.createFileIfDoesNotExist(filePath);
-        }
+        //}
 
 
         try (
@@ -105,9 +105,11 @@ public class Fileify {
 
         long startingPosition = 0;
 
-        if(Fileify.doesFileExist(filePath)) {
-            Fileify.createFileIfDoesNotExist(filePath);
-        }
+//        if(Fileify.doesFileExist(filePath)) {
+            //Fileify.createFileIfDoesNotExist(filePath);
+        Fileify.deleteFile(filePath);
+        Fileify.createFileIfDoesNotExist(filePath);
+//        }
 
 
         try (
@@ -141,6 +143,20 @@ public class Fileify {
     public static boolean doesFileExist(String filePath) {
         Path p = Paths.get(filePath);
         return Files.exists(p);
+    }
+
+
+    public static boolean deleteFile(String filePath) {
+        Path p = Paths.get(filePath);
+        try {
+            if (Files.deleteIfExists(p)) {
+                System.out.println("deleted file - "+ filePath);
+                return true;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public static void createDirectory(String dirPath) {

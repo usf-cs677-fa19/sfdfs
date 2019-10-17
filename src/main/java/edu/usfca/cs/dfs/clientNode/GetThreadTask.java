@@ -3,6 +3,8 @@ package edu.usfca.cs.dfs.clientNode;
 import edu.usfca.cs.dfs.net.MessageSender;
 import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.init.ClientParams;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 
 public class GetThreadTask implements Runnable {
 
@@ -26,7 +28,7 @@ public class GetThreadTask implements Runnable {
     public void runClient(StorageMessages.StorageMessageWrapper msgWrapper)
             throws InterruptedException {
 
-        new MessageSender().send(true,
+        ChannelFuture f = new MessageSender().send(true,
                 ClientParams.getNodeType(),
                 ClientParams.getConnectingAddress(),
                 ClientParams.getConnectingPort(),

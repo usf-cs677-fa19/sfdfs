@@ -11,6 +11,7 @@ import edu.usfca.cs.dfs.net.InboundHandler;
 import edu.usfca.cs.dfs.storageNode.StorageNodeDS;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.util.ArrayList;
@@ -156,6 +157,11 @@ public class ControllerInboundHandler extends InboundHandler {
             StorageMessages.StorageMessageWrapper healBadChunkMsgWrapper =
                     ControllerStorageMessagesHelper.prepareHealBadChunkMsg(recvSelfId, badChunkFoundId, primariesWithReplicas, primaryIdForChunk);
             String[] connectingInfo = NodeId.getIPAndPort(recvSelfId);
+            //String replicaNode = "";
+//            if(primariesWithReplicas.size() > 0) {
+//                replicaNode = primariesWithReplicas.get(0);
+//            }
+            //String[] connectingInfo = NodeId.getIPAndPort(replicaNode);
             try {
                 new MessageSender().send(false,
                         ConfigSystemParam.getNodeType(),
