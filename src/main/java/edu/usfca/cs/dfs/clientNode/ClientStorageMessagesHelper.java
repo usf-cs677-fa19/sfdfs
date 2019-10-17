@@ -69,7 +69,7 @@ public class ClientStorageMessagesHelper {
         for(Map.Entry<String, StorageMessages.StorageNodesHavingChunk> eachChunkId : mapping.entrySet()) {
 
             for(int i = 0 ; i < eachChunkId.getValue().getStorageNodeList().size(); i++) {
-                logger.log(Level.INFO,"Root Cause : "+ eachChunkId.getValue().getStorageNode(i));
+                logger.log(Level.INFO,"RpreparedRetrieveChunkMap : "+ eachChunkId.getValue().getStorageNode(i)+"for "+eachChunkId.getKey());
                 storageIds.add(eachChunkId.getValue().getStorageNode(i));
             }
         }

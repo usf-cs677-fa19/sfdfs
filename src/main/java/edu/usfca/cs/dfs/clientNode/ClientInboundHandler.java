@@ -85,11 +85,11 @@ public class  ClientInboundHandler extends InboundHandler {
             if(msg.getChunkMsg().getFound() == true) {
                 Fileify.writeChunkToFile(msg.getChunkMsg());
             } else {
-                logger.log(Level.INFO,"CHUNK NOT FOUND MSG : ");
+                logger.log(Level.INFO,"Chunk not Found");
                 logger.log(Level.INFO,"Storage node Ids : ");
 
                 for(int i =0; i<msg.getChunkMsg().getStorageNodeIdsList().size();i++) {
-                    System.out.println(msg.getChunkMsg().getStorageNodeIds(i));
+                    logger.log(Level.INFO,msg.getChunkMsg().getStorageNodeIds(i));
                 }
                 new AskChunkTask(ClientParams.getNodeType(), msg.getChunkMsg()).run();
                 logger.log(Level.INFO,"Chunk not found message");
@@ -107,8 +107,6 @@ public class  ClientInboundHandler extends InboundHandler {
             logger.log(Level.INFO,"\n Donno what message receieved");
         }
 
-
-//        ctx.close();  //todo from here to up
     }
 
     private void recvChunkMetaMsg( StorageMessages.StorageMessageWrapper msg){

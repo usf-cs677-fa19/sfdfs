@@ -6,6 +6,7 @@ import edu.usfca.cs.dfs.controllerNode.data.StorageNodeDetail;
 import edu.usfca.cs.dfs.data.FileChunkId;
 import edu.usfca.cs.dfs.data.NodeId;
 import edu.usfca.cs.dfs.filter.BloomFilter;
+import edu.usfca.cs.dfs.init.ConfigSystemParam;
 
 
 import java.util.*;
@@ -84,7 +85,7 @@ public class ControllerDS {
 
     public String findTheStorageNodeToSaveChunk(int size){
         String storageNodeKey = new String();
-        storageNodeKey = getSNWithMaxSpace(size);
+        storageNodeKey = getStorageNodesMinProcessing(size);
         return storageNodeKey;
     }
 
@@ -108,6 +109,28 @@ public class ControllerDS {
         }else{
             logger.log(Level.INFO,"Give config json as param");
 
+            //System.out.println("Storage Node size is less than the required Chunk size!!");
+            return "";
+        }
+    }
+
+    public String getStorageNodesMinProcessing(int requiredChunkSize){
+        String node = "";
+        long min = 0;
+        Iterator storageNodeIterator = storageNodeRegister.entrySet().iterator();
+        while (storageNodeIterator.hasNext()){
+            Map.Entry storageNode = (Map.Entry) storageNodeIterator.next();
+
+            StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
+
+            if(min <= (details.getRequestProcessed()+details.getRetrievalProcessed())){
+                min = (details.getRequestProcessed()+details.getRetrievalProcessed());
+                node = (String) storageNode.getKey();
+            }
+        }
+        if(storageNodeRegister.get(node).getSpaceRemaining() > requiredChunkSize) {
+            return node;
+        }else{
             //System.out.println("Storage Node size is less than the required Chunk size!!");
             return "";
         }
@@ -208,8 +231,7 @@ public class ControllerDS {
     }
 
     public boolean addAReplica(String primaryKey, String replicaKey) {
-        // todo : take no of replica from configSystem.json
-        int replication = 2;
+        int replication = ConfigSystemParam.getReplication();
         if((storageNodeGroupRegister.containsKey(primaryKey)) && storageNodeGroupRegister.get(primaryKey).size() < replication) {
             storageNodeGroupRegister.get(primaryKey).add(replicaKey);
             return true;
@@ -430,7 +452,7 @@ public class ControllerDS {
             logger.log(Level.INFO,"New Primary : " + newPrimaryNode);
            // System.out.println("New Primary : " + newPrimaryNode);
         }else {
-            newPrimaryNode = getSNWithMaxSpace(0);
+            newPrimaryNode = getStorageNodesMinProcessing(0);
         }
 //        }
         List<String> newReplicas = getReplicasForTheStorageNode(newPrimaryNode);

@@ -9,6 +9,8 @@ public class ConfigSystemParam {
     private String nodeType;
     private String address;
     private int port;
+    //controller specific
+    private int replication;
     //storageNodeSpecific
     private String controllerAddress;
     private int controllerPort;
@@ -56,6 +58,11 @@ public class ConfigSystemParam {
     //    public int getGeneralChunkSize() {
 //        return generalChunkSize;
 //    }
+
+
+    public static int getReplication() {
+        return params.replication;
+    }
 
     public static String getString() {
         return "System Params: \n"+
