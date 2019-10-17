@@ -8,7 +8,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import java.net.InetSocketAddress;
 
 @ChannelHandler.Sharable
-public class InboundHandler
+public class  InboundHandler
 extends SimpleChannelInboundHandler<StorageMessages.StorageMessageWrapper> {
 
     public InboundHandler() { }
