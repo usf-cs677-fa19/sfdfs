@@ -10,8 +10,13 @@ import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioSocketChannel;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 public class MessageSender {
+
+    public Logger logger = Logger.getLogger(MessageSender.class.getName());
 
     public ChannelFuture send(boolean waitForCtxToClose, String nodeType,
                               String connectingIpAddress, int connectingPort,
@@ -49,10 +54,7 @@ public class MessageSender {
     }
 
     private void shutDownEventLoopGroup(EventLoopGroup workerGroup) {
-        System.out.println("Shutting down client");
+        logger.log(Level.INFO,"Shutting down client");
         workerGroup.shutdownGracefully();
     }
-
-
-
 }

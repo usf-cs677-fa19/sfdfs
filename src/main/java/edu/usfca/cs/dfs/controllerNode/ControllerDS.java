@@ -1,13 +1,17 @@
 package edu.usfca.cs.dfs.controllerNode;
 
+import edu.usfca.cs.dfs.ClientNode;
 import edu.usfca.cs.dfs.controllerNode.data.FileMetaData;
 import edu.usfca.cs.dfs.controllerNode.data.StorageNodeDetail;
 import edu.usfca.cs.dfs.data.FileChunkId;
 import edu.usfca.cs.dfs.data.NodeId;
 import edu.usfca.cs.dfs.filter.BloomFilter;
 
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ControllerDS {
 
@@ -42,6 +46,8 @@ public class ControllerDS {
     public Map<String, StorageNodeDetail> getStorageNodeRegister() {
         return storageNodeRegister;
     }
+    public Logger logger = Logger.getLogger(ControllerDS.class.getName());
+
 
     public String getStorageNodeKey(String ipAddress, String port) {
        return NodeId.getId(ipAddress,port);
@@ -100,7 +106,9 @@ public class ControllerDS {
         if(size > requiredChunkSize) {
             return node;
         }else{
-            System.out.println("Storage Node size is less than the required Chunk size!!");
+            logger.log(Level.INFO,"Give config json as param");
+
+            //System.out.println("Storage Node size is less than the required Chunk size!!");
             return "";
         }
     }
@@ -150,7 +158,8 @@ public class ControllerDS {
         if(size > 0) {
             return node;
         }else{
-            System.out.println("Storage Node size is less than the required Chunk size!!");
+            logger.log(Level.INFO,"Storage Node size is less than the required Chunk size!!");
+            //System.out.println("Storage Node size is less than the required Chunk size!!");
             return "";
         }
     }
@@ -210,7 +219,8 @@ public class ControllerDS {
 
     public ArrayList<String> checkStorageNodeGroupRegister(String node, int chunkSize){
 
-        System.out.println("Check Storage Node Group Register !!!! \n");
+        logger.log(Level.INFO,"Check Storage Node Group Register !!!! \n");
+        //System.out.println("Check Storage Node Group Register !!!! \n");
         ArrayList<String> storageNodePrimaryReplicaDetails = new ArrayList<>();
         if(checkIfPrimaryExists(node)){
             storageNodePrimaryReplicaDetails.add(node);
@@ -257,7 +267,8 @@ public class ControllerDS {
                 }
             }
         }else {
-            System.out.println("The StorageNode register is empty! No storage Node Details are stored! ");
+            logger.log(Level.INFO,"The StorageNode register is empty! No storage Node Details are stored! ");
+            // System.out.println("The StorageNode register is empty! No storage Node Details are stored! ");
         }
         return storageNodes;
     }
@@ -273,7 +284,8 @@ public class ControllerDS {
                 stored = true;
            }
         }else {
-            System.out.println("StorageNodeRegister is empty!");
+            logger.log(Level.INFO,"StorageNodeRegister is empty!");
+            //System.out.println("StorageNodeRegister is empty!");
         }
         return stored;
     }
@@ -288,10 +300,12 @@ public class ControllerDS {
             ArrayList<String> storageNodeIdsForAChunk = checkBloomFiltersForChunk(chunkId);
 
             if(storageNodeIdsForAChunk.size() == 0){
-                System.out.println("No Storage Nodes found !!! File cannot be found because one chunk is missing from the bloom filters of the storage nodes!!");
+                logger.log(Level.INFO,"No Storage Nodes found !!! File cannot be found because one chunk is missing from the bloom filters of the storage nodes!!");
+                //System.out.println("No Storage Nodes found !!! File cannot be found because one chunk is missing from the bloom filters of the storage nodes!!");
                 return chunkIdToStorageNodeIds;
             } else if (storageNodeIdsForAChunk.size() > 0){
-                System.out.println("Chunk present in "+storageNodeIdsForAChunk.size()+" Storage Node!!");
+                logger.log(Level.INFO,"Chunk present in "+storageNodeIdsForAChunk.size()+" Storage Node!!");
+                //System.out.println("Chunk present in "+storageNodeIdsForAChunk.size()+" Storage Node!!");
             }
             chunkIdToStorageNodeIds.put(chunkId,storageNodeIdsForAChunk);
         }
@@ -302,13 +316,16 @@ public class ControllerDS {
 
     //Getting
     public List<String> getReplicasForTheStorageNode (String nodeId){
-        List<String> relicas = null;
+        List<String> replicas = null;
         if(storageNodeGroupRegister.containsKey(nodeId)) {
-            relicas = storageNodeGroupRegister.get(nodeId);
-            System.out.println("Getting the size of the replicas being returned : "
-                    +relicas.size()+" replicas are "+Arrays.toString(relicas.toArray()));
+            replicas = storageNodeGroupRegister.get(nodeId);
+
+            logger.log(Level.INFO,"Getting the size of the replicas being returned : "
+                    +replicas.size()+" replicas are "+Arrays.toString(replicas.toArray()));
+            //System.out.println("Getting the size of the replicas being returned : "
+            //        +relicas.size()+" replicas are "+Arrays.toString(relicas.toArray()));
         }
-        return relicas;
+        return replicas;
     }
 
     //Delete the storage node from the StorageNode register and from the storageNodeGroupRegister
@@ -321,10 +338,12 @@ public class ControllerDS {
                     storageNodeRegister.remove(nodeIdToBeDeleted);
                 }
             }else{
-                System.out.println("Storage Node Group register does not contain the node Id to be deleted.");
+                logger.log(Level.INFO,"Storage Node Group register does not contain the node Id to be deleted.");
+                //System.out.println("Storage Node Group register does not contain the node Id to be deleted.");
             }
         }else {
-            System.out.println("The storage node group register is empty.");
+            logger.log(Level.INFO,"The storage node group register is empty.");
+            //  System.out.println("The storage node group register is empty.");
         }
         return deleted;
     }
@@ -348,7 +367,8 @@ public class ControllerDS {
                 }
             }
         }else{
-            System.out.println("Storage Node Group Register is empty");
+            logger.log(Level.INFO,"Storage Node Group Register is empty");
+           // System.out.println("Storage Node Group Register is empty");
         }
         return storageNodesWithReplicasInThisNode;
     }
@@ -366,7 +386,8 @@ public class ControllerDS {
                     space = storageNodeDetail.getSpaceRemaining();
                 }
             }else{
-                System.out.println("The Storage Node Details for "+replica+" is null.");
+                logger.log(Level.INFO,"The Storage Node Details for \"+replica+\" is null.");
+                //System.out.println("The Storage Node Details for "+replica+" is null.");
             }
         }
 
@@ -376,14 +397,17 @@ public class ControllerDS {
     public  void faultToleranceWhenAStorageNodeIsDown(String nodeId,StorageNodeDetail oldStorageNodeDetail){
 
         //Get the replicas of the storage node to be deleted
-        System.out.println("Found the list of replicas for the node that is down");
+        logger.log(Level.INFO,"Found the list of replicas for the node that is down");
+        //System.out.println("Found the list of replicas for the node that is down");
         List<String> replicas = getReplicasForTheStorageNode(nodeId);
 
-        System.out.println("get the list of replicas that the Storage node to be deleted stores");
+        logger.log(Level.INFO,"get the list of replicas that the Storage node to be deleted stores");
+      //  System.out.println("get the list of replicas that the Storage node to be deleted stores");
         //get the list of replicas that the Storage node to be deleted stores
         List<String> storageNodesToReplicate = getStorageNodesWithReplicaInNodeToBeDeleted(nodeId);
 
-        System.out.println("Delete the storage node");
+        logger.log(Level.INFO,"Delete the storage node");
+        //System.out.println("Delete the storage node");
         //Delete the storage node
         deleteTheStorageNode(nodeId);
 
@@ -403,7 +427,8 @@ public class ControllerDS {
 
         if(replicas != null && replicas.size() > 0) {
             newPrimaryNode = getReplicaWithMaxSpace(replicas);
-            System.out.println("New Primary : " + newPrimaryNode);
+            logger.log(Level.INFO,"New Primary : " + newPrimaryNode);
+           // System.out.println("New Primary : " + newPrimaryNode);
         }else {
             newPrimaryNode = getSNWithMaxSpace(0);
         }
@@ -429,14 +454,16 @@ public class ControllerDS {
             newReplicas.addAll(getNewReplicas(0,newPrimaryNode));
             storageNodeGroupRegister.put(newPrimaryNode,newReplicas);
         }
-        System.out.println("Replicas : "+newReplicas.toString());
+        logger.log(Level.INFO,"Replicas : "+newReplicas.toString());
+        //System.out.println("Replicas : "+newReplicas.toString());
         //Contact the new primary and complete the data transfer also complete the replication
         ControllerNodeHelper.becomeNewPrimary(newPrimaryNode,newReplicas,nodeId);
 
         //update the bloomfilters
         boolean result = updateBloomFilter(newPrimaryNode,oldStorageNodeDetail);
 
-        System.out.println("Bloomfilter updated successfully : "+result);
+        logger.log(Level.INFO,"Bloomfilter updated successfully : "+result);
+        //System.out.println("Bloomfilter updated successfully : "+result);
         //choose a new node for replicas and
 
         ArrayList<String> storageNodeToExclude = new ArrayList<> ();
@@ -453,7 +480,8 @@ public class ControllerDS {
         if (nodes.size() >0) {
             for (String node : nodes){
                 if(storageNodeGroupRegister.containsKey(node)){
-                    System.out.println("Checking for node : "+ node);
+                    logger.log(Level.INFO,"Checking for node : "+ node);
+                    //System.out.println("Checking for node : "+ node);
                     listOfReplicas.addAll(storageNodeGroupRegister.get(node));
                 }
             }
