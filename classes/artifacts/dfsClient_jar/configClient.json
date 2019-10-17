@@ -3,6 +3,6 @@
   "nodeId": "3",
   "connectingAddress" : "localhost",
   "connectingPort" : "7777",
-  "noOfThreads" : 5,
+  "noOfThreads" : 10,
   "generalChunkSize" : 104857600
 }
