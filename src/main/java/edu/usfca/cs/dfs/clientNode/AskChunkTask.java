@@ -28,13 +28,6 @@ public class AskChunkTask implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
         }
-
-
-
     }
-
-
-
 }

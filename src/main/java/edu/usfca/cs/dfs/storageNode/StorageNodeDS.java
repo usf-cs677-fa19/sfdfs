@@ -29,6 +29,8 @@ public class StorageNodeDS {
     private long requestProcessed;
     private long retrievalProcessed;
 
+    private int healed;
+
 
 
     private Map<String, ChunkFileMeta> chunksMetaInfo;// = new HashMap<>();
@@ -45,9 +47,17 @@ public class StorageNodeDS {
 
         this.basePath = System.getProperty("user.home")+"/sfdfs_"+ NodeId.getId(this.ipAddress, this.port)+"/";
         Fileify.createDirectory(basePath);
-
+        this.healed = 1;
         storageNodeDS.chunksMetaInfo = new HashMap<>();
 
+    }
+
+    public int getHealed() {
+        return healed;
+    }
+
+    public void setHealed(int healed) {
+        this.healed = healed;
     }
 
     public static void setInstance(ConfigSystemParam nodeParam) {
