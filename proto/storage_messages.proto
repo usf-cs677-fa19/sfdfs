@@ -122,6 +122,10 @@ message HealBadChunk{
     string primaryIdForChunk = 4;
 }
 
+message NoFile{
+    string fileName = 1;
+}
+
 message StorageMessageWrapper {
     oneof msg {
         StoreChunk storeChunkMsg = 1;
@@ -142,6 +146,7 @@ message StorageMessageWrapper {
         HealBadChunk healBadChunkMsg = 16;
         RetrieveChunkForBadChunk retrieveChunkForBadChunk = 17;
         ChunkForBadChunk chunkForBadChunkMsg = 18;
+        NoFile noFileMsg = 19;
     }
 }
 

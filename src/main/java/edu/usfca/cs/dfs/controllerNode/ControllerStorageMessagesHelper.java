@@ -65,6 +65,19 @@ public class ControllerStorageMessagesHelper {
         return msgWrapper;
     }
 
+    public static StorageMessages.StorageMessageWrapper prepareNoFile(String fileName){
+
+        StorageMessages.NoFile noFileMsg = StorageMessages.NoFile.newBuilder()
+                .setFileName(fileName)
+                .build();
+
+        StorageMessages.StorageMessageWrapper msgWrapper =
+                StorageMessages.StorageMessageWrapper.newBuilder()
+                        .setNoFileMsg(noFileMsg)
+                        .build();
+
+        return msgWrapper;
+    }
 
     public static StorageMessages.StorageMessageWrapper buildBecomePrimary(String forAddress, String forPort, List<String> askIds){
 

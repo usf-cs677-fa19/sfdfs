@@ -91,6 +91,9 @@ public class  ClientInboundHandler extends InboundHandler {
             }
 
         }
+        else if(msg.hasNoFileMsg()) {
+            System.out.println("File is not present in System");
+        }
         else {
             System.out.println("\n Donno what message receieved");
         }

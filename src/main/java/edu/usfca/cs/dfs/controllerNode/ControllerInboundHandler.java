@@ -40,6 +40,14 @@ public class ControllerInboundHandler extends InboundHandler {
             // for First node in the list Send RetrieveChunkMeta To Storage
             if(storageNodes.size() == 0){
                 System.out.println("No Storage Nodes have the file!!!");
+                // todo sed not found
+                StorageMessages.StorageMessageWrapper msgWrapper =
+                        ControllerStorageMessagesHelper.prepareNoFile(filename);
+
+                Channel clientChan = ctx.channel();
+                ChannelFuture clientfuture = clientChan.write(msgWrapper);
+                clientChan.flush();
+
             } else {
 
                 String fileChunkId = FileChunkId.getFileChunkId(filename,1);
