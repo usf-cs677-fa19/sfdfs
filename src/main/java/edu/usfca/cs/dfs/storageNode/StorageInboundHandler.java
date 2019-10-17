@@ -170,6 +170,7 @@ public class StorageInboundHandler extends InboundHandler {
                             System.out.println("Checksum does not match :( :(");
                             // handle corrupt chunkFile
 
+                            isChunkFound = true;
                             StorageMessages.StorageMessageWrapper msgWrapper = this.handleChunkNotFound(fileChunkId, msg);
                             Channel chan = ctx.channel();
                             ChannelFuture future = chan.write(msgWrapper);
@@ -249,6 +250,7 @@ public class StorageInboundHandler extends InboundHandler {
                             // handle corrupt chunkFile
 
                             StorageMessages.StorageMessageWrapper msgWrapper = this.handleChunkNotFound(fileChunkId, msg);
+                            isChunkFound = true;
 //                            Channel chan = ctx.channel();
 //                            ChannelFuture future = chan.write(msgWrapper);
 //                            chan.flush();  // sending data back to client
