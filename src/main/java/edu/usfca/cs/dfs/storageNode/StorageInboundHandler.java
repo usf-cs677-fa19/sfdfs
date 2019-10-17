@@ -39,7 +39,7 @@ public class StorageInboundHandler extends InboundHandler {
     public void channelRead0(ChannelHandlerContext ctx, StorageMessages.StorageMessageWrapper msg) {
 
         if(msg.hasStoreChunkMsg()) {
-            System.out.println("\n**************************storage receieved store chunk *******************************\n");
+            System.out.println("*storage receieved store chunk");
             StorageNodeDS.getInstance().addToRequestProcessed();
             System.out.println("Size of storage node list : "+ msg.getStoreChunkMsg().getStorageNodeIdsList().size());
             // 1. create a directory, where directory name is 1st storage node in storageNodeIds field
