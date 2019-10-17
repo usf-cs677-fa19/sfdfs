@@ -40,6 +40,7 @@ public class StorageInboundHandler extends InboundHandler {
 
         if(msg.hasStoreChunkMsg()) {
             System.out.println("\n**************************storage receieved store chunk *******************************\n");
+            StorageNodeDS.getInstance().addToRequestProcessed();
             System.out.println("Size of storage node list : "+ msg.getStoreChunkMsg().getStorageNodeIdsList().size());
             // 1. create a directory, where directory name is 1st storage node in storageNodeIds field
             String nodeDir = System.getProperty("user.home")+"/sfdfs_"+ msg.getStoreChunkMsg().getToStorageNodeId()+"/"+msg.getStoreChunkMsg().getStorageNodeIds(0);
@@ -130,7 +131,7 @@ public class StorageInboundHandler extends InboundHandler {
         }  // store chunk and send to replica if needed
         else if(msg.hasRetrieveChunkMetaMsg()) {
             System.out.println("RetrieveChunkMeta received from controller");
-
+            StorageNodeDS.getInstance().addToRetrievalProcessed();
             String fileChunkId = msg.getRetrieveChunkMetaMsg().getFileChunkId();
             ChunkFileMeta chunkFileMeta = StorageNodeDS.getInstance().getChunkMetaInfo(fileChunkId);
 
@@ -146,6 +147,7 @@ public class StorageInboundHandler extends InboundHandler {
         else if(msg.hasRetrieveChunkMsg()) {  //storage node should send chunkMsg
 
             System.out.println("Client asking for a file chunk");
+            StorageNodeDS.getInstance().addToRetrievalProcessed();
             boolean isChunkFound = false;
             ByteBuffer buff;
 
@@ -214,10 +216,9 @@ public class StorageInboundHandler extends InboundHandler {
 
         } // closing hasRetrieveChunkMsg
         else if(msg.hasRetrieveChunkForBadChunk()) {
-            ////// todo
-
 
             System.out.println("Storgage asking for a file chunk to replace bad chunk");
+            StorageNodeDS.getInstance().addToRetrievalProcessed();
             boolean isChunkFound = false;
             ByteBuffer buff;
 
@@ -303,6 +304,7 @@ public class StorageInboundHandler extends InboundHandler {
         else if(msg.hasBecomePrimaryMsg()){
 
             System.out.println("Become Primary!!!");
+            StorageNodeDS.getInstance().addToRequestProcessed();
             String fromIP = msg.getBecomePrimaryMsg().getForApAddress();
             String fromPort = msg.getBecomePrimaryMsg().getForPort();
             List<String> selfReplicas = msg.getBecomePrimaryMsg().getAskIdsList();
@@ -343,6 +345,7 @@ public class StorageInboundHandler extends InboundHandler {
             String prevReplicaID = msg.getCreateNewReplicaMsg().getLostReplicaId();
             String newReplicaID = msg.getCreateNewReplicaMsg().getNewReplicaId();
             System.out.println("Creating new replica at : "+newReplicaID);
+            StorageNodeDS.getInstance().addToRequestProcessed();
 
             // go to self folder and send storeChunkMessage for all fileChunks to new id
             String selfFolder = StorageNodeDS.getInstance().getBasePath()+StorageNodeDS.getInstance().getNodeId();
@@ -369,6 +372,7 @@ public class StorageInboundHandler extends InboundHandler {
         } // end of msg.hasCreateNewReplicaMsg()
         else if(msg.hasHealBadChunkMsg()) {
             // 1. creates retrieve chunkmessage
+            StorageNodeDS.getInstance().addToRequestProcessed();
             System.out.println("Heal bad chunk received from controller");
             StorageMessages.StorageMessageWrapper retrieveChunkForBadChunkMsgWrapper =
                     StorageStorageMessagesHelper.prepareRetrieveChunkForBadChunk(
@@ -408,6 +412,7 @@ public class StorageInboundHandler extends InboundHandler {
             ctx.close();
 
             System.out.println("\n Received chunkMsg from Storage Node");
+            StorageNodeDS.getInstance().addToRequestProcessed();
             if(msg.getChunkForBadChunkMsg().getFound() == true) {
                 Fileify.writeChunkToFile(msg.getChunkForBadChunkMsg(), StorageNodeDS.getInstance().getBasePath());
                 StorageNodeDS.getInstance().setHealed(msg.getChunkForBadChunkMsg().getFileChunkId(), 1);

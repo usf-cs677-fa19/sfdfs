@@ -1,6 +1,5 @@
 package edu.usfca.cs.dfs.storageNode;
 
-import edu.usfca.cs.dfs.StorageNode;
 import edu.usfca.cs.dfs.data.NodeId;
 import edu.usfca.cs.dfs.fileUtil.Fileify;
 import edu.usfca.cs.dfs.init.ConfigSystemParam;
@@ -10,10 +9,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.LongAdder;
 
 
 public class StorageNodeDS {
@@ -28,8 +27,8 @@ public class StorageNodeDS {
     private String basePath;
 
     private long spaceRemaining;
-    private long requestProcessed;
-    private long retrievalProcessed;
+    private LongAdder requestProcessed;
+    private LongAdder retrievalProcessed;
 
     //private int healed;
     private Map<String, ChunkFileMeta> chunksMetaInfo;// = new HashMap<>();
@@ -111,11 +110,19 @@ public class StorageNodeDS {
     }
 
     public long getRequestProcessed() {
-        return storageNodeDS.requestProcessed;
+        return storageNodeDS.requestProcessed.sum();
+    }
+
+    public void addToRequestProcessed() {
+        storageNodeDS.requestProcessed.add(1);
     }
 
     public long getRetrievalProcessed() {
-        return storageNodeDS.retrievalProcessed;
+        return storageNodeDS.retrievalProcessed.sum();
+    }
+
+    public void addToRetrievalProcessed() {
+        storageNodeDS.retrievalProcessed.add(1);
     }
 
     public long getSpaceRemaining() {
