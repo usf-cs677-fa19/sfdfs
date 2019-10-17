@@ -164,7 +164,6 @@ public class StorageInboundHandler extends InboundHandler {
                             Channel chan = ctx.channel();
                             ChannelFuture future = chan.write(msgWrapper);
                             chan.flush();  // sending data back to client
-
                             break;
                         }else{
                             System.out.println("Checksum does not match :( :(");
@@ -175,7 +174,7 @@ public class StorageInboundHandler extends InboundHandler {
                             Channel chan = ctx.channel();
                             ChannelFuture future = chan.write(msgWrapper);
                             chan.flush();  // sending data back to client
-                            ctx.close();
+                            //ctx.close();
 
                             System.out.println("Preparing  and sending BadChunkFoundMsg  to controller");
                             StorageMessages.StorageMessageWrapper badChunkFoundMsgWrapper =
@@ -253,7 +252,6 @@ public class StorageInboundHandler extends InboundHandler {
                             StorageMessages.StorageMessageWrapper msgWrapper = this.handleChunkNotFound(fileChunkId, msg);
                             isChunkFound = true;
                            // Channel chan = ctx.channel();
-
                             ctx.close();
 
                             // todo : trigger a different request to heal the chunk
