@@ -10,7 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @ChannelHandler.Sharable
-public class InboundHandler
+public class  InboundHandler
 extends SimpleChannelInboundHandler<StorageMessages.StorageMessageWrapper> {
 
     public Logger logger =  Logger.getLogger(InboundHandler.class.getName());

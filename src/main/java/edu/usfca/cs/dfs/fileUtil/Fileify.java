@@ -18,13 +18,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class Fileify {
-
-    public  static Logger logger = Logger.getLogger(Fileify.class.getName());
 
     public static ByteBuffer readToBuffer(StorageMessages.ChunkMeta cmMsg, long generalChunkSize) throws IOException {
 
@@ -37,8 +33,8 @@ public class Fileify {
             // Sets the file-pointer offset
             reader.seek(((long)cmMsg.getChunkId()-1) * generalChunkSize);
             // read bytes into directBuf
-            int bytesRead = chan.read(directBuf);
-            logger.log(Level.INFO,"No of bytes read : "+ bytesRead);
+            int bytesRead = chan.read(directBuf); // todo : see if commenting this , helps in uploading 2.6 gb works
+            System.out.println("No of bytes read : "+ bytesRead);
             // flipping the byte buffer before it can be read
             directBuf.flip();
 
@@ -60,7 +56,7 @@ public class Fileify {
             reader.seek(0);
             // read bytes into directBuf
             int bytesRead = chan.read(directBuf);
-            logger.log(Level.INFO,"No of bytes read : "+ bytesRead);
+            System.out.println("No of bytes read : "+ bytesRead);
             // flipping the byte buffer before it can be read
             directBuf.flip();
 
@@ -100,13 +96,13 @@ public class Fileify {
 
 
     public static void writeChunkToFile(StorageMessages.ChunkForBadChunk chunkMsgForBadChunk, String basePath) {
-        logger.log(Level.INFO,"In writeChunkToFile for BadChunk");
+        System.out.println("In writeChunkToFile for BadChunk");
 
         //String[] filenameAndChunkId = FileChunkId.splitFileAndChunkId(chunkMsg.getFileChunkId());
 
         String fileName = chunkMsgForBadChunk.getFileChunkId();
         String filePath = basePath + chunkMsgForBadChunk.getPrimaryIdForChunk() + "/chunkFiles/"+ fileName;
-        logger.log(Level.INFO,"In writeChunkToFile for BadChunk, writing to : "+ filePath);
+        System.out.println("In writeChunkToFile for BadChunk, writing to : "+ filePath);
 
         long startingPosition = 0;
 
@@ -155,7 +151,7 @@ public class Fileify {
         Path p = Paths.get(filePath);
         try {
             if (Files.deleteIfExists(p)) {
-                logger.log(Level.INFO,"deleted file - "+ filePath);
+                System.out.println("deleted file - "+ filePath);
                 return true;
             }
         } catch (IOException e) {
@@ -171,7 +167,7 @@ public class Fileify {
             try {
                 Files.createDirectory(path);
             } catch (IOException e) {
-                logger.log(Level.SEVERE,"dir already exists");
+                System.out.println("dir already exists");
             }
         }
 
@@ -264,7 +260,7 @@ public class Fileify {
 
     public static void copyDirectory(File sourceLocation , File targetLocation){
 
-        logger.log(Level.INFO,"Start of Fileify.copyDiectory: ");
+        System.out.println("Start of Fileify.copyDiectory: ");
 
        // File sourceLocation = new File(sourceLocationString);
        // File targetLocation = new File(targetLocationString);
@@ -292,10 +288,10 @@ public class Fileify {
                 out.close();
 
             } catch (FileNotFoundException e) {
-                logger.log(Level.SEVERE,"Error while copying files!!!");
+                System.out.println("Error while copying files!!!");
                 e.printStackTrace();
             } catch (IOException e) {
-                logger.log(Level.SEVERE,"Error while copying files!!!");
+                System.out.println("Error while copying files!!!");
                 e.printStackTrace();
             }
         }

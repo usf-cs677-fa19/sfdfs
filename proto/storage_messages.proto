@@ -126,6 +126,10 @@ message NoFile{
     string fileName = 1;
 }
 
+message ChunkStored{
+    string fileChunkId = 1;
+}
+
 message StorageMessageWrapper {
     oneof msg {
         StoreChunk storeChunkMsg = 1;
@@ -147,6 +151,7 @@ message StorageMessageWrapper {
         RetrieveChunkForBadChunk retrieveChunkForBadChunk = 17;
         ChunkForBadChunk chunkForBadChunkMsg = 18;
         NoFile noFileMsg = 19;
+        ChunkStored chunkStoredMsg = 20;
     }
 }
 

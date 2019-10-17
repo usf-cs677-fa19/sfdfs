@@ -234,4 +234,18 @@ public class StorageStorageMessagesHelper {
     }
 
 
+    public static StorageMessages.StorageMessageWrapper prepareChunkStoredMsg(String fileChunkId){
+
+        StorageMessages.ChunkStored chunkStored = StorageMessages.ChunkStored.newBuilder()
+                .setFileChunkId(fileChunkId)
+                .build();
+
+        StorageMessages.StorageMessageWrapper msgWrapper = StorageMessages.StorageMessageWrapper.newBuilder()
+                .setChunkStoredMsg(chunkStored)
+                .build();
+
+        return msgWrapper;
+    }
+
+
 }
