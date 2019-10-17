@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.LongAdder;
+import java.util.logging.Logger;
 
 
 public class StorageNodeDS {
@@ -30,9 +31,11 @@ public class StorageNodeDS {
     private LongAdder requestProcessed;
     private LongAdder retrievalProcessed;
 
+    public Logger logger = Logger.getLogger(StorageNodeDS.class.getName());
     //private int healed;
     private Map<String, ChunkFileMeta> chunksMetaInfo;// = new HashMap<>();
     private Map<String, Integer> healingMap;
+
     private StorageNodeDS(){
     }
 
@@ -42,6 +45,8 @@ public class StorageNodeDS {
         this.nodeId = NodeId.getId(this.ipAddress, this.port);
         this.controllerIpAddress = nodeParam.getControllerAddress();
         this.controllerPort = nodeParam.getControllerPort();
+        this.requestProcessed = new LongAdder();
+        this.retrievalProcessed = new LongAdder();
 
         this.basePath = System.getProperty("user.home")+"/sfdfs_"+ NodeId.getId(this.ipAddress, this.port)+"/";
         Fileify.deleteDirectory(basePath);
@@ -149,7 +154,6 @@ public class StorageNodeDS {
     }
 
     ////
-
     public void keepSendingHeartBeat() {
         Timer timer = new Timer();
         timer.schedule(
@@ -169,8 +173,4 @@ public class StorageNodeDS {
                 0,
                 5000);
     }
-
-
-
-
 }
