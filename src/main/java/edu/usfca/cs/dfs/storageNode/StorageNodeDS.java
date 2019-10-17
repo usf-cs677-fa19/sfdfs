@@ -1,5 +1,6 @@
 package edu.usfca.cs.dfs.storageNode;
 
+import edu.usfca.cs.dfs.StorageNode;
 import edu.usfca.cs.dfs.data.NodeId;
 import edu.usfca.cs.dfs.fileUtil.Fileify;
 import edu.usfca.cs.dfs.init.ConfigSystemParam;
@@ -12,6 +13,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class StorageNodeDS {
@@ -29,12 +31,9 @@ public class StorageNodeDS {
     private long requestProcessed;
     private long retrievalProcessed;
 
-    private int healed;
-
-
-
+    //private int healed;
     private Map<String, ChunkFileMeta> chunksMetaInfo;// = new HashMap<>();
-
+    private Map<String, Integer> healingMap;
     private StorageNodeDS(){
     }
 
@@ -48,18 +47,28 @@ public class StorageNodeDS {
         this.basePath = System.getProperty("user.home")+"/sfdfs_"+ NodeId.getId(this.ipAddress, this.port)+"/";
         Fileify.deleteDirectory(basePath);
         Fileify.createDirectory(basePath);
-        this.healed = 1;
-        storageNodeDS.chunksMetaInfo = new HashMap<>();
+        //this.healed = 1;
+        storageNodeDS.chunksMetaInfo = new ConcurrentHashMap<>();
+        storageNodeDS.healingMap = new ConcurrentHashMap<>();
 
     }
 
-    public int getHealed() {
-        return healed;
+//    public int getHealed() {
+//        return healed;
+//    }
+//
+//    public void setHealed(int healed) {
+//        this.healed = healed;
+//    }
+
+    public int getHealed(String fileChunkId) {
+        return healingMap.get(fileChunkId);
     }
 
-    public void setHealed(int healed) {
-        this.healed = healed;
+    public void setHealed(String fileChunkId, int isHealed) {
+        healingMap.put(fileChunkId, isHealed);
     }
+
 
     public static void setInstance(ConfigSystemParam nodeParam) {
         if(storageNodeDS == null){

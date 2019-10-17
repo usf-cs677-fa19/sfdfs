@@ -401,7 +401,7 @@ public class ControllerDS {
 //        if(replicaPresentInStorageNodesToReplicate.length() == 0) {
             //Get the new primary node by comparing the replicas
 
-        if(replicas.size() > 0) {
+        if(replicas != null && replicas.size() > 0) {
             newPrimaryNode = getReplicaWithMaxSpace(replicas);
             System.out.println("New Primary : " + newPrimaryNode);
         }else {
