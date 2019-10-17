@@ -12,7 +12,6 @@ public class Authenticator {
      */
     public static void sha1sumOfFiles(String[] filenames) {
         StringBuilder result = new StringBuilder();
-
         try {
             Process process1 = new ProcessBuilder("pwd").start();
             process1.waitFor();

@@ -44,6 +44,7 @@ public class StorageNodeDS {
         this.controllerPort = nodeParam.getControllerPort();
 
         this.basePath = System.getProperty("user.home")+"/sfdfs_"+ NodeId.getId(this.ipAddress, this.port)+"/";
+        Fileify.deleteDirectory(basePath);
         Fileify.createDirectory(basePath);
 
         storageNodeDS.chunksMetaInfo = new HashMap<>();
