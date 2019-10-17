@@ -14,6 +14,7 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -173,17 +174,31 @@ public class Fileify {
     }
 
     //delete directory
-    public static void deleteDirectory(String basePath, String dirName) throws IOException {
-//        Path path = Paths.get(basePath, dirName);
-//
-//        Files.deleteIfExists(path);
-
-        Path rootPath = Paths.get(basePath, dirName);
-        final List<Path> pathsToDelete = Files.walk(rootPath).sorted(Comparator.reverseOrder()).collect(Collectors.toList());
-        for(Path path : pathsToDelete) {
-            Files.deleteIfExists(path);
+    public static void deleteDirectory(String dirPath) {
+        Path rootPath = Paths.get(dirPath);
+        if(Files.exists(rootPath)) {
+            final List<Path> pathsToDelete;
+            try {
+                pathsToDelete = Files.walk(rootPath).sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+                for(Path path : pathsToDelete) {
+                    Files.deleteIfExists(path);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+
+
     }
+
+//    public static void deleteDirectory(String basePath, String dirName) {
+//        Path rootPath = Paths.get(basePath, dirName);
+//        Fileify.deleteDirectory(rootPath.toString());
+////        final List<Path> pathsToDelete = Files.walk(rootPath).sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+////        for(Path path : pathsToDelete) {
+////            Files.deleteIfExists(path);
+////        }
+//    }
 
     public static String[] getListOfDirs(String basePath) {
         File file = new File(basePath);
@@ -280,6 +295,19 @@ public class Fileify {
                 e.printStackTrace();
             }
         }
+    }
+
+
+    public static ArrayList<String> listAllFiles(String basePath) {
+        ArrayList<String> allFiles = new ArrayList<>();
+        String[] dirs = Fileify.getListOfDirs(basePath);
+        for(String dir : dirs) {
+            String dirPath = dir + "/chunkFiles/";
+            String[] dirFiles = Fileify.getListOfFiles(basePath + dirPath);
+            allFiles.addAll(Arrays.asList(dirFiles));
+        }
+        return allFiles;
+
     }
 
 } //closing class Fileify

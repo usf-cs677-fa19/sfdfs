@@ -8,6 +8,7 @@ import edu.usfca.cs.dfs.fileUtil.Fileify;
 import edu.usfca.cs.dfs.init.ClientParams;
 import edu.usfca.cs.dfs.init.Init;
 
+import java.io.File;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -32,6 +33,7 @@ public class ClientNode {
     private ClientNode(String fileName) {
         ClientParams.buildClientParams(fileName);
         basePath = System.getProperty("user.home") + "/sfdfs_client" + ClientParams.getNodeId();
+        Fileify.deleteDirectory(basePath);
         Fileify.createDirectory(basePath);
         executor = Executors.newFixedThreadPool(ClientParams.getNoOfThreads());
     }
