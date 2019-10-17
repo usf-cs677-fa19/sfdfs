@@ -15,19 +15,23 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class  ClientInboundHandler extends InboundHandler {
+
+    public Logger logger =Logger.getLogger(ClientInboundHandler.class.getName());
 
     @Override
     public void channelRead0(
             ChannelHandlerContext ctx,
             StorageMessages.StorageMessageWrapper msg) {
 
-        System.out.println("IN CLIENT INBOUND HANDLER");
+        logger.log(Level.INFO,"IN CLIENT INBOUND HANDLER");
         ctx.close();
 
         if(msg.hasChunkMetaMsg()) { // msg returned from controller with storage nodes list // while client want to store chunks
-            System.out.println("\nChunkMetaMsg received in CLIENT INBOUND HANDLER");
+            logger.log(Level.INFO,"\nChunkMetaMsg received in CLIENT INBOUND HANDLER");
             int size = msg.getChunkMetaMsg().getStorageNodeIdsCount();
             if (size > 0) {
                 System.out.println(msg.getChunkMetaMsg().getFileName()+"-"+msg.getChunkMetaMsg().getChunkId());
@@ -45,7 +49,7 @@ public class  ClientInboundHandler extends InboundHandler {
         }
         else if(msg.hasMappingChunkIdToStorageNodesMsg()) { // client receieved cunk to sn mapping for all chunks for a file
             if(!msg.getMappingChunkIdToStorageNodesMsg().getMappingMap().isEmpty()) {
-                System.out.println("\n Recieved mapping from controller : todo send the request for filechunks to all nodes!!");
+               logger.log(Level.INFO,"\n Recieved mapping from controller : todo send the request for filechunks to all nodes!!");
                 // key = chunkId, value = StorageNodeList
                 Map<String, StorageMessages.StorageNodesHavingChunk> mapChunkIdToStorageNodes =
                         msg.getMappingChunkIdToStorageNodesMsg().getMappingMap();
@@ -70,36 +74,37 @@ public class  ClientInboundHandler extends InboundHandler {
                 }
 
             } else {
-                System.out.println("Received empty mapping, file chunks not found");
+                logger.log(Level.INFO,"Received empty mapping, file chunks not found");
             }
 
         }
         else if(msg.hasChunkMsg()) {
             ctx.close();
 
-            System.out.println("\n Received chunkMsg from Storage Node");
+            logger.log(Level.INFO,"\n Received chunkMsg from Storage Node");
             if(msg.getChunkMsg().getFound() == true) {
                 Fileify.writeChunkToFile(msg.getChunkMsg());
             } else {
-                System.out.println("CHUNK NOT FOUND MSG : ");
-                System.out.println("Storage node Ids : ");
+                logger.log(Level.INFO,"CHUNK NOT FOUND MSG : ");
+                logger.log(Level.INFO,"Storage node Ids : ");
+
                 for(int i =0; i<msg.getChunkMsg().getStorageNodeIdsList().size();i++) {
                     System.out.println(msg.getChunkMsg().getStorageNodeIds(i));
                 }
                 new AskChunkTask(ClientParams.getNodeType(), msg.getChunkMsg()).run();
-                System.out.println("Chunk not found message");
+                logger.log(Level.INFO,"Chunk not found message");
             }
 
         }
         else if(msg.hasNoFileMsg()) {
-            System.out.println("File is not present in System");
+            logger.log(Level.INFO, "File is not present in System");
         }
         else if(msg.hasChunkStoredMsg()) {
-            System.out.println("FileChunk stored : "+ msg.getChunkStoredMsg().getFileChunkId());
+            logger.log(Level.INFO, "FileChunk stored : "+ msg.getChunkStoredMsg().getFileChunkId());
             ctx.close();
         }
         else {
-            System.out.println("\n Donno what message receieved");
+            logger.log(Level.INFO,"\n Donno what message receieved");
         }
 
 
@@ -121,7 +126,7 @@ public class  ClientInboundHandler extends InboundHandler {
         StorageMessages.StorageMessageWrapper storeChunkMsg =
                 ClientStorageMessagesHelper.prepareStoreChunkMsg(cmMsg, buffer);
         buffer = null;
-        System.out.println("storage nodes assigned to "
+        logger.log(Level.INFO,"storage nodes assigned to "
                 + FileChunkId.getFileChunkId(cmMsg.getFileName(), cmMsg.getChunkId())
                 +" are : "
                 + storeChunkMsg.getStoreChunkMsg().getStorageNodeIdsList());

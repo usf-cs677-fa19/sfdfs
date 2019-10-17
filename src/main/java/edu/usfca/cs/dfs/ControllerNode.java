@@ -5,9 +5,12 @@ import edu.usfca.cs.dfs.init.Init;
 import edu.usfca.cs.dfs.nodes.NodeServer;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ControllerNode {
 
+    public static Logger logger = Logger.getLogger(ControllerNode.class.getName());
 
     public static void main(String[] args) throws IOException {
         if(Init.isCorrectArgs(args)) { //if configSystem.json specified
@@ -20,7 +23,7 @@ public class ControllerNode {
 
 
         } else {
-            System.out.println("give config json as param");
+            logger.log(Level.INFO,"give config json as param");
         }
     }
 
