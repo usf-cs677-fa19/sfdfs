@@ -94,6 +94,10 @@ public class  ClientInboundHandler extends InboundHandler {
         else if(msg.hasNoFileMsg()) {
             System.out.println("File is not present in System");
         }
+        else if(msg.hasChunkStoredMsg()) {
+            System.out.println("FileChunk stored : "+ msg.getChunkStoredMsg().getFileChunkId());
+            ctx.close();
+        }
         else {
             System.out.println("\n Donno what message receieved");
         }
@@ -116,6 +120,7 @@ public class  ClientInboundHandler extends InboundHandler {
         String[] connectingInfo = NodeId.getIPAndPort(cmMsg.getStorageNodeIds(0));
         StorageMessages.StorageMessageWrapper storeChunkMsg =
                 ClientStorageMessagesHelper.prepareStoreChunkMsg(cmMsg, buffer);
+        buffer = null;
         System.out.println("storage nodes assigned to "
                 + FileChunkId.getFileChunkId(cmMsg.getFileName(), cmMsg.getChunkId())
                 +" are : "

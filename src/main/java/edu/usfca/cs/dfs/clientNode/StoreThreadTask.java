@@ -63,7 +63,6 @@ public class StoreThreadTask implements Runnable {
 
     }
 
-    // todo: parallize async method
     public void createAndSendMetaHelper(String fileName, int chunkId, long chunkSizeInBytes, int totalChunks)
             throws IOException, ExecutionException, InterruptedException {
 

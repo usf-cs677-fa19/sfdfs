@@ -33,7 +33,7 @@ public class Fileify {
             // Sets the file-pointer offset
             reader.seek(((long)cmMsg.getChunkId()-1) * generalChunkSize);
             // read bytes into directBuf
-            int bytesRead = chan.read(directBuf);
+            int bytesRead = chan.read(directBuf); // todo : see if commenting this , helps in uploading 2.6 gb works
             System.out.println("No of bytes read : "+ bytesRead);
             // flipping the byte buffer before it can be read
             directBuf.flip();

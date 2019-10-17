@@ -16,6 +16,7 @@ import edu.usfca.cs.dfs.net.InboundHandler;
 import edu.usfca.cs.dfs.storageNode.data.ChunkFileMeta;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.io.File;
@@ -89,7 +90,13 @@ public class StorageInboundHandler extends InboundHandler {
                 System.out.println("Something went wrong in Meta and Chunk saved on Storage node :-<");
             }
 
-            ctx.close();
+
+            System.out.println("fileChunk stored : "+ fileChunkId);
+            StorageMessages.StorageMessageWrapper chunkStoredWrapper = StorageStorageMessagesHelper.prepareChunkStoredMsg(fileChunkId);
+            Channel chan = ctx.channel();
+            ChannelFuture future = chan.write(chunkStoredWrapper);
+            chan.flush();  // sending data back to client
+            //future.addListener(ChannelFutureListener.CLOSE);
             //
             // forwarding storeChunk to other replica
             //
