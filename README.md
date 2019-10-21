@@ -42,7 +42,20 @@ message MappingChunkIdToStorageNodes{
 
 
 ## Storage Nodes 
+Storage Node stores the file chunks and chunk meta data in disk and these chunks can be retrieved through chunkName.
 
+Store chunk message is used to store data and meta of chunk on disk.
+message StoreChunk {
+     string fileName = 1;
+     int32 chunkId = 2;
+     int32 chunkSize = 3;
+     int32 totalChunks = 4;
+     repeated string storageNodeIds = 5;
+     bytes data = 6;
+     string toStorageNodeId = 7;
+ }
+ 
+ 
 
 ## Client
 
@@ -72,7 +85,7 @@ Controller also sends create new replica msg to all the storage nodes that has t
 
 Corrupted chunk :
 If the checksum of the filechunk does not match with the metadata held in the memory. Then storage node sends chunk not found message to client. So client moves on to the next storage node in list and ask for the chunk. 
-In the mean while, storage node that found a bad chunk sends a badchunk found message to controller. Controller sends back a list of storage node that also have the chunk. Storage node uses this list and ask for the chunk from the fellow storage nodes in the list.
+In the mean while, storage node that found a bad chunk sends a badchunk found message to controller. Controller sends back a heal bad chunk message which contains a list of storage nodes that also have the chunk. Storage node uses this list and ask for the chunk from the fellow storage nodes in the list.
 
 
 
