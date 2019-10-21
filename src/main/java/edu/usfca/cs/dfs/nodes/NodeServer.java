@@ -5,6 +5,7 @@ import edu.usfca.cs.dfs.controllerNode.ControllerNodeHelper;
 import edu.usfca.cs.dfs.init.ConfigSystemParam;
 import edu.usfca.cs.dfs.net.ServerMessageRouter;
 import edu.usfca.cs.dfs.nodes.SfdfsNode;
+import edu.usfca.cs.dfs.storageNode.HeartBeatSender;
 import edu.usfca.cs.dfs.storageNode.StorageNodeDS;
 
 
@@ -41,7 +42,9 @@ public class NodeServer {
         logger.info("Listening for connections on address : "+ConfigSystemParam.getAddress()+":"+ConfigSystemParam.getPort());
         if(ConfigSystemParam.getNodeType().equals("storage")) { // if storage  node
             StorageNodeDS.setInstance(ConfigSystemParam.getParams());
-            StorageNodeDS.getInstance().keepSendingHeartBeat();
+            //StorageNodeDS.getInstance().keepSendingHeartBeat();
+            new HeartBeatSender().run();
+
 
         } else if(ConfigSystemParam.getNodeType().equals("controller")) { // if controller  node
             ControllerNodeHelper.checkAliveStorageNodes();

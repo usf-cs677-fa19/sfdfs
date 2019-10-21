@@ -135,7 +135,7 @@ public class Fileify {
             try {
                 Files.createFile(path);
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.log(Level.INFO, "Cannot create File "+ filePath);
             }
         }
     }

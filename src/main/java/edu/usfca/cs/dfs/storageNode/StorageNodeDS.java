@@ -115,19 +115,23 @@ public class StorageNodeDS {
     }
 
     public long getRequestProcessed() {
-        return storageNodeDS.requestProcessed.sum();
+        System.out.println("GetRequestProcessed : "+ storageNodeDS.requestProcessed.longValue());
+        return storageNodeDS.requestProcessed.longValue();
     }
 
     public void addToRequestProcessed() {
-        storageNodeDS.requestProcessed.add(1);
+        System.out.println("addToRequestProcessed : "+ storageNodeDS.requestProcessed.longValue());
+        storageNodeDS.requestProcessed.increment();
     }
 
     public long getRetrievalProcessed() {
-        return storageNodeDS.retrievalProcessed.sum();
+        System.out.println("GetRetrievalProcessed : "+ storageNodeDS.retrievalProcessed.longValue());
+        return storageNodeDS.retrievalProcessed.longValue();
     }
 
     public void addToRetrievalProcessed() {
-        storageNodeDS.retrievalProcessed.add(1);
+        System.out.println("addToRetrievalProcessed : "+ storageNodeDS.retrievalProcessed.longValue());
+        storageNodeDS.retrievalProcessed.increment();
     }
 
     public long getSpaceRemaining() {
@@ -154,24 +158,17 @@ public class StorageNodeDS {
     }
 
     ////
-    public void keepSendingHeartBeat() {
-        Timer timer = new Timer();
-        timer.schedule(
-                new HeartBeatSender(
-                        StorageNodeDS.getInstance().getControllerIpAddress(),
-                        StorageNodeDS.getInstance().getControllerPort(),
-                        StorageStorageMessagesHelper.prepareHeartBeat(
-                                StorageNodeDS.getInstance().getIpAddress(),
-                                StorageNodeDS.getInstance().getPort(),
-                                StorageNodeDS.getInstance().getSpaceRemaining(),
-                                StorageNodeDS.getInstance().getRequestProcessed(),
-                                StorageNodeDS.getInstance().getRetrievalProcessed()
+//    public void keepSendingHeartBeat() {
+//        Timer timer = new Timer();
+//        timer.schedule(
+//                new HeartBeatSender(
+//                        StorageNodeDS.getInstance().getControllerIpAddress(),
+//                        StorageNodeDS.getInstance().getControllerPort()
+//                ),
+//                0,
+//                5000);
+//
+//    }
 
 
-                        )
-                ),
-                0,
-                5000);
-
-    }
 }

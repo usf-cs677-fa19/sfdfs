@@ -13,5 +13,6 @@
     <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.10.0" level="project" />
     <orderEntry type="library" name="Maven: com.sangupta:murmur:1.0.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.8.5" level="project" />
+    <orderEntry type="library" name="Bundled Protobuf Distribution" level="application" />
   </component>
 </module>
