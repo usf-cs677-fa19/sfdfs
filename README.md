@@ -58,7 +58,28 @@ message StoreChunk {
  
 
 ## Client
+Saving : The client breaks a file to be stored into multiple chunks and sends a chunkMetaMsg for each chunk, the controller replies with a list of storage nodes for each chunk, primary and 2 replicas. 
 
+message ChunkMeta {
+    string fileName = 1;
+    int32 chunkId = 2;
+    int32 chunkSize = 3;
+    int32 totalChunks = 4;
+    repeated string storageNodeIds = 5;
+}
+
+Retrieval : On requesting for a retrieval of a file, the client recieves a mapping of all the chunkIds to storage Nodes.
+message MappingChunkIdToStorageNodes{
+    map<string,StorageNodesHavingChunk> mapping = 1;
+}
+
+The Storage Nodes reply with the bytes for a requested chunk
+message Chunk {
+    bool found = 1;
+    string fileChunkId = 2;
+    bytes data = 3;
+    repeated string storageNodeIds = 4;
+}
 
 ## Storing Chunks
 To store a file in sfdfs:
