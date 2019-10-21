@@ -44,7 +44,7 @@ message MappingChunkIdToStorageNodes{
 ## Storage Nodes 
 Storage Node stores the file chunks and chunk meta data in disk and these chunks can be retrieved through chunkName.
 
-Store chunk message is used to store data and meta of chunk on disk.
+a. Store chunk message is used to store data and meta of chunk on disk.
 message StoreChunk {
      string fileName = 1;
      int32 chunkId = 2;
@@ -54,6 +54,51 @@ message StoreChunk {
      bytes data = 6;
      string toStorageNodeId = 7;
  }
+ 
+b. Storage node receive message RetrieveChunk{
+    string fileChunkId = 1;
+    repeated string storageNodeIds = 2;
+} and responds back with message Chunk {
+    bool found = 1;
+    string fileChunkId = 2;
+    bytes data = 3;
+    repeated string storageNodeIds = 4;
+}
+
+c. Storage node receive message RetrieveChunkForBadChunk{
+    string fileChunkId = 1;
+    repeated string storageNodeIds = 2;
+    string primaryNode = 3;
+} and responds back with message ChunkForBadChunk {
+    bool found = 1;
+    string fileChunkId = 2;
+    bytes data = 3;
+    repeated string storageNodeIds = 4;
+    string primaryIdForChunk = 5;
+}
+
+d. Storage node receives message BecomePrimary{
+    string forApAddress = 1;
+    string forPort = 2;
+    repeated string askIds = 3;
+} and becomes primary for forApAddress-forPort chunks.
+
+e. Storage node receieves message CreateNewReplica {
+    string lostReplicaId = 1;
+    string newReplicaId = 2;
+} and sends new filechunks to new replica.
+
+f. Whenever a bad chunk is found Storage node sends message BadChunkFound{
+    string selfId = 1;
+    string fileChunkId = 2;
+    string primaryIdForChunk = 3;
+}, Controller responds back with message HealBadChunk{
+    string selfId = 1;
+    string badFileChunkId = 2;
+    repeated string storageNodes = 3;
+    string primaryIdForChunk = 4;
+}, storage node uses the storage node list to ask for the particular chunk.
+ 
  
  
 
