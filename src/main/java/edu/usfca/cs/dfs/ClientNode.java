@@ -36,7 +36,7 @@ public class ClientNode {
 
     private ClientNode(String fileName) {
         ClientParams.buildClientParams(fileName);
-        basePath = System.getProperty("user.home") + "/sfdfs_client" + ClientParams.getNodeId();
+        basePath = System.getProperty("user.home") + "/bigdata/sfdfs_client" + ClientParams.getNodeId();
         Fileify.deleteDirectory(basePath);
         Fileify.createDirectory(basePath);
         executor = Executors.newFixedThreadPool(ClientParams.getNoOfThreads());
