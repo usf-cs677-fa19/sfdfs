@@ -2,6 +2,7 @@ package edu.usfca.cs.dfs.clientNode;
 
 import com.google.protobuf.ByteString;
 import edu.usfca.cs.dfs.StorageMessages;
+import edu.usfca.cs.dfs.fileUtil.Fileify;
 
 import java.nio.ByteBuffer;
 import java.util.*;
@@ -12,10 +13,16 @@ public class ClientStorageMessagesHelper {
 
     public static Logger logger = Logger.getLogger(ClientStorageMessagesHelper.class.getName());
 
-    public static StorageMessages.StorageMessageWrapper prepareChunkMeta(String fileName, int chunkId, int chunkSize, int totalChunks) {
+    public static StorageMessages.StorageMessageWrapper prepareChunkMeta(String filePath, int chunkId, int chunkSize, int totalChunks) {
+
+        String fileName = Fileify.getFileNameFromPath(filePath);
+
+        System.out.println("The filename is : "+fileName);
+
         StorageMessages.ChunkMeta chunkMetaMsg
                 = StorageMessages.ChunkMeta.newBuilder()
                 .setFileName(fileName)
+                .setFilePath(filePath)
                 .setChunkId(chunkId)
                 .setChunkSize(chunkSize)
                 .setTotalChunks(totalChunks)

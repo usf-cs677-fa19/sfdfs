@@ -3,17 +3,18 @@ package edu.usfca.cs.dfs.data;
 public class ChunkMetaPOJO {
 
     private String filename;
+    private String filePath;
     private int chunkId;
     private int chunkSize;
     private int totalChunks;
     private String[] storageNodeIds;
 
-    public ChunkMetaPOJO() {
-
+    public ChunkMetaPOJO(){
     }
 
-    public ChunkMetaPOJO(String filename, int totalChunks, int chunkNumber, int chunkSize){
+    public ChunkMetaPOJO(String filename, String filePath, int totalChunks, int chunkNumber, int chunkSize){
         this.filename = filename;
+        this.filePath = filePath;
         this.totalChunks = totalChunks;
         this.chunkId = chunkNumber;
         this.chunkSize = chunkSize;
@@ -21,6 +22,10 @@ public class ChunkMetaPOJO {
 
     public String getFilename() {
         return filename;
+    }
+
+    public String getFilePath() {
+        return filePath;
     }
 
     public int getTotalChunks() {
@@ -44,6 +49,11 @@ public class ChunkMetaPOJO {
 
     public ChunkMetaPOJO setFilename(String filename) {
         this.filename = filename;
+        return this;
+    }
+
+    public ChunkMetaPOJO setFilePath(String filePath) {
+        this.filePath = filePath;
         return this;
     }
 

@@ -3,6 +3,7 @@ option java_package = "edu.usfca.cs.dfs";
 
 message StoreChunk {
      string fileName = 1;
+     string filePath = 8;
      int32 chunkId = 2;
      int32 chunkSize = 3;
      int32 totalChunks = 4;
@@ -14,6 +15,7 @@ message StoreChunk {
 
 message ChunkMeta {
     string fileName = 1;
+    string filePath = 6;
     int32 chunkId = 2;
     int32 chunkSize = 3;
     int32 totalChunks = 4;

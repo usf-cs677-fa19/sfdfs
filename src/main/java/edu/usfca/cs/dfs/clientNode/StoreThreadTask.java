@@ -7,10 +7,14 @@ import edu.usfca.cs.dfs.init.ClientParams;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class StoreThreadTask implements Runnable {
 
     private String filePath;
+
+    public Logger logger = Logger.getLogger(StoreThreadTask.class.getName());
 
     public StoreThreadTask(String filePath) {
         this.filePath = filePath;
@@ -29,7 +33,7 @@ public class StoreThreadTask implements Runnable {
 
     public void storeFileInSfdfs(String filePath) throws IOException, ExecutionException, InterruptedException { //
         if (!Fileify.doesFileExist(filePath)) {
-            System.out.println("File does not exist on client side");
+            logger.log(Level.SEVERE,"File does not exist on client side");
             return;
         }
         long fileSizeInBytes = Fileify.getFileSize(filePath);
@@ -44,7 +48,7 @@ public class StoreThreadTask implements Runnable {
             totalChunks += 1;
         }
 
-        System.out.println("Based on chunk size : "+chunkSizeInBytes+" , File : "+filePath+" : will be broken into : "+totalChunks+ " chunks.");
+        logger.log(Level.SEVERE,"Based on chunk size : "+chunkSizeInBytes+" , File : "+filePath+" : will be broken into : "+totalChunks+ " chunks.");
 
         this.createAndSendMeta(filePath, fileSizeInBytes, chunkSizeInBytes, totalChunks);
 
@@ -60,7 +64,6 @@ public class StoreThreadTask implements Runnable {
             int lastChunkId = totalChunks;
             this.createAndSendMetaHelper(fileName, lastChunkId, lastChunkSize, totalChunks);
         }
-
     }
 
     public void createAndSendMetaHelper(String fileName, int chunkId, long chunkSizeInBytes, int totalChunks)
@@ -79,7 +82,7 @@ public class StoreThreadTask implements Runnable {
 
     public void runClient(StorageMessages.StorageMessageWrapper msgWrapper)
             throws IOException, ExecutionException, InterruptedException {
-
+        // sending to controller
         new MessageSender().send(true,
                 ClientParams.getNodeType(),
                 ClientParams.getConnectingAddress(),

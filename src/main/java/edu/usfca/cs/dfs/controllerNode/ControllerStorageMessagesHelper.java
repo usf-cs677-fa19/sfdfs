@@ -15,6 +15,7 @@ public class ControllerStorageMessagesHelper {
         StorageMessages.ChunkMeta chunkMetaMsg
                 = StorageMessages.ChunkMeta.newBuilder()
                 .setFileName(cm.getFilename())
+                .setFilePath(cm.getFilePath())
                 .setChunkId(cm.getChunkId())
                 .setChunkSize(cm.getChunkSize())
                 .setTotalChunks(cm.getTotalChunks())

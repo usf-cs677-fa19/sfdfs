@@ -27,7 +27,7 @@ public class Fileify {
         ByteBuffer directBuf = ByteBuffer.allocateDirect(cmMsg.getChunkSize());
 
         try (
-            RandomAccessFile reader = new RandomAccessFile(cmMsg.getFileName(), "r");
+            RandomAccessFile reader = new RandomAccessFile(cmMsg.getFilePath(), "r");
             FileChannel chan = reader.getChannel();
             ) {
             // Sets the file-pointer offset
@@ -41,6 +41,16 @@ public class Fileify {
             return directBuf;
         }
 
+    }
+
+    public static String getFileNameFromPath(String chunkPath) {
+        if( !chunkPath.contains("/")) {
+            return chunkPath;
+        } else {
+            String[] chunkPaths = chunkPath.split("/");
+            return chunkPaths[chunkPaths.length-1];
+
+        }
     }
 
     public static ByteBuffer readToBuffer(String chunkPath) throws IOException {

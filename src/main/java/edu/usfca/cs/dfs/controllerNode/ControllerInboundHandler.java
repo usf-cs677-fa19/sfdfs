@@ -34,6 +34,11 @@ public class ControllerInboundHandler extends InboundHandler {
         else if(msg.hasRetrieveFileMsg()){ // controller receieving a:  RetrieveFile message from client should return file containing mapping of each chunk to storage node //Map<ChunkName,StorageNode>
             ControllerDS.getInstance().logger.log(Level.INFO,"Request from client to retrieve file!!!");
             String filename = msg.getRetrieveFileMsg().getFileName();
+
+            if(filename.contains("/")){
+                String[] filenameArray = filename.split("/");
+                filename = filenameArray[filenameArray.length-1];
+            }
             //get list of storage nodes from bloomFilter, for chunk 1
             ArrayList<String> storageNodes = ControllerNodeHelper.getStorageNodeFromBloomFiltersForChunk(filename,1);
 
@@ -88,6 +93,7 @@ public class ControllerInboundHandler extends InboundHandler {
 
             ChunkMetaPOJO cm = new ChunkMetaPOJO()
                     .setFilename(receivedChunkMetaMsg.getFileName())
+                    .setFilePath(receivedChunkMetaMsg.getFilePath())
                     .setChunkId(receivedChunkMetaMsg.getChunkId())
                     .setChunkSize(receivedChunkMetaMsg.getChunkSize())
                     .setTotalChunks(receivedChunkMetaMsg.getTotalChunks());
@@ -185,7 +191,6 @@ public class ControllerInboundHandler extends InboundHandler {
             ctx.close();
         }
     }
-
 
     private String[] getStorageNodesForChunkMeta(ChunkMetaPOJO cm) {
         String[] arr = null;
