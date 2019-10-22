@@ -48,7 +48,7 @@ public class StorageNodeDS {
         this.requestProcessed = new LongAdder();
         this.retrievalProcessed = new LongAdder();
 
-        this.basePath = System.getProperty("user.home")+"/sfdfs_"+ NodeId.getId(this.ipAddress, this.port)+"/";
+        this.basePath = System.getProperty("user.home")+"/bigdata/sfdfs_"+ NodeId.getId(this.ipAddress, this.port)+"/";
         Fileify.deleteDirectory(basePath);
         Fileify.createDirectory(basePath);
         //this.healed = 1;

@@ -46,7 +46,7 @@ public class StorageInboundHandler extends InboundHandler {
             StorageNodeDS.getInstance().addToRequestProcessed();
             logger.log(Level.INFO,"Size of storage node list : "+ msg.getStoreChunkMsg().getStorageNodeIdsList().size());
             // 1. create a directory, where directory name is 1st storage node in storageNodeIds field
-            String nodeDir = System.getProperty("user.home")+"/sfdfs_"+ msg.getStoreChunkMsg().getToStorageNodeId()+"/"+msg.getStoreChunkMsg().getStorageNodeIds(0);
+            String nodeDir = System.getProperty("user.home")+"/bigdata/sfdfs_"+ msg.getStoreChunkMsg().getToStorageNodeId()+"/"+msg.getStoreChunkMsg().getStorageNodeIds(0);
             Fileify.createDirectory(nodeDir);
             // 2. read the bytes in data field - getData()
             byte[] dataArr = msg.getStoreChunkMsg().getData().toByteArray();

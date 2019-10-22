@@ -46,6 +46,7 @@ public class StoreThreadTask implements Runnable {
 
         System.out.println("Based on chunk size : "+chunkSizeInBytes+" , File : "+filePath+" : will be broken into : "+totalChunks+ " chunks.");
 
+        //String[] filePaths = filePath.split("/");
         this.createAndSendMeta(filePath, fileSizeInBytes, chunkSizeInBytes, totalChunks);
 
     }
