@@ -484,6 +484,23 @@ public class StorageInboundHandler extends InboundHandler {
                 logger.log(Level.INFO,"Chunk not found message");
             }
         }
+        else if (msg.hasGetStorageNodeDetailsMsg()){
+
+            ArrayList<String> fileNames = Fileify.listAllFiles(StorageNodeDS.getInstance().getBasePath());
+//            System.out.println("Files :"+fileNames.size());
+//            for(String fileName : fileNames){
+//                System.out.println(fileName);
+//            }
+            long numberOfRequestProccessed = StorageNodeDS.getInstance().getRequestProcessed();
+            long spaceRemaining = StorageNodeDS.getInstance().getSpaceRemaining();
+
+            StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareStorageNodeDetails(fileNames,numberOfRequestProccessed,spaceRemaining);
+
+            Channel chan = ctx.channel();
+            ChannelFuture future = chan.write(msgWrapper);
+            chan.flush();  // sending data back to client
+
+        }
     }
 
     private boolean checkIfSourceExists(String sourcePath){

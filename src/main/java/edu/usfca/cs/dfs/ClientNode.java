@@ -3,12 +3,11 @@ package edu.usfca.cs.dfs;
 import edu.usfca.cs.dfs.clientNode.GetThreadTask;
 import edu.usfca.cs.dfs.clientNode.StoreThreadTask;
 
-import edu.usfca.cs.dfs.controllerNode.ControllerDS;
+import edu.usfca.cs.dfs.clientNode.GetInfoThreadTask;
 import edu.usfca.cs.dfs.fileUtil.Fileify;
 import edu.usfca.cs.dfs.init.ClientParams;
 import edu.usfca.cs.dfs.init.Init;
 
-import java.io.File;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -59,8 +58,12 @@ public class ClientNode {
     }
 
     public void get(String filePath) {
-        Fileify.deleteFile(filePath);
+        Fileify.deleteFile(ClientNode.getInstance().basePath+"/"+filePath);
         executor.submit(new GetThreadTask(filePath));
+    }
+
+    public void getNodeInfo(String ip, String port){
+        executor.submit(new GetInfoThreadTask(ip,Integer.parseInt(port)));
     }
 
 
@@ -80,6 +83,16 @@ public class ClientNode {
                         else if(inCmdParams[0].equalsIgnoreCase("get")) { // retrieving a file
                             c.get(inCmdParams[1]);
                         }
+                    }else if(inCmdParams.length == 3){
+                        if(inCmdParams[0].equalsIgnoreCase("info")){
+                            c.getNodeInfo(inCmdParams[1],inCmdParams[2]);
+                            System.out.println("IPAddress:"+inCmdParams[1]);
+                            System.out.println("Port:"+inCmdParams[2]);
+                        }else {
+                            logger.log(Level.INFO,"Command not found!");
+                        }
+                    }else {
+                        logger.log(Level.INFO,"Command not found!");
                     }
                 }
             }

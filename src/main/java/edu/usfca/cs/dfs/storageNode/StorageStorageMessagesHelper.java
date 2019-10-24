@@ -247,5 +247,18 @@ public class StorageStorageMessagesHelper {
         return msgWrapper;
     }
 
+    public static StorageMessages.StorageMessageWrapper prepareStorageNodeDetails(ArrayList<String> fileNames,long numberOfRequestsProccessed,long spaceRemaining){
+        StorageMessages.StorageNodeDetails nodeDetails = StorageMessages.StorageNodeDetails.newBuilder()
+                .setRequestPerNode(numberOfRequestsProccessed)
+                .setSpaceRemaining(spaceRemaining)
+                .addAllFileNames(fileNames)
+                .build();
+
+        StorageMessages.StorageMessageWrapper messageWrapper = StorageMessages.StorageMessageWrapper.newBuilder()
+                .setStorageNodeDetailsMsg(nodeDetails)
+                .build();
+
+        return messageWrapper;
+    }
 
 }

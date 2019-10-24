@@ -117,6 +117,13 @@ public class ClientStorageMessagesHelper {
         return msgWrapper;
     }
 
+    public static StorageMessages.StorageMessageWrapper prepareGetStorageNodeInfo(){
+        StorageMessages.GetStorageNodeDetails snDetail= StorageMessages.GetStorageNodeDetails.newBuilder().build();
 
+        StorageMessages.StorageMessageWrapper messageWrapper = StorageMessages.StorageMessageWrapper.newBuilder()
+                .setGetStorageNodeDetailsMsg(snDetail)
+                .build();
 
+        return messageWrapper;
+    }
 }

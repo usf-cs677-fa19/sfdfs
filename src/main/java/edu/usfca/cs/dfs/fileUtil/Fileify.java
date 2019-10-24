@@ -306,7 +306,6 @@ public class Fileify {
         }
     }
 
-
     public static ArrayList<String> listAllFiles(String basePath) {
         ArrayList<String> allFiles = new ArrayList<>();
         String[] dirs = Fileify.getListOfDirs(basePath);
@@ -316,7 +315,5 @@ public class Fileify {
             allFiles.addAll(Arrays.asList(dirFiles));
         }
         return allFiles;
-
     }
-
 } //closing class Fileify

@@ -103,6 +103,15 @@ public class  ClientInboundHandler extends InboundHandler {
             logger.log(Level.INFO, "FileChunk stored : "+ msg.getChunkStoredMsg().getFileChunkId());
             ctx.close();
         }
+        else if(msg.hasStorageNodeDetailsMsg()){
+            logger.log(Level.INFO,"Storage Node Details Received! \n");
+            System.out.println("Space Remaining:"+msg.getStorageNodeDetailsMsg().getSpaceRemaining());
+            System.out.println("Number of Requests Processed :"+msg.getStorageNodeDetailsMsg().getRequestPerNode());
+            System.out.println("List of files :");
+            for(String fileName:msg.getStorageNodeDetailsMsg().getFileNamesList()){
+                System.out.println(fileName);
+            }
+        }
         else {
             logger.log(Level.INFO,"\n Donno what message receieved");
         }
