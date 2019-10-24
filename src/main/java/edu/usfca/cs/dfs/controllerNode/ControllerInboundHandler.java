@@ -194,8 +194,21 @@ public class ControllerInboundHandler extends InboundHandler {
 
     private String[] getStorageNodesForChunkMeta(ChunkMetaPOJO cm) {
         String[] arr = null;
-        ArrayList<String> threeNodes = ControllerNodeHelper.getThreeNodes(cm);
-        arr = threeNodes.toArray(new String[threeNodes.size()]);
+
+        //checking if file already stored in sfdfs
+        boolean found = false;
+        String fileChunkId = FileChunkId.getFileChunkId(cm.getFilename(),cm.getChunkId());
+        ArrayList<String> primaries = ControllerDS.getInstance().checkBloomFiltersForChunk(fileChunkId);
+        if (primaries.size() == 3) {
+            found = true;
+            arr = primaries.toArray(new String[primaries.size()]);
+        }
+
+        if(!found) {
+            ArrayList<String> threeNodes = ControllerNodeHelper.getThreeNodes(cm);
+            arr = threeNodes.toArray(new String[threeNodes.size()]);
+        }
+
         return arr;
     }
 
