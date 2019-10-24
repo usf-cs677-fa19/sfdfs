@@ -48,9 +48,10 @@ public class StorageNodeDS {
         this.requestProcessed = new LongAdder();
         this.retrievalProcessed = new LongAdder();
 
-        this.basePath = System.getProperty("user.home")+"/bigdata/sfdfs_"+ NodeId.getId(this.ipAddress, this.port)+"/";
-        Fileify.deleteDirectory(basePath);
-        Fileify.createDirectory(basePath);
+//        this.basePath = System.getProperty("user.home")+"/bigdata/sfdfs_"+ NodeId.getId(this.ipAddress, this.port)+"/";
+        this.basePath = nodeParam.getBasePath()+"/sfdfs_"+ NodeId.getId(this.ipAddress, this.port)+"/";
+        Fileify.deleteDirectory(this.basePath);
+        Fileify.createDirectory(this.basePath);
         //this.healed = 1;
         storageNodeDS.chunksMetaInfo = new ConcurrentHashMap<>();
         storageNodeDS.healingMap = new ConcurrentHashMap<>();
@@ -115,19 +116,23 @@ public class StorageNodeDS {
     }
 
     public long getRequestProcessed() {
-        return storageNodeDS.requestProcessed.sum();
+        System.out.println("GetRequestProcessed : "+ storageNodeDS.requestProcessed.longValue());
+        return storageNodeDS.requestProcessed.longValue();
     }
 
     public void addToRequestProcessed() {
-        storageNodeDS.requestProcessed.add(1);
+        System.out.println("addToRequestProcessed : "+ storageNodeDS.requestProcessed.longValue());
+        storageNodeDS.requestProcessed.increment();
     }
 
     public long getRetrievalProcessed() {
-        return storageNodeDS.retrievalProcessed.sum();
+        System.out.println("GetRetrievalProcessed : "+ storageNodeDS.retrievalProcessed.longValue());
+        return storageNodeDS.retrievalProcessed.longValue();
     }
 
     public void addToRetrievalProcessed() {
-        storageNodeDS.retrievalProcessed.add(1);
+        System.out.println("addToRetrievalProcessed : "+ storageNodeDS.retrievalProcessed.longValue());
+        storageNodeDS.retrievalProcessed.increment();
     }
 
     public long getSpaceRemaining() {
@@ -154,24 +159,15 @@ public class StorageNodeDS {
     }
 
     ////
-    public void keepSendingHeartBeat() {
-        Timer timer = new Timer();
-        timer.schedule(
-                new HeartBeatSender(
-                        StorageNodeDS.getInstance().getControllerIpAddress(),
-                        StorageNodeDS.getInstance().getControllerPort(),
-                        StorageStorageMessagesHelper.prepareHeartBeat(
-                                StorageNodeDS.getInstance().getIpAddress(),
-                                StorageNodeDS.getInstance().getPort(),
-                                StorageNodeDS.getInstance().getSpaceRemaining(),
-                                StorageNodeDS.getInstance().getRequestProcessed(),
-                                StorageNodeDS.getInstance().getRetrievalProcessed()
-
-
-                        )
-                ),
-                0,
-                5000);
-
-    }
+//    public void keepSendingHeartBeat() {
+//        Timer timer = new Timer();
+//        timer.schedule(
+//                new HeartBeatSender(
+//                        StorageNodeDS.getInstance().getControllerIpAddress(),
+//                        StorageNodeDS.getInstance().getControllerPort()
+//                ),
+//                0,
+//                5000);
+//
+//    }
 }

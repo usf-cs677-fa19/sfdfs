@@ -120,7 +120,7 @@ public class ControllerInboundHandler extends InboundHandler {
                 Channel chan = ctx.channel();
                 ChannelFuture write = chan.write(msgWrapper);
                 chan.flush();
-               // write.addListener(ChannelFutureListener.CLOSE);
+                //write.addListener(ChannelFutureListener.CLOSE);
 
             //todo here - handle context
 //

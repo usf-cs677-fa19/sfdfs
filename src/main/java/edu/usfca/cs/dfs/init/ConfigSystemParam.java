@@ -12,6 +12,7 @@ public class ConfigSystemParam {
     //controller specific
     private int replication;
     //storageNodeSpecific
+    private String basePath;
     private String controllerAddress;
     private int controllerPort;
 
@@ -45,6 +46,10 @@ public class ConfigSystemParam {
 
     public static String getAddress() {
         return params.address;
+    }
+
+    public static String getBasePath() {
+        return params.basePath;
     }
 
     public static String getControllerAddress() {

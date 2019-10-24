@@ -4,6 +4,8 @@ import edu.usfca.cs.dfs.net.MessageSender;
 import edu.usfca.cs.dfs.StorageMessages;
 import edu.usfca.cs.dfs.fileUtil.Fileify;
 import edu.usfca.cs.dfs.init.ClientParams;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -83,11 +85,13 @@ public class StoreThreadTask implements Runnable {
     public void runClient(StorageMessages.StorageMessageWrapper msgWrapper)
             throws IOException, ExecutionException, InterruptedException {
         // sending to controller
-        new MessageSender().send(true,
+        ChannelFuture f = new MessageSender().send(true,
                 ClientParams.getNodeType(),
                 ClientParams.getConnectingAddress(),
                 ClientParams.getConnectingPort(),
                 msgWrapper);
+
+        //f.addListener(ChannelFutureListener.CLOSE);
     }
 
 }

@@ -165,7 +165,7 @@ public class Fileify {
                 return true;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.INFO,"File does not exist, cannot delete file.");
         }
         return false;
     }
@@ -175,7 +175,7 @@ public class Fileify {
 
         if(!Files.exists(path)) {
             try {
-                Files.createDirectory(path);
+                Files.createDirectories(path);
             } catch (IOException e) {
                 logger.log(Level.INFO, "dir already exists");
             }

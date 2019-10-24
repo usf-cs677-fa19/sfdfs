@@ -1,8 +1,9 @@
 {
   "nodeType": "client",
   "nodeId": "2",
+  "basePath" : "users/anuragjha/bigdata/ajha6",
   "connectingAddress" : "localhost",
   "connectingPort" : "20001",
-  "noOfThreads" : 10,
+  "noOfThreads" : 5,
   "generalChunkSize" : 104857600
 }

@@ -114,26 +114,53 @@ public class ControllerDS {
         }
     }
 
+//    public String getStorageNodesMinProcessing(int requiredChunkSize){
+//        String node = "";
+//        long min = 0;
+//        Iterator storageNodeIterator = storageNodeRegister.entrySet().iterator();
+//        while (storageNodeIterator.hasNext()){
+//            Map.Entry storageNode = (Map.Entry) storageNodeIterator.next();
+//
+//            StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
+//
+//            if(min <= (details.getRequestProcessed()+details.getRetrievalProcessed())){
+//                min = (details.getRequestProcessed()+details.getRetrievalProcessed());
+//                node = (String) storageNode.getKey();
+//            }
+//        }
+//        if(storageNodeRegister.get(node).getSpaceRemaining() > requiredChunkSize) {
+//            return node;
+//        }else{
+//            //System.out.println("Storage Node size is less than the required Chunk size!!");
+//            return "";
+//        }
+//    }
+
+
     public String getStorageNodesMinProcessing(int requiredChunkSize){
         String node = "";
         long min = 0;
         Iterator storageNodeIterator = storageNodeRegister.entrySet().iterator();
         while (storageNodeIterator.hasNext()){
+
             Map.Entry storageNode = (Map.Entry) storageNodeIterator.next();
 
             StorageNodeDetail details = (StorageNodeDetail) storageNode.getValue();
 
-            if(min <= (details.getRequestProcessed()+details.getRetrievalProcessed())){
+            if(min >= (details.getRequestProcessed()+details.getRetrievalProcessed())){
                 min = (details.getRequestProcessed()+details.getRetrievalProcessed());
                 node = (String) storageNode.getKey();
             }
         }
-        if(storageNodeRegister.get(node).getSpaceRemaining() > requiredChunkSize) {
-            return node;
-        }else{
-            //System.out.println("Storage Node size is less than the required Chunk size!!");
-            return "";
+        if(storageNodeRegister.containsKey(node)){
+            if(storageNodeRegister.get(node).getSpaceRemaining() > requiredChunkSize){
+                return node;
+            }
         }
+//        else{
+        //System.out.println("Storage Node size is less than the required Chunk size!!");
+        return (String)storageNodeRegister.keySet().toArray()[0];
+//        }
     }
 
     public String getSNWithMaxSpaceExcludingTheSNs(ArrayList<String> storageNodes){

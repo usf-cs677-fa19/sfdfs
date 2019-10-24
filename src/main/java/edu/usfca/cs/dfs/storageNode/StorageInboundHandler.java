@@ -16,7 +16,6 @@ import edu.usfca.cs.dfs.net.InboundHandler;
 import edu.usfca.cs.dfs.storageNode.data.ChunkFileMeta;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.io.File;
@@ -46,7 +45,8 @@ public class StorageInboundHandler extends InboundHandler {
             StorageNodeDS.getInstance().addToRequestProcessed();
             logger.log(Level.INFO,"Size of storage node list : "+ msg.getStoreChunkMsg().getStorageNodeIdsList().size());
             // 1. create a directory, where directory name is 1st storage node in storageNodeIds field
-            String nodeDir = System.getProperty("user.home")+"/bigdata/sfdfs_"+ msg.getStoreChunkMsg().getToStorageNodeId()+"/"+msg.getStoreChunkMsg().getStorageNodeIds(0);
+            //String nodeDir = System.getProperty("user.home")+"/bigdata/sfdfs_"+ msg.getStoreChunkMsg().getToStorageNodeId()+"/"+msg.getStoreChunkMsg().getStorageNodeIds(0);
+            String nodeDir = StorageNodeDS.getInstance().getBasePath() + msg.getStoreChunkMsg().getStorageNodeIds(0);
             Fileify.createDirectory(nodeDir);
             // 2. read the bytes in data field - getData()
             byte[] dataArr = msg.getStoreChunkMsg().getData().toByteArray();
@@ -54,12 +54,18 @@ public class StorageInboundHandler extends InboundHandler {
             double entropy = Entropy.entropy(dataArr);
             // 4. if entropy is low - compress using gzip
             boolean isCompressed = false;
-            if(entropy < 0.6) {
-                dataArr = Zipper.compress(dataArr.clone());
-                isCompressed = true;
-            }
+            byte[] newDataArr = null;
             // 5. calculate checksum of compressed or uncompressed data in byte[]
-            int checksum = Arrays.hashCode(dataArr);
+            int checksum;
+            if(entropy < 0.6) {
+                newDataArr = Zipper.compress(dataArr.clone());
+                dataArr = null;
+                isCompressed = true;
+                checksum = Arrays.hashCode(newDataArr);;
+            } else {
+                checksum = Arrays.hashCode(dataArr);
+            }
+
             // 6. prepare chunkFileMeta top be stored for particular chunkData
             ChunkFileMeta forMetaFile = new ChunkFileMeta(
                     msg.getStoreChunkMsg().getFileName(),
@@ -85,7 +91,15 @@ public class StorageInboundHandler extends InboundHandler {
             // 9. store fileChunk in a file inside chunkFiles dir
             String chunkFilePath = nodeChunkDir+"/"+fileChunkId;
             //String chunkFilePath = nodeChunkDir+"/"+msg.getStoreChunkMsg().getFileName()+"_chunk_"+msg.getStoreChunkMsg().getChunkId();
-            boolean isChunkWritten = Fileify.writeToAFile(chunkFilePath, msg.getStoreChunkMsg().getData().toByteArray());
+            boolean isChunkWritten = false;
+            if (isCompressed) {
+                isChunkWritten = Fileify.writeToAFile(chunkFilePath, newDataArr);
+                newDataArr = null;
+            } else {
+                isChunkWritten = Fileify.writeToAFile(chunkFilePath,dataArr);
+                dataArr = null;
+            }
+
             // 10. check if everything done
             if(isMetaWritten && isChunkWritten) {
                 StorageNodeDS.getInstance().getChunksMetaInfo().put(fileChunkId, forMetaFile);
@@ -104,6 +118,23 @@ public class StorageInboundHandler extends InboundHandler {
             //
             // forwarding storeChunk to other replica
             //
+
+            //            for(int i = 0; i< msg.getStoreChunkMsg().getStorageNodeIdsList().size()-1; i++) {
+//                if (msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(i))) {
+//                    // change toaddress in strorechunk message to 2nd replica and send to 2nd replica
+//                    String[] sendingInfo = NodeId.getIPAndPort(msg.getStoreChunkMsg().getStorageNodeIds(i+1));
+//                    try {
+//                        new MessageSender().send(
+//                                false, "storage", sendingInfo[0], Integer.parseInt(sendingInfo[1]),
+//                                StorageStorageMessagesHelper.prepareStoreChunkMsgForReplica(msg, i+1));
+//                    } catch (InterruptedException e) {
+//                        logger.log(Level.INFO, " : "+ e.getMessage());;
+//                    }
+//                    break;
+//                }
+//            }
+
+
             if ( msg.getStoreChunkMsg().getStorageNodeIdsList().size() > 1 &&
                     msg.getStoreChunkMsg().getToStorageNodeId().equals(msg.getStoreChunkMsg().getStorageNodeIds(0))) { // in primary node
                 // change toaddress in strorechunk message to 2nd replica and send to 2nd replica
@@ -164,19 +195,42 @@ public class StorageInboundHandler extends InboundHandler {
                         //create checksum of the buff
                         byte[] arr = new byte[buff.remaining()];
                         buff.get(arr);
+
                         long checksumNew = Arrays.hashCode(arr);
                         long checksumExisting = StorageNodeDS.getInstance().getChunkMetaInfo(fileChunkId).getChecksum();
                         // match it with checksum in the mata data
                         if(checksumNew == checksumExisting) {
                             logger.log(Level.INFO,"Checksum matches....... :) :) ");
                             isChunkFound = true;
-                            StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareChunkMsg(fileChunkId, ByteBuffer.wrap(arr));
 
-                            logger.log(Level.INFO,"Sending fileChunk to client : "+ msgWrapper.getChunkMsg().getFileChunkId());
-                            Channel chan = ctx.channel();
-                            ChannelFuture future = chan.write(msgWrapper);
-                            chan.flush();  // sending data back to client
-                            break;
+                            //read from metainfo if the chunk is compressed, uncompress
+                            System.out.println("");
+                            if(StorageNodeDS.getInstance().getChunksMetaInfo().containsKey(fileChunkId)) {
+                                ChunkFileMeta chunkMeta = StorageNodeDS.getInstance().getChunksMetaInfo().get(fileChunkId);
+                                if(chunkMeta.isCompressed())  { // if compressed
+                                    System.out.println("Chunk was compressed, uncompressing");
+                                    byte[] newArr = Zipper.decompress(arr);
+                                    System.out.println("Length after uncompressing : "+ newArr.length);
+                                    arr = null;
+
+                                    StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareChunkMsg(fileChunkId, ByteBuffer.wrap(newArr));
+
+                                    logger.log(Level.INFO,"Sending fileChunk to client : "+ msgWrapper.getChunkMsg().getFileChunkId());
+                                    Channel chan = ctx.channel();
+                                    ChannelFuture future = chan.write(msgWrapper);
+                                    chan.flush();  // sending data back to client
+                                    break;
+
+                                } else { // if not compressed
+                                    StorageMessages.StorageMessageWrapper msgWrapper = StorageStorageMessagesHelper.prepareChunkMsg(fileChunkId, ByteBuffer.wrap(arr));
+
+                                    logger.log(Level.INFO,"Sending fileChunk to client : "+ msgWrapper.getChunkMsg().getFileChunkId());
+                                    Channel chan = ctx.channel();
+                                    ChannelFuture future = chan.write(msgWrapper);
+                                    chan.flush();  // sending data back to client
+                                    break;
+                                }
+                            }
                         }else{
                             logger.log(Level.INFO,"Checksum does not match :( :(");
                             // handle corrupt chunkFile

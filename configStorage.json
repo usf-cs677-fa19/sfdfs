@@ -1,2 +1,7 @@
-{"nodeType": "storage", "address" : "localhost", "port" : 7789,
-  "controllerAddress" :  "localhost", "controllerPort" : 20001}
+{
+  "nodeType": "storage",
+  "address" : "localhost",
+  "port" : 9061,
+  "basePath" : "users/anuragjha/bigdata/ajha6",
+  "controllerAddress" :  "localhost",
+  "controllerPort" : 20001}

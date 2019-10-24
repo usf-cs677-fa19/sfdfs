@@ -8,6 +8,7 @@ public class ClientParams {
 
     private String nodeType;
     private String nodeId;
+    private String basePath;
     private String connectingAddress;
     private int connectingPort;
     private int generalChunkSize;
@@ -22,6 +23,10 @@ public class ClientParams {
 
     public static String getNodeType() {
         return params.nodeType;
+    }
+
+    public static String getBasePath() {
+        return params.basePath;
     }
 
     public static  String getConnectingAddress() {
