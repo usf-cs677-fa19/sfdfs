@@ -1,7 +1,7 @@
 {
   "nodeType": "storage",
   "address" : "localhost",
-  "port" : 9065,
+  "port" : 9064,
   "basePath" : "users/anuragjha/bigdata/ajha6",
   "controllerAddress" :  "localhost",
   "controllerPort" : 20001}

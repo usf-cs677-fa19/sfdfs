@@ -467,7 +467,6 @@ public class StorageInboundHandler extends InboundHandler {
         } // end of msg.hasHealBadChunkMsg()
         else if(msg.hasChunkForBadChunkMsg()) {
             ctx.close();
-
             logger.log(Level.INFO,"\n Received chunkMsg from Storage Node");
             StorageNodeDS.getInstance().addToRequestProcessed();
             if(msg.getChunkForBadChunkMsg().getFound() == true) {
@@ -499,7 +498,6 @@ public class StorageInboundHandler extends InboundHandler {
             Channel chan = ctx.channel();
             ChannelFuture future = chan.write(msgWrapper);
             chan.flush();  // sending data back to client
-
         }
     }
 
