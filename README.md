@@ -37,6 +37,7 @@ message RetrieveChunkMeta{
 }
 
 When the controller receives the metadata, the controller gets the mapping for chunkId to StorageNodes and sends to the client for retrieval
+
 message MappingChunkIdToStorageNodes{
     map<string,StorageNodesHavingChunk> mapping = 1;
 }
