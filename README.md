@@ -15,6 +15,7 @@ The heartbeat contains the identification of the storage node i.e. the IPAddress
 
 Controller recieves requests from client to retrieve or save a file. 
 Save : In case of saving the file is broken into chunks by the client and sent to the controller with the file Metadata.
+
 message ChunkMeta {
     string fileName = 1;
     int32 chunkId = 2;
@@ -22,6 +23,7 @@ message ChunkMeta {
     int32 totalChunks = 4;
     repeated string storageNodeIds = 5;
 }
+
 The Controller replies with list of storage nodes containing the primary and 2 replicas for each chunk using the bloomfilters.
 
 Retrieval: The Controller recieves a request from the client to retrieve a file 
