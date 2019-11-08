@@ -27,11 +27,13 @@ message ChunkMeta {
 The Controller replies with list of storage nodes containing the primary and 2 replicas for each chunk using the bloomfilters.
 
 Retrieval: The Controller recieves a request from the client to retrieve a file 
+
 message RetrieveFile {
     string fileName = 1;
 }
 
 The controller prepares a check meta message for the first chunk and asks the storage node (probabilistically) containing the chunk for the metadata of the file.
+
 message RetrieveChunkMeta{
     string fileChunkId = 1;
 }
@@ -48,6 +50,7 @@ message MappingChunkIdToStorageNodes{
 Storage Node stores the file chunks and chunk meta data in disk and these chunks can be retrieved through chunkName.
 
 a. Store chunk message is used to store data and meta of chunk on disk.
+
 message StoreChunk {
      string fileName = 1;
      int32 chunkId = 2;
@@ -58,7 +61,9 @@ message StoreChunk {
      string toStorageNodeId = 7;
  }
  
-b. Storage node receive message RetrieveChunk{
+b. Storage node receive 
+
+message RetrieveChunk{
     string fileChunkId = 1;
     repeated string storageNodeIds = 2;
 } and responds back with message Chunk {
@@ -68,7 +73,9 @@ b. Storage node receive message RetrieveChunk{
     repeated string storageNodeIds = 4;
 }
 
-c. Storage node receive message RetrieveChunkForBadChunk{
+c. Storage node receive 
+
+message RetrieveChunkForBadChunk{
     string fileChunkId = 1;
     repeated string storageNodeIds = 2;
     string primaryNode = 3;
@@ -80,27 +87,39 @@ c. Storage node receive message RetrieveChunkForBadChunk{
     string primaryIdForChunk = 5;
 }
 
-d. Storage node receives message BecomePrimary{
+d. Storage node receives 
+
+message BecomePrimary{
     string forApAddress = 1;
     string forPort = 2;
     repeated string askIds = 3;
 } and becomes primary for forApAddress-forPort chunks.
 
-e. Storage node receieves message CreateNewReplica {
+e. Storage node receieves 
+
+message CreateNewReplica {
     string lostReplicaId = 1;
     string newReplicaId = 2;
 } and sends new filechunks to new replica.
 
-f. Whenever a bad chunk is found Storage node sends message BadChunkFound{
+f. Whenever a bad chunk is found Storage node sends 
+
+message BadChunkFound{
     string selfId = 1;
     string fileChunkId = 2;
     string primaryIdForChunk = 3;
-}, Controller responds back with message HealBadChunk{
+}, 
+
+Controller responds back with 
+
+message HealBadChunk{
     string selfId = 1;
     string badFileChunkId = 2;
     repeated string storageNodes = 3;
     string primaryIdForChunk = 4;
-}, storage node uses the storage node list to ask for the particular chunk.
+}, 
+
+Storage node uses the storage node list to ask for the particular chunk.
  
  
  
@@ -117,11 +136,13 @@ message ChunkMeta {
 }
 
 Retrieval : On requesting for a retrieval of a file, the client recieves a mapping of all the chunkIds to storage Nodes.
+
 message MappingChunkIdToStorageNodes{
     map<string,StorageNodesHavingChunk> mapping = 1;
 }
 
 The Storage Nodes reply with the bytes for a requested chunk
+
 message Chunk {
     bool found = 1;
     string fileChunkId = 2;
