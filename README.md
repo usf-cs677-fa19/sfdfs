@@ -150,6 +150,12 @@ message Chunk {
     repeated string storageNodeIds = 4;
 }
 
+## Bloom Filter Configuration 
+{
+  "filterSize" : "5000000",
+  "hashes" : "3"
+}
+
 ## Storing Chunks
 To store a file in sfdfs:
 First the Client gets the file size, to know the number of chunks the file will have. Then sends the ChunkMeta for each chunk to controller. Controller responds by sending a list of storage nodes (with primary at index 0) to client for every chunkmeta received.
