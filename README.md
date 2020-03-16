@@ -1,4 +1,4 @@
-# Project 1: DFS With Probabilistic Routing Version SFDFS
+# Project: DFS With Probabilistic Routing Version SFDFS
 
 ## Controller
 Controller recieves the heartbeat from the storage nodes and keeps track of the storage nodes that are alive 
